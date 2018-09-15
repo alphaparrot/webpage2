@@ -127,28 +127,31 @@
 
 	</head>
 	<body>
-<!--
+
     <div class="globalWrapper">
         <div id="tableOfContents">
         <h2><a id="toc" href="#">Table of Contents</a></h2>
         <div class="sectionsWrapper closed">
         <dl class="sections">
-          <dt><a class="subsection" href="#ChemTag">1. Chemical Tagging</a></dt>
+          <dt><a class="subsection" href="#ChemTag">1. Current Research</a></dt>
             <div class="subsectionContent">
-              <dd><a href="#PhD" data=""-offset="70">1.1. PhD Project</a></dd>
-              <dd><a href="#AST1501" data=""-offset="70">1.2. AST1501 Project</a></dd>
+              <dd><a href="#habz" data=""-offset="70">1.1. Tidally-locked Planets</a></dd>
+              <dd><a href="#stability" data=""-offset="70">1.2. Climate stability</a></dd>
+              <dd><a href="#observ" data=""-offset="70">1.2. Observability</a></dd>
             </div>
-          <dt><a class="subsection" href="#Other">2. Other Projects</a></dt>
+          <dt><a class="subsection" href="#Other">2. Past Research</a></dt>
             <div class="subsectionContent">
-              <dd><a href="#dynamo" data=""-offset="80">2.1. Lunar Dynamo</a></dd>
-              <dd><a href="#reflection" data=""-offset="80">2.2. Reflection Nebulae</a></dd>
-              <dd><a href="#TDEs" data=""-offset="80">2.3. Tidal Disruption Events</a></dd>
-              <dd><a href="#scintellometry" data=""-offset="80">2.4. Pulsar Scintellometry</a></dd>
+              <dd><a href="#blocking" data=""-offset="80">2.1. Atmospheric Blocking</a></dd>
+              <dd><a href="#chime" data=""-offset="80">2.2. CHIME FRB</a></dd>
+              <dd><a href="#implicit" data=""-offset="80">2.3. Implicit Fluid Transport</a></dd>
+              <dd><a href="#poisson" data=""-offset="80">2.4. Poisson Solver</a></dd>
+              <dd><a href="#solarwind" data=""-offset="80">2.5. Solar Wind</a></dd>
             </div>
            <dt><a class="subsection" href="#Pub">3. Publications</a></dt>
             <div class="subsectionContent">
               <dd><a href="#first" data=""-offset="80">3.1. First Author</a></dd>
               <dd><a href="#author" data=""-offset="80">3.2. Author</a></dd>
+              <dd><a href="#draft" data=""-offset="80">3.3. Drafts</a></dd>
             </div>
         </dl><!-- / sections -->
         </div><!-- / sectionsWrapper -->
@@ -235,37 +238,32 @@ function setIFrameSize() {
                                     <p class="description content"> A true-color rendering of a tidally-locked planet viewed at different phases, simulated with the LMD Generic model, using spectral data computed by SBDART. </p>
                                     </div></a>
                                 </div>
-<!--
-                                <p>I presented this work at the 2016 SDSS collaboration meeting (collaborators pictured above).</p>
 
-
-                                <iframe class="iframe-class" src="https://docs.google.com/presentation/d/1BzYlcTokJbex2ZyNsiNiHTRwTXw0Tx5gmut0ORMzgDk/embed?start=false&loop=true&delayms=5000" frameborder="0" width="960" height="596" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-
-                                <p>Final presentation to fulfill course requirement for AST1501.</p>
                                 
-                                <p style="font-size:35px; border-top: 5px solid #a6a6a6; line-height: 160%;"><a name="Other">Other Projects</a></p>
+                                <header>
+                                        <h2><a name="past">Past Research</a></h2>
+                                </header>
+                                
+                                <p style="font-size:25px"><a name="blocking">Jet Stream Blocking: Traffic jams in the atmosphere</a></p>
+                                
+                                WIP<br>
+                                
+                                <p style="font-size:25px"><a name="chime">GPU Beamforming Algorithms: Looking for FRBs with CHIME</a></p>
+                                
+                                WIP<br>
+                                
+                                <p style="font-size:25px"><a name="implicit">Implicit Fluid Transport: Looking for a better way</a></p>
+                                
+                                WIP<br>
+                                
+                                <p style="font-size:25px"><a name="poisson">Solving the Poisson Equation Quickly</a></p>
+                                
+                                WIP<br>
+                                
+                                <p style="font-size:25px"><a name="solarwind">Blowing in the Wind: The solar wind and the magnetosphere</a></p>
 
-                                <p>I have engaged in a variety of research projects, as I have strong interests in many areas of astronomy and wish to diversify my knowledge as much as possible. Below are listed projects I have worked on that are unrelated to chemical tagging.</p>
-
-                                <p style="font-size:25px"><a name="dynamo">Lunar Dynamo</a></p>
-                                <p>I spent the summer of 2016 working with Professor Sabine Stanley on an attempt to numerically simulate the lunar dynamo. In particular, we were interested in the early history of the lunar dynamo. A review by <a href="http://www.sciencemag.org/cgi/doi/10.1126/science.1246753\nhttp://www.sciencemag.org/content/346/6214/1246753.short"> Weiss and Tikoo (2014)</a> highlights the problem: paleomagnetic data shows that the Moon had a stronger magnetic field at early times (strong field regime), which transitioned to a weaker field around 3.5 Gyr ago (weak field regime) before dropping below detection levels at the present day. When scaling laws are applied to the magnetic field strength from Earth's convection driven dynamo, we estimate the Moon's magnetic field to be in agreement with the weak field regime strength. Of the mechanisms proposed to explain the strong field regime, mechanical stirring seems the most likely, and does match the expected field strength (<a href="http://dx.doi.org/10.1038/nature10564"> Dwyer et al 2011</a>). My task was to understand how (or if) mechanical stirring and convection worked together as drivers of dynamo action.</p>
-
-                                <p style="font-size:25px"><a name="reflection">Imaging Reflection Nebulae</a></p>
-
-                                <p>My final undergraduate research project was done in the summer of 2015, when I worked with Professor Peter Martin on imaging dim and dusty reflection nebulae with the Dragonfly telescope. I spent the summer building a software pipeline to process Dragonfly images and compare them to counterparts in the infrared from the Herschel telescope in an attempt to understand why the brightness in scattered light is not linear with the brightness in emitted light.</p>
-
-                                <p style="font-size:25px"><a name="TDES">Tidal Disruption Events</a></p>
-
-                                <p>My work on tidal disruption events was what first inspired my interest in galactic astronomy. A tidal disruption event occurs when a star travels too close to a supermassive black hole and is ripped apart. With the sky coverage of recent and upcoming transient surveys, these events have begun to be observed (e.g. <a href="http://arxiv.org/abs/1602.02824">Krolik et al 2016</a>, <a href="https://arxiv.org/abs/1405.1417"> Holoien et al 2014</a>, <a href="http://arxiv.org/abs/1405.1415"> Arcavi et al 2014</a>). These observations need corresponding theoretical models to understand them as fully as possible. I began work on this problem with Dr. Linda Strubbe in the summer of 2014, when we used a sample of galaxy density profiles to predict the rate of tidal disruption events as a function of stars' closest approach to the black hole. I continued this work into my undergraduate senior thesis.</p>
-
-                                <iframe class="iframe-class" src="https://docs.google.com/presentation/d/1v-i4kKotVFXgEHXIU-3Fro4GdVjj9kHo5VVvdxG1CrI/embed?start=false&loop=true&delayms=5000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-                                <p> Final presentation of my senior thesis work.</p>
-
-                                <p style="font-size:25px"><a name="scintellometry">Pulsar Scintellometry</a></p>
-
-                                <p> My first research project was a very exciting introduction to astronomy research practices. I had to quickly improve my coding and time management skills to keep myself on track. The project was to assist with Very Long Baseline Interferometry pulsar observations on site at the Algonquin Radio Observatory in Algonquin Park and remotely at the Giant Metre-wave Radio Telescope in India. The goal of the project was to get nano-arcseond precision pulsar images by using the fact that intervening the interstellar medium scatters the pulsar signal, creating scintellation patterns. </p>
-                                -->
-
+                                WIP<br>
+                                
                                 <header>
                                     <h2><a name="Publications">Publications</a></h2>
                                 </header>
@@ -319,6 +317,8 @@ function setIFrameSize() {
 								<ul class="style1">
                                     <li><a target="_blank" href="https://github.com/HartmutBorth/PLASIM">PlaSim</a></li>
                                     <li><a target="_blank" href="http://mitgcm.org/">MITgcm</a></li>
+                                    <li><a target="_blank" href="http://web.lmd.jussieu.fr/trac-planeto/browser/planeto/trunk/LMDZ.GENERIC">LMD Generic</a></li>
+                                    <li><a target="_blank" href="https://github.com/paulricchiazzi/SBDART">SBDART</a></li>
                                     <li><a target="_blank" href="https://github.com/alphaparrot/">GitHub</a></li>
                                     <li><script language="JavaScript">
                                         var username = "paradise";
@@ -329,6 +329,17 @@ function setIFrameSize() {
                                    <!-- <li><input type="button" value="Research Log" onClick="window.open('research_log.html')">
                                     </li>-->
                                 </ul>
+                                    <br>
+                                    <br>
+                                                        <header>
+                                                            <h2>Selected Projects</h2>
+                                                        </header>
+                                                        <ul class="style1">
+                                                        <li>GPlaSim</li>
+                                                        <li>Crawler<sub>2</sub></li>
+                                                        <li>GCMScope</li>
+                                                        <li>NagMe</li>
+                                                        </ul>
 							</section>
 						</div>
 					</div>
