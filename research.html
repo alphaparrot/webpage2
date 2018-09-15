@@ -207,37 +207,35 @@ function setIFrameSize() {
 }
 </script>
 			
-			<div id="page">
-				<div class="container">
-					<div class="row">
-						<div class="9u skel-cell-important">
-							<section id="content" >
-								<header>
-									<h2><a name="#top">Research Interests</a></h2>
-								</header>
-								<p>Work In Progress</p>
-								<!--
-                                <p style="font-size:35px"><a name="ChemTag">Chemical Tagging</a></p>
+<div id="page">
+        <div class="container">
+                <div class="row">
+                        <div class="9u skel-cell-important">
+                                <section id="content" >
+                                <header>
+                                        <h2><a name="current">Current Research</a></h2>
+                                </header>
+                                <p>Most of my graduate research so far has focused on the cold edge of the habitable zone. Traditionally, we talk about the habitable zone in terms of distance: the "inner edge" and the "outer edge". But there are a great many factors that affect habitability and climate beyond just distance from the star--CO2, atmospheric mass, water inventory, land masses, etc all play a role. So it makes more sense to talk about the <strong>cold edge</strong>, which describes the cold limit of habitability across all those parameters.</p>
+								
+                                <p style="font-size:25px"><a name="habz">How do you freeze a tidally-locked planet?</a></p>
 
-                                <p>Chemical tagging, first proposed by <a href="http://arxiv.org/abs/astro-ph/0208106"> Freeman and Bland-Hawthorn (2002)</a>, is the process of identifying stars as belonging to a group based on their chemical composition. This technique has already been used to identify large scale structures in the Milky Way (see <a href="http://arxiv.org/abs/1503.02110"> Hayden et al 2015</a>), but there is debate about its applicability at smaller scales (see <a href="http://arxiv.org/abs/1504.03327"> Ting et al 2015</a>, <a href="http://arxiv.org/abs/1601.05413"> Hogg et al 2016</a>). The small scales of interest would be co-natal groups, clusters of stars that formed from the same gas cloud. Since such clusters tend to disrupt early after their formation, it is difficult to trace stars back to their formation site with dynamical data alone. However, chemical composition likely remains stable over the lifetime of a star and thus may provide a marker of star formation environment. I began working on the problem of the feasibility of chemical tagging in September 2015 when I began a project with Professor Jo Bovy at the University of Toronto, and still investigate this question as my thesis. </p>
+                                <p>Tidally-locked planets represent perhaps one of the greatest challenges in planetary science: they are at once our most promising targets in the search for life and the most attractive targets for follow-up observations, and at the same time also the most different from the planets in our solar system. About 70% of the stars in our galaxy are small, dim, low-mass stars, and planets in their habitable zones are almost all going to be tidally-locked, with one side always facing the star. Due to their proximity to their stars, short orbits, and the small size of those stars, they are the easiest terrestrial planets to observe. But when the planet has a temperate day-side and an inhospitable night-side, and when the very dynamics of the atmosphere operate in a different regime, it becomes difficult to generalize what we know about the habitability of Earth-like climates to tidally-locked planets. I use numerical models at various levels of complexity to probe how basic parameters affect the position of the cold edge of the habitable zone. Models I use include a 1D EBM, a modified version of PlaSim, MITgcm, and the LMD Generic model. PlaSim is the key to this work, because it both runs very quickly (1 year of climate in 45 seconds on 8 CPUs) and contains enough physics to give us useful information about a planet's climate. I use the other models to verify whether my results are robust, or model-dependent.</p>
 
-                                <p style="font-size:25px"><a name="PhD">PhD Project</a></p>
+                                <p style="font-size:25px"><a name="stability">How do climates change over time?</a></p>
 
-                                <p>Starting in September 2016, I began working forward from my previous work on chemical tagging, where I had established that the new method of chemical abundance analysis I used offered a complex abundance space to explore. I am currently trying to reproduce these results with data from a newer release.</p>
+                                <p>It's all fine and well if you can identify the conditions that give habitable climates, but what if those conditions are themselves unstable? Earth has several geological feedbacks which connect the atmospheric composition to the planet's interior, and depending on factors like continental configuration and volcanic outgassing rates, CO2 levels can adjust by large amounts over millions of years. Some of my work has focused on examining the consequences of this feedback when outgassing, the source of CO2, is weak. Carbon dioxide sequestration could then continue unabated, pulling the planet into a colder state. <a target="_blank" href="https://arxiv.org/abs/1704.04535">Some of our research</a> suggests that this could lead to planets that cycle between being completely frozen and completely temperate, and some of our other research suggests that sometimes planets can get stuck in their frozen states. Not to worry, though--<a target="_blank" href="https://arxiv.org/abs/1803.00511">that same research</a> also suggests that when that happens, there are regions of land that remain temperate, even though the rest of the planet is frozen. I use a modified version of PlaSim to compute how CO2 changes over time on different planets and identify whether or not these planets have stable climates.</p>
 
-                                <p style="font-size:25px"><a name="AST1501">AST1501 Project</a></p>
+                                <p style="font-size:25px"><a name="observ">How do we know what we're looking at?</a></p>
 
-                                <p>In September 2015, I began working with spectroscopic data from the Apache Point Galactic Evolution Experiment (APOGEE). I applied a method of chemical abundance analysis from <a href="http://arxiv.org/abs/1510.06745">Bovy (2016)</a>. Where that work used a sample of open clusters, I used a larger sample of red clump stars. The new method used the spectra directly, rather than the chemical abundances derived by fitting model spectra, which allowed for a better understanding of sources of uncertainty.</p>
-
-                                <p> I performed a polynomial fit at each pixel in the spectra for all stars in the sample. Subtracting this fit in effective temperature, surface gravity and metallicity removed those effects from the spectrum. After subtracting the fit at each pixel, I was left with a sample of spectra that differed only due to the differing chemical abundances between stars. I used expecation maximized principal component analysis (<a href="http://arxiv.org/abs/1208.4122"> Bailey 2012</a>) to identify the eigenvectors in this spectrum space along which the most variance occured. Subtracting out these eigenvectors allowed me to measure how much variance each explained, I compared this explained variance to the level of variance that was due to noise. With this, I found that of order 10 to 20 eigenvectors were needed to explain variance not due to noise, where the exact number depended on the specific subsample of red clump stars used. I performed the same analysis on open cluster stars and confirmed that they are chemically homogeneous (zero non-noise eigenvectors). These results implied that in the red clump sample, chemical abundance space is fairly diverse, and so chemical tagging might be possible. </p>
+                                <p>We are at the cusp of being able to observe and characterize Earth-sized exoplanets. New instruments and bigger telescopes are allowing us to peer further, see smaller, and collect more detail. But our experience doing that with larger planets tells us that this will be an extraordinarily difficult endeavor--particularly because terrestrial climates are extraordinarily complex, with many difficult-to-predict highly-coupled nonlinear feedbacks. We are not yet at the stage where we can take a spectrum of a planet and determine what its climate must be like, and we may not be at a point where we can even try to solve that problem. We can however identify how different features of the climate affect that spectrum. I use the radiative transfer model SBDART together with output from my climate models to compute the reflected light spectra of various climate states, and then look for changes in the spectrum that could be attributed to those changes in climate. As a fun aside, because I compute the full reflected spectrum for each point on the planet, I also have everything I need to compute the color and brightness of each point--allowing me to construct an image of what my model would look like to the human eye, if seen from space.</p>
 
                                 <div class="image full">
-                                <a href="http://www.sdss.org"><img src="images/sdssgroup.jpg" alt="">
+                                    <img src="imgs/lprx_1.3bar.gif" alt="True-color rendering of model output">
                                     <div class="description">
-                                    <p class="description content"> Conference photo from SDSS Meeting 2016 in Madison Wisconsin (photo credit: Jake Parks) </p>
+                                    <p class="description content"> A true-color rendering of a tidally-locked planet viewed at different phases, simulated with the LMD Generic model, using spectral data computed by SBDART. </p>
                                     </div></a>
                                 </div>
-
+<!--
                                 <p>I presented this work at the 2016 SDSS collaboration meeting (collaborators pictured above).</p>
 
 
