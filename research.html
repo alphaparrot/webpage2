@@ -2,8 +2,7 @@
 <!--
 	Synchronous by TEMPLATED
     templated.co @templatedco
-    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)-->
 <html>
 	<head>
 		<title>Adiv Paradise Research</title>
@@ -215,10 +214,25 @@ function setIFrameSize() {
                 <div class="row">
                         <div class="9u skel-cell-important">
                                 <section id="content" >
+                                
+                                
                                 <header>
                                         <h2><a name="current">Current Research</a></h2>
+                                        <h3>Supervisor: <a target="_blank" href="http://individual.utoronto.ca/kmenou/Homepage.html">Kristen Menou</a></h3>
                                 </header>
                                 <p>Most of my graduate research so far has focused on the cold edge of the habitable zone. Traditionally, we talk about the habitable zone in terms of distance: the "inner edge" and the "outer edge". But there are a great many factors that affect habitability and climate beyond just distance from the star--CO2, atmospheric mass, water inventory, land masses, etc all play a role. So it makes more sense to talk about the <strong>cold edge</strong>, which describes the cold limit of habitability across all those parameters.</p>
+                                
+                                
+                                <div class="image full">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="imgs/combinedcw.mp4" type="video/mp4">
+                                        <img src="imgs/combinedcw359.png" alt="3D renderings of water and cloud fields on a tidally-locked planet">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> 3D renderings of the water content [kg/kg] in the atmosphere of a tidally-locked planet (the dayside is where the big purple region is; the nightside is the other half) and the associated cloud field, generated using output from the LMD Generic model.</p>
+                                    </div></a>
+                                </div>
+                                
 								
                                 <p style="font-size:25px"><a name="habz">How do you freeze a tidally-locked planet?</a></p>
 
@@ -244,25 +258,35 @@ function setIFrameSize() {
                                         <h2><a name="past">Past Research</a></h2>
                                 </header>
                                 
-                                <p style="font-size:25px"><a name="blocking">Jet Stream Blocking: Traffic jams in the atmosphere</a></p>
+                                <p style="font-size:25px"><a name="blocking">Jet Stream Blocking: Traffic jams in the atmosphere</a><br><h3>Supervisor: <a target="_blank" href="https://geosci.uchicago.edu/people/noboru-nakamura/">Noboru Nakamura</a></h3></p>
                                 
-                                WIP<br>
+                                <p>In June 2018, I attended the Rossbypalooza climate modeling summer school at the University of Chicago. Two other students and I worked with Professor Noboru Nakamura on a follow-up to his <a target="_blank" href="http://science.sciencemag.org/content/early/2018/05/23/science.aat0721">Science paper</a> on why the jet stream sometimes gets stuck in a holding-pattern of sorts--an event called 'blocking'. His paper proposed using reanalysis data that flow in the jet stream might obey effectively the same equation as traffic flow--that effectively, blocks are atmospheric traffic jams. Over the course of 2 weeks, we wrote and tested a 1D model of the jet stream using this equation to understand under what conditions blocks form, and how that might change as a result of climate change. Professor Nakamura is presenting some of our results at the 2018 AGU Fall Meeting.</p>
                                 
-                                <p style="font-size:25px"><a name="chime">GPU Beamforming Algorithms: Looking for FRBs with CHIME</a></p>
+                                <br>
                                 
-                                WIP<br>
+                                <p style="font-size:25px"><a name="chime">GPU Beamforming Algorithms: Looking for FRBs with CHIME</a><h3>Supervisor: <a target="_blank" href="http://dunlap.utoronto.ca/~vanderlinde/">Keith Vanderlinde</a></h3></p>
                                 
-                                <p style="font-size:25px"><a name="implicit">Implicit Fluid Transport: Looking for a better way</a></p>
+                                <p>In the summer of 2016, as my second first-year project at UofT, I worked with Professor Keith Vanderlinde on writing software beamforming algorithms for the CHIME Pathfinder radio telescope. <a target="_blank" href="https://chime-experiment.ca/">CHIME</a> is a series of half-pipes, with radio antennae along the axis. Traditional telescopes only need one set of receivers at the focal point, because the dish does all the work of gathering the light and interfering it into an image at the receiver. With a telescope like CHIME or the smaller CHIME Pathfinder, a computer needs to compute that using a Fourier transform. By applying different offsets, however, the telescope can form many beams looking at different parts of the sky simultaneously. As a result, CHIME can see a strip of sky spannign almost all the way from the Southern horizon to the Northern horizon--and over the course of a day, as the Earth rotates, it sweeps out the entire sky. CHIME's original mission is to construct a 3D map of neutral hydrogen from redshifts 2.5 to 0.8, but it's also useful for detecting Fast Radio Bursts, or FRBS, which are short, bright, mysterious radio pulses from very distant sources. Because CHIME sees a huge portion of the sky and has to process it with computers, and needs to maintain a high cadence to catch FRBs, the beamforming algorithms have to be screamingly fast--so CHIME uses a huge GPU supercomputer on-site to process several terabytes of data per second. In collaboration with Cherry Ng and a few others, I helped with proof-of-concept and prototype beamforming algorithms, figuring out how to code extremely fast and efficient FFTs for the GPUs powering the CHIME Pathfinder. </p><br>
                                 
-                                WIP<br>
                                 
-                                <p style="font-size:25px"><a name="poisson">Solving the Poisson Equation Quickly</a></p>
+                                <div class="image full">
+                                    <img src="imgs/pathfinder.jpg" alt="The CHIME Pathfinder, a radio telescope with a software beamformer.">
+                                    <div class="description">
+                                    <p class="description content"> The CHIME Pathfinder at the Dominion Radio Astrophysical Observatory near Penticton, BC. CHIME is a series of half-pipes, and uses software to form images of the sky. Photo credit Keith Vanderlinde, Dunlap Institute. </p>
+                                    </div></a>
+                                </div><br>
                                 
-                                WIP<br>
+                                <p style="font-size:25px"><a name="implicit">Implicit Fluid Transport: Looking for a better way</a><h3>Supervisor: <a target="_blank" href="https://www.lcse.umn.edu/">Paul Woodward</a></h3></p>
                                 
-                                <p style="font-size:25px"><a name="solarwind">Blowing in the Wind: The solar wind and the magnetosphere</a></p>
+                                <p>In the year between undergrad and grad school (2014-2015), I worked with Professor Paul Woodward at the University of Minnesota on trying to come up with a faster, more efficient way to compute implicit fluid transport in multi-dimensional fluid simulations, using Riemann invariants. We had very promising results in 1D cases, but have yet to find a way to robustly generalize that success to multiple dimensions.</p><br>
+                                
+                                <p style="font-size:25px"><a name="poisson">Solving the Poisson Equation Quickly</a><h3>Supervisors: <a target="_blank" href="https://www.lcse.umn.edu/">Paul Woodward</a> and <a target="_blank" href="https://www.lanl.gov/org/padste/adtsc/computer-computational-statistical-sciences/computational-physics-methods/index.php">William Dai</a></h3></p>
+                                
+                                <p>For my undergraduate astronomy thesis, I worked with Professor Paul Woodward at the University of Minnesota on coming up with a better, more efficient way to compute the Poisson equation for gravity on regular finite-volume cartesian grids. For large, self-gravitating systems like astrophysical disks (ranging from proto-planetary disks to galactic disks), gravity computations can be very expensive and inefficient in highly-parallelized simulations, since the gravitational force on a given position depends on knowledge of the entire system--leading to an N<sup>2</sup> problem. Solving a discretized version of the Poisson equation for gravity allows one to iteratively express the problem as simply depending on a local source term and the values of the cell's immediate neighbors. We <a target="_blank" href="undergradthesis.pdf">used a "red-black" relaxation algorithm</a> coupled with manipulations of the domain geometry to reduce the expense and improve the efficiency of this approach for scalable highly-parallelized applications. I continued this work the summer after graduation with Dr. William Dai at the Los Alamos National Laboratory.</p><br>
+                                
+                                <p style="font-size:25px"><a name="solarwind">Blowing in the Wind: The solar wind and the magnetosphere</a><h3>Supervisors: <a target="_blank" href="https://www.physics.umn.edu/people/breneman.html">Aaron Breneman</a> and <a target="_blank" href="https://www.physics.umn.edu/people/cattell.html">Cynthia Cattell</a></p>
 
-                                WIP<br>
+                                <p>From Summer 2011 until my graduation in Spring 2014, I worked with the Space Physics Lab at the University of Minnesota as an undergraduate research assistant. We studied electromagnetic waves and other phenomena in the solar wind, in particular as they interacted with Earth's magnetosphere. This work involved data from the STEREO spacecraft as well as the Van Allen Space Probes (originally the Radiation Belt Space Probes). I helped to analyze data, write analysis code, designed an early version of the <a target="_blank" href="http://www.space.umn.edu/missions/rbspefw-home-university-of-minnesota/">website</a> for our electric field instrument aboard the Van Allen probes, and wrote some end-user software for aquisition and analysis of data from the Van Allen probes.</p><br>
                                 
                                 <header>
                                     <h2><a name="Publications">Publications</a></h2>
@@ -335,10 +359,10 @@ function setIFrameSize() {
                                                             <h2>Selected Projects</h2>
                                                         </header>
                                                         <ul class="style1">
-                                                        <li>GPlaSim</li>
-                                                        <li>Crawler<sub>2</sub></li>
-                                                        <li>GCMScope</li>
-                                                        <li>NagMe</li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/GPlaSim">GPlaSim</a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/NagMe">NagMe</a></li>
                                                         </ul>
 							</section>
 						</div>
