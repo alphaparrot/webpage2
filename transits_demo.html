@@ -21,6 +21,8 @@
 
 	</head>
 	<body>
+	<input type="file" id="file"></input>
+        <button id="submit_button">PARSE FILE</button>
 	<div id="tester" style="width:600px;height:250px;"></div>
 	<script>
 // 	    var allText =[];
@@ -31,19 +33,96 @@
 //             {
 //                 allText = txtFile.responseText;
 //             };
+//             parseMe("paradi16_c1.csv",doStuff);
+var submit_button = document.getElementById('submit_button');
+submit_button.addEventListener('click', parse_array);
+
+
+function parse_array ()
+{
+  console.log('Parsing Array!');
+  var newArray=[];
+  var file = document.getElementById("file").files[0];
+  parseMe(file, doStuff);
+  console.log('(Log no.2) After parse call but before complete fired, newArray:', newArray, new Date()); //log no. 2
+}
+
+function parseMe(url, callBack){
+    var time = [];
+    var brightness = [];
+    var _error = [];
+    Papa.parse(url, {
+        comment:"#",
+        header:true,
+        dynamicTyping:true,
+        skipEmptyLines:"greedy",
+        worker:true,
+        complete: function(results) {
+          var n;
+          for (n in results.data) {
+            time.push(results.data[n].Time);
+            brightness.push(results.data[n].Brightness);
+            _error.push(results.data[n].Error);
+          }
+        callBack(time,brightness,_error);
+        }
+    });
+}
+
+function doStuff(time,data,error){
+  // NOTE: this throws an Error in strict mode:
+  //console.log('after stuff done, new Array is:', newArray);
+    var newTime=time;
+    var newData=data;
+    var newError=error;
+//     console.log('(Log no.1) In OnComplete callback, Array is:', new Date(), newArray); //log no. 1
+            TESTER = document.getElementById('tester');
+            var layout = {
+  autosize: false,
+  width: 1200,
+  height: 600,
+  yaxis: {
+    title: 'Brightness',
+    automargin: true,
+    titlefont: { size:30 },
+  },
+  xaxis: {
+    title: "Time [Days]",
+    automargin: true,
+    titlefont: {size:30 },
+    },
+   title: {
+        text:"Lightcurve"}
+    }
+  
+Plotly.plot( TESTER, [{
+	x: newTime,
+	y: newData,
+        error_y: {
+            type: 'data',
+            array: newError,
+            visible: true
+            },
+        type: 'scatter' }], 
+        layout);
+}
+
             
-            var data = Papa.parse("paradi16_c1.csv",{
-                                                        download: true,
-                                                        header: true,
-                                                        comments: "Star",
-                                                        dynamicTyping: true,
-                                                        step: function(row) {
-                                                            console.log("Row:", row.data);
-                                                        },
-                                                        complete: function() {
-                                                            console.log("All done!");
-                                                        }
-                                                    });
+//             Papa.parse("paradi16_c1.csv",{
+//                                               download: true,
+//                                               header: true,
+//                                               comments: "Star",
+//                                               dynamicTyping: true,
+//                                               skipEmptyLines: "greedy",
+//                                               worker: true,
+// //                                               step: function(row) {
+// //                                                   console.log("Row:", row.data);
+// //                                               },
+//                                               complete: function(results) {
+//                                                   console.log("All done!");
+//                                                   console.log(results.data.Time);
+//                                               }
+//                                           });
     
 //             TESTER = document.getElementById('tester');
 //             
@@ -52,7 +131,7 @@
 //             y: data["Brightness"] }], {
 //             margin: { t: 0 } } );
             
-            document.write(data["Time (Days)"]);
+//             document.write(allText);
         </script>
         </body>
 </html>
