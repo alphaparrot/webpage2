@@ -228,8 +228,20 @@ function setIFrameSize() {
                                 </header>
                                 <p>Most of my graduate research so far has focused on the cold edge of the habitable zone. Traditionally, we talk about the habitable zone in terms of distance: the "inner edge" and the "outer edge". But there are a great many factors that affect habitability and climate beyond just distance from the star--CO2, atmospheric mass, water inventory, land masses, etc all play a role. So it makes more sense to talk about the <strong>cold edge</strong>, which describes the cold limit of habitability across all those parameters.</p>
                                 
+                               <p style="fotn-size:25px"><a name="exoplasim">ExoPlaSim: A Fast 3D Climate Model for the Masses</a></p>
+                               <div class="image full" style="text-align: center">
+                                    <video width="75%" height="75%" controls loop autoplay>
+                                        <source src="imgs/tlexo_t170_adv.mp4" type="video/mp4">
+                                        <img src="imgs/tlexo_t170_adv_cover.png" alt="Relative vorticity and windspeed at different atmospheric pressures on a tidally-locked planet, captured with high-cadence output at 75-km resolution with ExoPlaSim.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Relative vorticity (top) and wind speed (bottom) of a tidally-locked planet at different model layers in a high-resolution (75 km) ExoPlaSim simulation, captured in high-cadence output. The substellar point is in the middle.</p>
+                                    </div></a>
+                                </div>
+                               
+                                <p>In order to enable a lot of my research, I have had to make several modifications to the <a target="_blank" style="font-style:italic;" href="https://www.mi.uni-hamburg.de/en/arbeitsgruppen/theoretische-meteorologie/modelle/plasim.html">PlaSim</a> climate model. I use PlaSim for the foundation of my work because it is extraordinarily fast (1 year in 45 seconds on 16 CPUs at 32x64x10 resolution), but PlaSim was designed for Earth, and cannot natively model a wide range of habitable exoplanets accurately. Years of modifications and additions to the model have resulted in the <a style="font-style:italic;" target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a> climate model, of which I am the primary maintainer, which extends PlaSim for planets orbiting stars unlike our Sun, and for different atmospheric pressures. ExoPlaSim also features a <a href="https://pypi.org/project/exoplasim/" style="font-style:italic;" target="_blank">Python API</a> which streamlines installation and model configuration, enabling rapid and efficient modelling with a very shallow learning curve. This should make this model accessible to a range of users, including observers with no modelling experience, while permitting experienced theorists and modellers to produce ensembles of models orders of magnitude larger than those possible with other GCMs. ExoPlaSim does not yet have all the physics necessary to model every physical process we will find on Earth-like exoplanets in the habitable zone, but its robustness, reliability, flexibility, and speed make it a good choice for parameter space studies and pathfinding experiments, where the expense of a larger model may not be justified without first testing the waters with ExoPlaSim.</p>
                                 
-                                
+                                <p style="font-size:25px"><a name="habz">How do you freeze a tidally-locked planet?</a></p>
                                 
                                 <div class="image full">
                                     <video width="100%" height="100%" controls loop autoplay>
@@ -242,7 +254,6 @@ function setIFrameSize() {
                                 </div>
                                 
 								
-                                <p style="font-size:25px"><a name="habz">How do you freeze a tidally-locked planet?</a></p>
 
                                 <p>Tidally-locked planets represent perhaps one of the greatest challenges in planetary science: they are at once our most promising targets in the search for life and the most attractive targets for follow-up observations, and at the same time also the most different from the planets in our solar system. About 70% of the stars in our galaxy are small, dim, low-mass stars, and planets in their habitable zones are almost all going to be tidally-locked, with one side always facing the star. Due to their proximity to their stars, short orbits, and the small size of those stars, they are the easiest terrestrial planets to observe. But when the planet has a temperate day-side and an inhospitable night-side, and when the very dynamics of the atmosphere operate in a different regime, it becomes difficult to generalize what we know about the habitability of Earth-like climates to tidally-locked planets. I use numerical models at various levels of complexity to probe how basic parameters affect the position of the cold edge of the habitable zone. Models I use include a 1D EBM, a modified version of PlaSim called <a href="https://doi.org/10.5281/zenodo.3601570" target="_blank">ExoPlaSim</a>, MITgcm, and the LMD Generic model. ExoPlaSim is the key to this work, because it both runs very quickly (1 year of climate in 45 seconds on 8 CPUs) and contains enough physics to give us useful information about a planet's climate. I use the other models to verify whether my results are robust, or model-dependent.</p>
 
@@ -305,6 +316,7 @@ function setIFrameSize() {
                                 <ul class="style1">
                                 <li><a href="https://arxiv.org/abs/1704.04535" style="font-style:italic;" target="_blank">GCM Simulations of Unstable Climates in the Habitable Zone</a></li>
                                 <li><a href="https://arxiv.org/abs/1803.00511" style="font-style:italic;" target="_blank">Habitable Snowballs: Temperate Land Conditions, Liquid Water, and Implications for CO2 Weathering</a></li>
+                                <li><a href="https://arxiv.org/abs/1910.02355" style="font-style:italic;" target="_blank">Climate diversity in the solar-like habitable zone due to varying background gas pressure</a></li>
                                 </ul>
 
                                 <p></p>
@@ -324,7 +336,7 @@ function setIFrameSize() {
                                 <p style="font-size:25px"><a name="draft">Under Review</a></p>
 
                                 <ul class="style1">
-                                <li><a href="https://arxiv.org/abs/1910.02355" style="font-style:italic;" target="_blank">Climate Diversity in the Habitable Zone due to Varying pN2 Levels</a></li>
+                                
                                 </ul>
 
                                 <p></p>
@@ -332,6 +344,7 @@ function setIFrameSize() {
                                 <p style="font-size:25px"><a name="bonus">Bonus</a></p>
                                 
                                 <ul class="style1">
+                                <li><a href="https://arxiv.org/abs/2008.02339" style="font-style:italic;" target="_blank">A Large Repository of 3D Climate Model Outputs for Community Analysis and Postprocessing</a></li>
                                 <li><a href="https://arxiv.org/abs/1903.12195" style="font-style:italic;" target="_blank">The Long Night: Modeling the Climate of Westeros</a></li>
                                 </ul>
                                 
@@ -340,6 +353,8 @@ function setIFrameSize() {
                                 </header>
 
                                 <ul class="style1">
+                                    <li><a target="_blank" href="https://sites.northwestern.edu/iceland2019/">Extreme Solar Systems IV</a> - Reykjavik, Iceland, Aug 19-23 2019</li>
+                                    <li><a target="_blank" href="http://eres.astro.cornell.edu/">Emerging Researchers in Exoplanet Science V</a> - Cornell University, Ithaca, June 17-19, 2019</li>
                                     <li><a target="_blank" href="https://www.hou.usra.edu/meetings/climatology2018/">Comparative Climatology of Terrestrial Planets III</a> - Lunar & Planetary Institute, Houston, August 27-30 2018 </li>
                                     <li><a target="_blank" href="http://www.rossbypalooza.org/">Rossbypalooza Summer School</a> - University of Chicago, Chicago, June 11-22 2018</li>
                                     <li><a href="http://eres-yale.science/" target="_blank">Emerging Researchers in Exoplanet Science III</a> - Yale University, New Haven, June 12-13 2017</li>
@@ -377,7 +392,7 @@ function setIFrameSize() {
                                                             <h2>Selected Projects</h2>
                                                         </header>
                                                         <ul class="style1">
-                                                        <li><a target="_blank" href="https://github.com/alphaparrot/GPlaSim">GPlaSim</a></li>
+                                                        <li><a target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a></li>
                                                         <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
                                                         <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
                                                         <li><a target="_blank" href="https://github.com/alphaparrot/gcmtools">gcmtools</a></li>
