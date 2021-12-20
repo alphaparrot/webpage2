@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python -m pip install numpy, scipy, matplotlib
+python get-pip.py --prefix=/usr/local/
