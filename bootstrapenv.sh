@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pip install --user numpy scipy matplotlib
+python -m pip install --user numpy scipy matplotlib
