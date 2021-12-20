@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python /home/adivp416/public_html/get-pip-py2.py --user
+pip install --user numpy scipy matplotlib
