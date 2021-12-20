@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python get-pip.py --prefix=/usr/local/
+python /home/adivp416/public_html/get-pip.py --prefix=/usr/local/
