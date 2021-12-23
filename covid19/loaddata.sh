@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cdir=$(pwd)
+rm -rf /home/adivp416/public_html/covid19/github
 if [ ! -d "/home/adivp416/public_html/covid19/github" ]; then
    mkdir /home/adivp416/public_html/covid19/github
 fi
