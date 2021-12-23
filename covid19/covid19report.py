@@ -676,12 +676,13 @@ if __name__=="__main__":
     import numpy as np
     from scipy.special import factorial,loggamma
     import matplotlib.pyplot as plt
-    import csv, time
+    import csv
+    import time as systime
     from datetime import date, timedelta
     import warnings,traceback
     warnings.filterwarnings('ignore')
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Imports completed. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Imports completed. \t%s"%systime.asctime(systime.localtime()))
     
     countrysetf = "countrypopulations.csv"
     with open(countrysetf,"r") as df:
@@ -719,7 +720,7 @@ if __name__=="__main__":
         popx = float(linedata[3])
         statepops[name] = popx
         
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -758,7 +759,7 @@ if __name__=="__main__":
         for row in creader:
             usadcsv.append(row)
             
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
     ca_deaths = extract_country(ddataset,"Canada")
     us_deaths = extract_usa(usadcsv)
@@ -959,13 +960,13 @@ if __name__=="__main__":
                                        "ACTIVE":ontario_a["TORONTO"],
                                        "RECOVERED":ontario_r["TORONTO"]}
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
 
 
     for neighborhood in TOneighborhoods["units"]:
         plot_TOneighborhood(neighborhood,TOneighborhoods)
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
          
     fig,ax=plt.subplots(figsize=(16,12))
     for neighborhood in TOneighborhoods["units"]:
@@ -1274,7 +1275,7 @@ if __name__=="__main__":
     plt.close('all')
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto plots completed. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario_a.keys()):
@@ -1319,7 +1320,7 @@ if __name__=="__main__":
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     adivgroup = [{"type":"county","dataset":usacsv,"state/province":"Minnesota",
                   "abbrev":"MN","place":"Hennepin"},
@@ -1346,7 +1347,7 @@ if __name__=="__main__":
                  
     plotgroup(adivgroup,directory="adiv")
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Adiv's personal report plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
          
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
@@ -1564,14 +1565,14 @@ if __name__=="__main__":
     plt.close('all')
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US nation-wide data plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
     
     for place in usa:
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
             plot_stateRt(place,usa)
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
     labels=[]
     ptotals = {}
@@ -1655,7 +1656,7 @@ if __name__=="__main__":
     plt.close('all')
 
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
     fig,ax=plt.subplots(figsize=(12,12))
     tmax = 0
@@ -1966,15 +1967,15 @@ if __name__=="__main__":
     plt.savefig("global_rt.pdf",bbox_inches='tight')
     plt.close('all')
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Global data plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
     for country in countries:
         try:
             country_summary(country,dataset,ddataset,countrypops)
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,time.asctime(time.localtime())))
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
             
         except Exception as e:
             traceback.print_exc()
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","No data or broken data for %s \t%s"%(country,time.asctime(time.localtime())))
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%time.asctime(time.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
