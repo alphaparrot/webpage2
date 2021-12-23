@@ -1,0 +1,471 @@
+<!DOCTYPE HTML>
+<!--
+	Synchronous by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)-->
+<html>
+	<head>
+		<title>Adiv Paradise | COVID-19 Dashboard</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="icon" type='image/x-icon' href="imgs/planeticon.ico">
+        <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-panels.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+
+       <style>
+      /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+      /*body { background: #000; font-family: 'Open Sans', sans-serif; -webkit-font-smoothing: antialiased; font-smoothing: antialiased; background-image: url('https://i.imgur.com/n4O2kR2.jpg'); }*/
+
+/* -- Table of Contents -- */
+
+#tableOfContents {
+    width: 300px;
+    color: #fff !important;
+    background: #222;
+    float: left;
+    position: fixed;
+    bottom: 0;
+    right: 1%;
+    z-index: 11;
+    font-size: 18px;
+    font-weight: normal;
+    opacity:0.95;
+}
+
+#tableOfContents h2 {
+    padding: 0;
+    font-size: 20px;
+    font-weight: 700;
+    width: 100%;
+    margin: 0 !important;
+    line-height: 26px;
+    z-index: 10;
+    background: #5c0929;
+    position: relative;
+}
+
+#tableofContents:hover {
+  background: #a32f59;
+}
+
+#tableOfContents h2 a {
+    
+    background: url("imgs/tocarrow.png") no-repeat top left;
+    padding: 10px 0 10px 50px;
+    width: 250px;
+    display: block;
+}
+
+#tableOfContents h2 a:hover {
+    background: #a32f59; 
+}
+
+#tableOfContents a {
+    color: #fff;
+    text-decoration: none;
+    width: 260px;
+    padding: 6px 10px;
+    margin: 0;
+    display: block;
+}
+
+#tableOfContents a:hover {
+    background: #8194d1;
+    color:#000000;
+}
+
+.sectionsWrapper {
+    padding-left: 40px;
+    background: transparent;
+    position: absolute;
+    width: 260px;
+    bottom: -200px;
+    visibility: hidden;
+}
+
+#tableOfContents dl {
+    margin: 0;
+    overflow: hidden;
+    background: #002a5c;
+    padding: 0 0 20px 0;
+    width: 260px;
+    z-index: 10;
+}
+
+#tableOfContents dt {
+    padding: 0;
+    font-weight: 550;
+}
+
+.subsectionContent {
+    display: none;
+}
+
+.subsectionContent dd a {
+    /*color: #eee !important;*/
+    color: #000000;
+    padding-left: 25px !important;
+    font-weight: 500;
+    background: #002a5c;
+}
+    </style>
+
+    <script src="js/prefixfree.min.js"></script>
+
+
+	</head>
+	<body>
+
+    <div class="globalWrapper">
+        <div id="tableOfContents">
+        <h2><a id="toc" href="#">Table of Contents</a></h2>
+        <div class="sectionsWrapper closed">
+        <dl class="sections">
+          <dt><a class="subsection" href="#ChemTag">1. PhD Research</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#habz" data=""-offset="70">1.1. Tidally-locked Planets</a></dd>
+              <dd><a href="#stability" data=""-offset="70">1.2. Climate stability</a></dd>
+              <dd><a href="#observ" data=""-offset="70">1.2. Observability</a></dd>
+            </div>
+          <dt><a class="subsection" href="#Other">2. Past Research</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#blocking" data=""-offset="80">2.1. Atmospheric Blocking</a></dd>
+              <dd><a href="#chime" data=""-offset="80">2.2. CHIME FRB</a></dd>
+              <dd><a href="#implicit" data=""-offset="80">2.3. Implicit Fluid Transport</a></dd>
+              <dd><a href="#poisson" data=""-offset="80">2.4. Poisson Solver</a></dd>
+              <dd><a href="#solarwind" data=""-offset="80">2.5. Solar Wind</a></dd>
+            </div>
+           <dt><a class="subsection" href="#Pub">3. Publications</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#first" data=""-offset="80">3.1. First Author</a></dd>
+              <dd><a href="#author" data=""-offset="80">3.2. Author</a></dd>
+              <dd><a href="#draft" data=""-offset="80">3.3. Drafts</a></dd>
+            </div>
+        </dl><!-- / sections -->
+        </div><!-- / sectionsWrapper -->
+      </div><!-- / tableOfContents -->
+      </div>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+        <script src="js/index.js"></script>
+
+		<div id="wrapper">
+			
+			<!-- Header -->
+			<div id="header">
+				<div class="container"> 
+					
+					<!-- Logo -->
+					<div id="logo">
+						<h1><a href="../index.html">Adiv Paradise</a></h1>
+						<span>Astrophysicist | Climate Scientist | Programmer | Storyteller</span>
+					</div>
+					
+					<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="../index.html">Homepage</a></li>
+			<!--				<li class="active"><a href="research.html">Research</a></li>
+							<li><a href="extracurriculars.html">Extracurriculars</a></li>
+							<li><a href="outreach.html">Outreach</a></li>
+							<li><a href="cv_dossier.html">CV/Resume</a></li>-->
+						</ul>
+					</nav>
+				</div>
+			</div>
+			<!-- /Header -->
+
+            <script>
+            $(function () {
+    setIFrameSize();
+    $(window).resize(function () {
+        setIFrameSize();
+    });
+});
+
+function setIFrameSize() {
+    var ogWidth = 960;
+    var ogHeight = 596;
+    var ogRatio = ogWidth / ogHeight;
+
+    var parentDivWidth = $(".iframe-class").parent().width();
+    var newHeight = (parentDivWidth / ogRatio);
+    $(".iframe-class").addClass("iframe-class-resize");
+    $(".iframe-class-resize").css("width", parentDivWidth);
+    $(".iframe-class-resize").css("height", newHeight);
+}
+</script>
+			
+<div id="page">
+        <div class="container">
+                <div class="row">
+                        <div class="9u skel-cell-important">
+                                <section id="content" >
+                           
+                                <div class="image full">
+                                    <img src="imgs/mixplanets.png" alt="True-color renderings of planets around stars ranging from 2500 K to 8000 K">
+                                    <div class="description">
+                                    <p class="description content"> True-color renderings of planets orbiting stars of various masses and temperatures, ranging from 2500 K to 8000 K, with the planets orbiting the cooler stars rotating with one side always facing the star. These planets were simulated with ExoPlaSim.</p>
+                                    </div></a>
+                                </div>     
+                                
+                                <header>
+                                        <h2><a name="current">PhD Research</a></h2>
+                                        <h3>Supervisor: <a target="_blank" href="https://individual.utoronto.ca/kmenou/Homepage.html">Kristen Menou</a></h3>
+                                </header>
+                                <p>Most of my graduate research focused on the cold edge of the habitable zone. Traditionally, we talk about the habitable zone in terms of distance: the "inner edge" and the "outer edge". But there are a great many factors that affect habitability and climate beyond just distance from the star--CO2, atmospheric mass, water inventory, land masses, etc all play a role. So it makes more sense to talk about the <strong>cold edge</strong>, which describes the cold limit of habitability across all those parameters.</p>
+                                
+                               <p style="fotn-size:25px"><a name="exoplasim">ExoPlaSim: A Fast 3D Climate Model for the Masses</a></p>
+                               <div class="image full" style="text-align: center">
+                                    <video width="75%" height="75%" controls loop autoplay>
+                                        <source src="imgs/tlexo_t170_adv.mp4" type="video/mp4">
+                                        <img src="imgs/tlexo_t170_adv_cover.png" alt="Relative vorticity and windspeed at different atmospheric pressures on a tidally-locked planet, captured with high-cadence output at 75-km resolution with ExoPlaSim.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Relative vorticity (top) and wind speed (bottom) of a tidally-locked planet at different model layers in a high-resolution (75 km) ExoPlaSim simulation, captured in high-cadence output. The substellar point is in the middle.</p>
+                                    </div></a>
+                                </div>
+                               
+                                <p>In order to enable a lot of my research, I have had to make several modifications to the <a target="_blank" style="font-style:italic;" href="https://www.mi.uni-hamburg.de/en/arbeitsgruppen/theoretische-meteorologie/modelle/plasim.html">PlaSim</a> climate model. I use PlaSim for the foundation of my work because it is extraordinarily fast (1 year in 45 seconds on 16 CPUs at 32x64x10 resolution), but PlaSim was designed for Earth, and cannot natively model a wide range of habitable exoplanets accurately. Years of modifications and additions to the model have resulted in the <a style="font-style:italic;" target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a> climate model, of which I am the primary maintainer, which extends PlaSim for planets orbiting stars unlike our Sun, and for different atmospheric pressures. ExoPlaSim also features a <a href="https://pypi.org/project/exoplasim/" style="font-style:italic;" target="_blank">Python API</a> which streamlines installation and model configuration, enabling rapid and efficient modelling with a very shallow learning curve. This should make this model accessible to a range of users, including observers with no modelling experience, while permitting experienced theorists and modellers to produce ensembles of models orders of magnitude larger than those possible with other GCMs. ExoPlaSim does not yet have all the physics necessary to model every physical process we will find on Earth-like exoplanets in the habitable zone, but its robustness, reliability, flexibility, and speed make it a good choice for parameter space studies and pathfinding experiments, where the expense of a larger model may not be justified without first testing the waters with ExoPlaSim.</p>
+                                
+                                <p style="font-size:25px"><a name="habz">How do you freeze a tidally-locked planet?</a></p>
+                                
+                                <div class="image full">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="imgs/combinedcw.mp4" type="video/mp4">
+                                        <img src="imgs/combinedcw359.png" alt="3D renderings of water and cloud fields on a tidally-locked planet">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> 3D renderings of the water content [kg/kg] in the atmosphere of a tidally-locked planet (the dayside is where the big purple region is; the nightside is the other half) and the associated cloud field, generated using output from the LMD Generic model.</p>
+                                    </div></a>
+                                </div>
+                                
+								
+
+                                <p>Tidally-locked planets represent perhaps one of the greatest challenges in planetary science: they are at once our most promising targets in the search for life and the most attractive targets for follow-up observations, and at the same time also the most different from the planets in our solar system. About 70% of the stars in our galaxy are small, dim, low-mass stars, and planets in their habitable zones are almost all going to be tidally-locked, with one side always facing the star. Due to their proximity to their stars, short orbits, and the small size of those stars, they are the easiest terrestrial planets to observe. But when the planet has a temperate day-side and an inhospitable night-side, and when the very dynamics of the atmosphere operate in a different regime, it becomes difficult to generalize what we know about the habitability of Earth-like climates to tidally-locked planets. I use numerical models at various levels of complexity to probe how basic parameters affect the position of the cold edge of the habitable zone. Models I use include a 1D EBM, a modified version of PlaSim called <a href="https://doi.org/10.5281/zenodo.3601570" target="_blank">ExoPlaSim</a>, MITgcm, and the LMD Generic model. ExoPlaSim is the key to this work, because it both runs very quickly (1 year of climate in 45 seconds on 8 CPUs) and contains enough physics to give us useful information about a planet's climate. I use the other models to verify whether my results are robust, or model-dependent.</p>
+
+                                <p style="font-size:25px"><a name="stability">How do climates change over time?</a></p>
+
+                                <p>It's all fine and well if you can identify the conditions that give habitable climates, but what if those conditions are themselves unstable? Earth has several geological feedbacks which connect the atmospheric composition to the planet's interior, and depending on factors like continental configuration and volcanic outgassing rates, CO2 levels can adjust by large amounts over millions of years. Some of my work has focused on examining the consequences of this feedback when outgassing, the source of CO2, is weak. Carbon dioxide sequestration could then continue unabated, pulling the planet into a colder state. <a target="_blank" href="https://arxiv.org/abs/1704.04535">Some of our research</a> suggests that this could lead to planets that cycle between being completely frozen and completely temperate, and some of our other research suggests that sometimes planets can get stuck in their frozen states. Not to worry, though--<a target="_blank" href="https://arxiv.org/abs/1803.00511">that same research</a> also suggests that when that happens, there are regions of land that remain temperate, even though the rest of the planet is frozen. I use a modified version of PlaSim to compute how CO2 changes over time on different planets and identify whether or not these planets have stable climates.</p>
+
+                                <p style="font-size:25px"><a name="observ">How do we know what we're looking at?</a></p>
+
+                                <p>We are at the cusp of being able to observe and characterize Earth-sized exoplanets. New instruments and bigger telescopes are allowing us to peer further, see smaller, and collect more detail. But our experience doing that with larger planets tells us that this will be an extraordinarily difficult endeavor--particularly because terrestrial climates are extraordinarily complex, with many difficult-to-predict highly-coupled nonlinear feedbacks. We are not yet at the stage where we can take a spectrum of a planet and determine what its climate must be like, and we may not be at a point where we can even try to solve that problem. We can however identify how different features of the climate affect that spectrum. I use the radiative transfer model SBDART together with output from my climate models to compute the reflected light spectra of various climate states, and then look for changes in the spectrum that could be attributed to those changes in climate. As a fun aside, because I compute the full reflected spectrum for each point on the planet, I also have everything I need to compute the color and brightness of each point--allowing me to construct an image of what my model would look like to the human eye, if seen from space.</p>
+
+                                <div class="image full">
+                                    <img src="imgs/lprx_1.3bar.gif" alt="True-color rendering of model output">
+                                    <div class="description">
+                                    <p class="description content"> A true-color rendering of a tidally-locked planet viewed at different phases, simulated with the LMD Generic model, using spectral data computed by SBDART. </p>
+                                    </div></a>
+                                </div>
+
+                                
+                                <header>
+                                        <h2><a name="past">Past Research</a></h2>
+                                </header>
+                                
+                                <p style="font-size:25px"><a name="blocking">Jet Stream Blocking: Traffic jams in the atmosphere</a><br><h3>Supervisor: <a target="_blank" href="https://geosci.uchicago.edu/people/noboru-nakamura/">Noboru Nakamura</a></h3></p>
+                                
+                                <p>In June 2018, I attended the Rossbypalooza climate modeling summer school at the University of Chicago. Two other students and I worked with Professor Noboru Nakamura on a follow-up to his <a target="_blank" href="https://science.sciencemag.org/content/early/2018/05/23/science.aat0721">Science paper</a> on why the jet stream sometimes gets stuck in a holding-pattern of sorts--an event called 'blocking'. His paper proposed using reanalysis data that flow in the jet stream might obey effectively the same equation as traffic flow--that effectively, blocks are atmospheric traffic jams. Over the course of 2 weeks, we wrote and tested a 1D model of the jet stream using this equation to understand under what conditions blocks form, and how that might change as a result of climate change. Professor Nakamura is presenting some of our results at the 2018 AGU Fall Meeting.</p>
+                                
+                                <br>
+                                
+                                <p style="font-size:25px"><a name="chime">GPU Beamforming Algorithms: Looking for FRBs with CHIME</a><h3>Supervisor: <a target="_blank" href="https://dunlap.utoronto.ca/~vanderlinde/">Keith Vanderlinde</a></h3></p>
+                                
+                                <p>In the summer of 2016, as my second first-year project at UofT, I worked with Professor Keith Vanderlinde on writing software beamforming algorithms for the CHIME Pathfinder radio telescope. <a target="_blank" href="https://chime-experiment.ca/">CHIME</a> is a series of half-pipes, with radio antennae along the axis. Traditional telescopes only need one set of receivers at the focal point, because the dish does all the work of gathering the light and interfering it into an image at the receiver. With a telescope like CHIME or the smaller CHIME Pathfinder, a computer needs to compute that using a Fourier transform. By applying different offsets, however, the telescope can form many beams looking at different parts of the sky simultaneously. As a result, CHIME can see a strip of sky spannign almost all the way from the Southern horizon to the Northern horizon--and over the course of a day, as the Earth rotates, it sweeps out the entire sky. CHIME's original mission is to construct a 3D map of neutral hydrogen from redshifts 2.5 to 0.8, but it's also useful for detecting Fast Radio Bursts, or FRBS, which are short, bright, mysterious radio pulses from very distant sources. Because CHIME sees a huge portion of the sky and has to process it with computers, and needs to maintain a high cadence to catch FRBs, the beamforming algorithms have to be screamingly fast--so CHIME uses a huge GPU supercomputer on-site to process several terabytes of data per second. In collaboration with Cherry Ng and a few others, I helped with proof-of-concept and prototype beamforming algorithms, figuring out how to code extremely fast and efficient FFTs for the GPUs powering the CHIME Pathfinder. </p><br>
+                                
+                                
+                                <div class="image full">
+                                    <img src="imgs/pathfinder.jpg" alt="The CHIME Pathfinder, a radio telescope with a software beamformer.">
+                                    <div class="description">
+                                    <p class="description content"> The CHIME Pathfinder at the Dominion Radio Astrophysical Observatory near Penticton, BC. CHIME is a series of half-pipes, and uses software to form images of the sky. Photo credit Keith Vanderlinde, Dunlap Institute. </p>
+                                    </div></a>
+                                </div><br>
+                                
+                                <p style="font-size:25px"><a name="implicit">Implicit Fluid Transport: Looking for a better way</a><h3>Supervisor: <a target="_blank" href="https://www.lcse.umn.edu/">Paul Woodward</a></h3></p>
+                                
+                                <p>In the year between undergrad and grad school (2014-2015), I worked with Professor Paul Woodward at the University of Minnesota on trying to come up with a faster, more efficient way to compute implicit fluid transport in multi-dimensional fluid simulations, using Riemann invariants. We had very promising results in 1D cases, but have yet to find a way to robustly generalize that success to multiple dimensions.</p><br>
+                                
+                                <p style="font-size:25px"><a name="poisson">Solving the Poisson Equation Quickly</a><h3>Supervisors: <a target="_blank" href="https://www.lcse.umn.edu/">Paul Woodward</a> and <a target="_blank" href="https://www.lanl.gov/org/padste/adtsc/computer-computational-statistical-sciences/computational-physics-methods/index.php">William Dai</a></h3></p>
+                                
+                                <p>For my undergraduate astronomy thesis, I worked with Professor Paul Woodward at the University of Minnesota on coming up with a better, more efficient way to compute the Poisson equation for gravity on regular finite-volume cartesian grids. For large, self-gravitating systems like astrophysical disks (ranging from proto-planetary disks to galactic disks), gravity computations can be very expensive and inefficient in highly-parallelized simulations, since the gravitational force on a given position depends on knowledge of the entire system--leading to an N<sup>2</sup> problem. Solving a discretized version of the Poisson equation for gravity allows one to iteratively express the problem as simply depending on a local source term and the values of the cell's immediate neighbors. We <a target="_blank" href="undergradthesis.pdf">used a "red-black" relaxation algorithm</a> coupled with manipulations of the domain geometry to reduce the expense and improve the efficiency of this approach for scalable highly-parallelized applications. I continued this work the summer after graduation with Dr. William Dai at the Los Alamos National Laboratory.</p><br>
+                                
+                                <p style="font-size:25px"><a name="solarwind">Blowing in the Wind: The solar wind and the magnetosphere</a><h3>Supervisors: <a target="_blank" href="https://www.physics.umn.edu/people/breneman.html">Aaron Breneman</a> and <a target="_blank" href="https://www.physics.umn.edu/people/cattell.html">Cynthia Cattell</a></p>
+
+                                <p>From Summer 2011 until my graduation in Spring 2014, I worked with the Space Physics Lab at the University of Minnesota as an undergraduate research assistant. We studied electromagnetic waves and other phenomena in the solar wind, in particular as they interacted with Earth's magnetosphere. This work involved data from the STEREO spacecraft as well as the Van Allen Space Probes (originally the Radiation Belt Space Probes). I helped to analyze data, write analysis code, designed an early version of the <a target="_blank" href="https://www.space.umn.edu/missions/rbspefw-home-university-of-minnesota/">website</a> for our electric field instrument aboard the Van Allen probes, and wrote some end-user software for aquisition and analysis of data from the Van Allen probes.</p><br>
+                                
+                                <header>
+                                    <h2><a name="Publications">Publications</a></h2>
+                                </header>
+
+                                <p style="font-size:25px"><a name="first">First Author</a></p>
+
+                                <ul class="style1">
+                                <li><a href="https://arxiv.org/abs/1704.04535" style="font-style:italic;" target="_blank">GCM Simulations of Unstable Climates in the Habitable Zone</a></li>
+                                <li><a href="https://arxiv.org/abs/1803.00511" style="font-style:italic;" target="_blank">Habitable Snowballs: Temperate Land Conditions, Liquid Water, and Implications for CO2 Weathering</a></li>
+                                <li><a href="https://arxiv.org/abs/1910.02355" style="font-style:italic;" target="_blank">Climate diversity in the solar-like habitable zone due to varying background gas pressure</a></li>
+                                </ul>
+
+                                <p></p>
+
+                                <p style="font-size:25px"><a name="author">Author</a></p>
+
+                                <ul class="style1">
+                                    <li><a href="https://arxiv.org/abs/2110.04310" style="font-style:italic;" target="_blank">Climate uncertainties caused by unknown land distribution on habitable M-Earths</a> (2nd author)</li>
+                                    <li><a href="https://arxiv.org/abs/1710.08591" style="font-style:italic;" target="_blank">Algorithms for FFT Beamforming Radio Interferometers</a></li>
+                                    <li><a href="https://arxiv.org/abs/1702.04728" style="font-style:italic;" target="_blank">CHIME FRB: An application of FFT beamforming for a radio telescope</a></li>
+                                    <li><a href="https://arxiv.org/abs/1610.05359" style="font-style:italic;" target="_blank">A Machine Learns to Predict the Stability of Tightly Packed Planetary Systems</a></li>
+                                    <li><a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2013JA019372" style="font-style:italic;" target="_blank">STEREO and Wind observations of intense cyclotron harmonic waves at the Earth's bow shock and inside the magnetosheath</a></li>
+                                    <li><a href="https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2011JA017425" style="font-style:italic;" target="_blank">Explaining polarization reversals in STEREO wave data</a></li>
+                                </ul>
+
+                                <p></p>
+
+                                <p style="font-size:25px"><a name="draft">Under Review</a></p>
+
+                                <ul class="style1">
+                                    <li><a href="https://arxiv.org/abs/2107.07685" style="font-style:italic;" target="_blank">ExoPlaSim: Extending the Planet Simulator for Exoplanets</a></li>
+                                    <li><a href="https://arxiv.org/abs/2106.00079" style="font-style:italic;" target="_blank">Fundamental Challenges to Remote Sensing of Exo-Earths</a></li>
+                                </ul>
+
+                                <p></p>
+                                
+                                <p style="font-size:25px"><a name="bonus">Bonus</a></p>
+                                
+                                <ul class="style1">
+                                <li><a href="https://arxiv.org/abs/2008.02339" style="font-style:italic;" target="_blank">A Large Repository of 3D Climate Model Outputs for Community Analysis and Postprocessing</a></li>
+                                <li><a href="https://arxiv.org/abs/1903.12195" style="font-style:italic;" target="_blank">The Long Night: Modeling the Climate of Westeros</a></li>
+                                <li><a href="https://arxiv.org/abs/2104.00175" style="font-style:italic;" target="_blank">Preliminary Analysis of Planetary Characteristics, Dynamics, and Climates from the Systems Alliance Planetary Survey Catalogue</a></li>
+                                </ul>
+                                
+                                <header>
+                                    <h2><a href="research.html" name="Travel">Travel</a></h2>
+                                </header>
+
+                                <ul class="style1">
+                                    <li><a target="_blank" href="https://sites.northwestern.edu/iceland2019/">Extreme Solar Systems IV</a> - Reykjavik, Iceland, Aug 19-23 2019</li>
+                                    <li><a target="_blank" href="https://eres.astro.cornell.edu/">Emerging Researchers in Exoplanet Science V</a> - Cornell University, Ithaca, June 17-19, 2019</li>
+                                    <li><a target="_blank" href="https://www.hou.usra.edu/meetings/climatology2018/">Comparative Climatology of Terrestrial Planets III</a> - Lunar & Planetary Institute, Houston, August 27-30 2018 </li>
+                                    <li><a target="_blank" href="https://www.rossbypalooza.org/">Rossbypalooza Summer School</a> - University of Chicago, Chicago, June 11-22 2018</li>
+                                    <li><a href="https://eres-yale.science/" target="_blank">Emerging Researchers in Exoplanet Science III</a> - Yale University, New Haven, June 12-13 2017</li>
+                                    <li><a href="#">Emerging Researchers in Exoplanet Science II</a> - Carl Sagan Institute, Cornell University, Ithaca, June 13-14 2016</li>
+                                    <li><a target="_blank" href="https://helix.phys.uvic.ca:8080/JINA-CEE/gnash-workshop">GNASH: The anomalous metal-poor stars and convective-reactive nuclear astrophysics</a> - University of Victoria, Victoria, BC, May 25-29, 2015</li>
+                                    <li><a target="_blank" href="https://bluewaters.ncsa.illinois.edu/bw-sym-2015">NCSA Blue Waters Symposium for Petascale Science and Beyond</a> - Sunriver Resort, Sunriver, Oregon, May 10-13 2015</li>
+                                    <li><a target="_blank" href="https://fallmeeting.agu.org/2013/">American Geophysical Union Fall Meeting</a> - San Francisco, December 9-13 2013</li>
+                                </ul>
+                                <p></p>
+							</section>
+						</div>
+						<div class="3u"> 
+							<section id="sidebard2">
+								<header>
+									<h2>Links</h2>
+								</header>
+								<ul class="style1">
+                                    <li><a target="_blank" href="https://www.linkedin.com/in/adivparadise/">LinkedIn</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/">GitHub</a></li>
+                                    <li><script language="JavaScript">
+                                        var username = "paradise.astro";
+                                        var hostname = "gmail.com";
+                                        var linktext = username + "@" + hostname ;
+                                        document.write("<a href='" + "mailto:" + username + "@" + hostname + "'>Email</a>");
+                                    </script></li>
+                                   <!-- <li><input type="button" value="Research Log" onClick="window.open('research_log.html')">
+                                    </li>-->
+                                </ul>
+                                    <br>
+                                    <br>
+                                                        <header>
+                                                            <h2>Selected Projects</h2>
+                                                        </header>
+                                                        <ul class="style1">
+                                                        <li><a target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/gcmtools">gcmtools</a></li>
+                                                        <li><a target="_blank" href="https://github.com/alphaparrot/NagMe">NagMe</a></li>
+                                                        </ul>
+							</section>
+						</div>
+					</div>
+
+				</div>	
+			</div>
+
+<!-- Footer -->
+            <div id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="3u">
+                            <section id="box1">
+                                <header>
+                                    <h2>Recent travel</h2>
+                                </header>
+                                <ul class="style3">
+                                    <li class="first">
+                                        <p class="date"> Aug 19-23 2019</p>
+                                        <p><a href="https://sites.northwestern.edu/iceland2019/">Extreme Solar Systems IV</a> - Reykjavik, Iceland </p>
+                                    </li>
+                                    <li>
+                                        <p class="date">Jun 17-19 2019</p>
+                                        <p><a href="https://eres.astro.cornell.edu/">Emerging Researchers in Exoplanet Science V</a> - Cornell University, Ithaca</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="6u">
+                            <section id="box2">
+                                <header>
+                                    <h2>Department of Astronomy</h2>
+                                </header>
+                                <div> <a href="https://www.astro.utoronto.ca/" class="image full"><img src="imgs/gasa_nov2017.jpg" style="width:90%" alt=""></a> </div>
+                                <p>I did my PhD at the <a target="_blank" href="https://www.astro.utoronto.ca/">Department of Astronomy & Astrophysics </a> at the University of Toronto.</p>
+                            </section>
+                        </div>
+                        <div class="3u">
+                            <section id="box3">
+                                <header>
+                                    <h2>External Links</h2>
+                                </header>
+                                <ul class="style1">
+                                    <li class="first"><a href="https://universe.utoronto.ca/talks-lectures/ask-an-astronomer/" target=_"blank">Ask an Astronomer</a>
+                                    <a href="https://www.astro.utoronto.ca/astrotours/" target="_blank">AstroTours</a>
+                                    <a href="https://astro.utoronto.ca/~gasa/" target="_blank">GASA</a>
+                                    <a target="_blank" href="https://www.linkedin.com/in/adivparadise/">My LinkedIn</a>
+                                    <a href="https://github.com/alphaparrot/">My GitHub</a>
+                                    <script language="JavaScript">
+                                        var username = "paradise";
+                                        var hostname = "astro.utoronto.ca";
+                                        var linktext = username + "@" + hostname ;
+                                        document.write("<a href='" + "mailto:" + username + "@" + hostname + "'>My Email</a>");
+                                    </script></li>
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div id="copyright">
+                <div class="container">
+                    Copyright Adiv Paradise 2018; Design: <a href="https://templated.co">TEMPLATED</a> ; Banner image: <a href="https://eol.jsc.nasa.gov/">Earth Science and Remote Sensing Unit, NASA Johnson Space Center</a>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>
+
