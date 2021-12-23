@@ -2,12 +2,15 @@
 
 cdir=$(pwd)
 if [ ! -d "/home/adivp416/public_html/covid19/github" ]; then
-   git clone https://github.com/CSSEGISandData/COVID-19.git /home/adivp416/public_html/covid19/COVID-19
-   ln -s /home/adivp416/public_html/covid19/COVID-19/csse_covid_19_data/csse_covid_19_time_series /home/adivp416/public_html/covid19/github
+   mkdir /home/adivp416/public_html/covid19/github
 fi
 cd /home/adivp416/public_html/covid19/github
-git stash
-git pull
+
+wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
+wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_US.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
+wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv
+wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_recovered_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv
+wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_US.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv
 
 sed -i 's/"Korea, South"/South Korea/g' time_series_covid19_confirmed_global.csv
 sed -i 's/"Korea, South"/South Korea/g' time_series_covid19_deaths_global.csv
