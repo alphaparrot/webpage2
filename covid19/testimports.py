@@ -1,7 +1,7 @@
 
 if __name__=="__main__":
-   os.system(' echo "beginning imports">/home/adivp416/public_html/covid19/pythonlog.txt')
    import os 
+   os.system('echo "beginning imports">/home/adivp416/public_html/covid19/pythonlog.txt')
    os.environ['OPENBLAS_NUM_THREADS'] = '2'
    import numpy as np
    from scipy.special import factorial,loggamma
