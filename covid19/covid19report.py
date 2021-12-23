@@ -671,7 +671,7 @@ def _log(destination,string):
 
 if __name__=="__main__":
     import os 
-    os.system('echo "beginning imports">/home/adivp416/public_html/covid19/pythonlog.txt')
+    os.system('echo "beginning imports">/home/adivp416/public_html/covid19/reportlog.txt')
     os.environ['OPENBLAS_NUM_THREADS'] = '2'
     import numpy as np
     from scipy.special import factorial,loggamma
