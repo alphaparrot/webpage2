@@ -675,6 +675,8 @@ if __name__=="__main__":
     os.environ['OPENBLAS_NUM_THREADS'] = '2'
     import numpy as np
     from scipy.special import factorial,loggamma
+    import matplotlib
+    matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import csv
     import time as systime
