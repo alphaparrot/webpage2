@@ -1,6 +1,5 @@
 <?php
-var_dump($_POST);
-if(isset($_POST['submit'])){
+// var_dump($_POST);
 // Fetching variables of the form which travels in URL
 $neighborhood = $_POST['neighborhood'];
 $filename = str_replace(" ","_",$neighborhood);
@@ -14,6 +13,5 @@ header("Location:".$filename.".html");
 }
 else{
 ?><span><?php echo "Please select a neighborhood!";?></span> <?php
-}
 }
 ?>
