@@ -30,7 +30,7 @@ section = '<p style="font-size:25px"><a name="%s">%s</a></p>'
 def makeneighborhood(neighborhood,pathdir):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
-    pathdir = pathdir.replace("/","_").replace(" ","_").replace("-","_")
+    pathdir = pathdir.replace("/","-")
     filename = neighborhood.replace("/","_").replace(" ","_").replace("-","_")+".html"
     title = "\t\t<title>%s | COVID-19 Dashboard</title>"%neighborhood
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, Toronto</a></li>'%(filename,neighborhood)
@@ -73,7 +73,7 @@ def makeneighborhood(neighborhood,pathdir):
                       "%s_avgcases.png"%pathdir,"%s_avgcases.pdf"%pathdir,
                       "%s_avgcases_log.png"%pathdir,"%s_avgcases_log.pdf"%pathdir)+"\n"+
             "<br >\n"+
-            "<p>Last updated %s</p>"%(systime.asctime(systime.localtime())))
+            "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
             
             
     
