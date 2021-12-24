@@ -965,10 +965,37 @@ if __name__=="__main__":
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
 
 
+    #for neighborhood in TOneighborhoods["units"]:
+    #    plot_TOneighborhood(neighborhood,TOneighborhoods)
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    
+    #Generate HTML pages
+    import makehtml
     for neighborhood in TOneighborhoods["units"]:
-        plot_TOneighborhood(neighborhood,TOneighborhoods)
+        makehtml.makeneighborhood(neighborhood,"%s/%s"%(neighborhood,neighborhood))
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- TORONTOFORM -->" in line:
+                html.append(line)
+                for neighborhood in TOneighborhoods["units"]:
+                    html.append('\t\t\t\t<option value="%s">%s</option>'%(neighborhood,
+                                                                          neighborhood))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            else:
+                html.append(line)
+        else:
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
+
          
     fig,ax=plt.subplots(figsize=(16,12))
     for neighborhood in TOneighborhoods["units"]:
