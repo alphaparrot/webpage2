@@ -226,8 +226,8 @@ function setIFrameSize() {
                                         <h2><a name="current">COVID-19 Data Dashboard</a></h2>
                                 </header>
                                 <p style="font-size:25px">Important Disclaimers</p>
-                                <ul style="font-weight:bold">
-                                <li>I am not an epidemiologist. I may get things wrong, and you should not use my analyses as predictive tools or for policy decisions.<br/></li>
+                                <ul style="font-weight:bold;list-style-type:disc;">
+                                <li>I am not an epidemiologist. I may get things wrong, and you should not use my analyses as predictive tools or for policy decisions.<br/><br/></li>
                                 <li>I am providing access to data along with some basic mathematical and statistical manipulations of said data, packaged into visualizations I think are useful. I am not making predictions about where the pandemic is headed next.</li>
                                 <li>Data on small populations are inherently more uncertain. Take any data product for local scales such as counties, neighborhoods, small states, etc with some hefty grains of salt.</li>
                                 <li>These analyses are always retrospective. There is a known lag between when someone gets sick and when the databases find out about it, often several days to a week. When things are getting worse, assume they're worse than the data reveal. When they're getting better, however, assume you don't know what's actually going on, because there could be a growth in cases happening that hasn't shown up in the data yet. Additionally, many of my measures make use of rolling averages or running sums, which will also tend to increase the degree to which the analysis lags the real world. Where possible I use the center of the rolling window for the associated timestamp, which reduces the lag effect for historical data, but for recent data it absolutely still applies.</li>
@@ -237,7 +237,7 @@ function setIFrameSize() {
                                 
                                 <p style="font-size:25px">My Data and Methodology Sources</p>
                                 <p>For Toronto and Ontario data, I source my data directly from the respective public health authorities. For US and global data, I use the John's Hopkins COVID-19 Dashboard github repository.</p>
-                                <ul>
+                                <ul style="list-style-type:disc">
                                 <li><a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a></li>
                                 <li><a target="_blank" href="https://data.ontario.ca/dataset/1115d5fe-dd84-4c69-b5ed-05bf0c0a0ff9/resource/d1bfe1ad-6575-4352-8302-09ca81f7ddfc">Status of COVID-19 cases in Ontario by Public Health Unit (PHU) - Ontario Data Catalogue</a></li>
                                 <li><a target="_blank" href="https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/covid-19-cases-in-toronto">Toronto Public Health COVID-19 Cases</a></li>
