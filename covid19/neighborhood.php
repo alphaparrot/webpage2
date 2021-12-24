@@ -7,6 +7,7 @@ $filename = str_replace("-","_",$filename);
 $filename = str_replace("+","_",$filename);
 if($neighborhood !=''&& $neighborhood !='placeholder')
 {
+echo $filename."html" //must delete for Header to work
 //  To redirect form on a particular page
 header("Location:".$filename.".html");
 }
