@@ -373,8 +373,8 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.plot(np.arange(len(cases))-len(cases),cases,marker='.')
     plt.annotate("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
                  (-len(cases)+2,cases.max()*1.1))
-    print("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
-                 (-len(cases),cases.max()*1.1))
+    #print("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
+    #             (-len(cases),cases.max()*1.1))
     #plt.yscale('log')
     plt.title("Daily New Cases in %s"%neighborhood)
     plt.xlabel("Days Before Present")
