@@ -965,9 +965,9 @@ if __name__=="__main__":
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
 
 
-    #for neighborhood in TOneighborhoods["units"]:
-    #    plot_TOneighborhood(neighborhood,TOneighborhoods)
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    for neighborhood in TOneighborhoods["units"]:
+        plot_TOneighborhood(neighborhood,TOneighborhoods)
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
     
     #Generate HTML pages
     import makehtml
