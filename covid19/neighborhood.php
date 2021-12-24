@@ -1,10 +1,12 @@
 <?php
+var_dump($_POST);
 if(isset($_POST['submit'])){
 // Fetching variables of the form which travels in URL
 $neighborhood = $_POST['neighborhood'];
 $filename = str_replace(" ","_",$neighborhood);
 $filename = str_replace("-","_",$filename);
 $filename = str_replace("+","_",$filename);
+echo $filename.".html";
 if($neighborhood !=''&& $neighborhood !='placeholder')
 {
 //  To redirect form on a particular page
