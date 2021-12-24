@@ -97,7 +97,7 @@
 
 #tableOfContents dl {
     margin: 0;
-/*     overflow: hidden; */
+    overflow: hidden;
     background: #002a5c;
     padding: 0 0 20px 0;
     width: 260px;
@@ -138,7 +138,7 @@
         <h2><a id="toc" href="#">Table of Contents</a></h2>
         <div class="sectionsWrapper closed">
         <dl class="sections">
-          <dt><a class="subsection" href="#Toronto">Toronto</a></dt>
+          <dt><a class="subsection" href="#Toronto">Locales</a></dt>
             <div class="subsectionContent">
               <dd><a href="#Toronto" data=""-offset="70">Toronto</a></dd>
               <dd><a href="#Ontario" data=""-offset="70">Ontario</a></dd>
@@ -291,8 +291,10 @@ function setIFrameSize() {
                                 <br>
                                 
                                 <div class="image full">
+                                   <div>
                                    <img style="width:48%;float:left;" alt="Toronto case breakdown (linear)" src="toronto_breakdown.png">
-                                   <img style="width:45%;float:right;" alt="Toronto case breakdown (logarithmic)" src="toronto_breakdown_log.png">
+                                   <img style="width:48%;float:right;" alt="Toronto case breakdown (logarithmic)" src="toronto_breakdown_log.png">
+                                   </div>
                                    <div class="description">
                                    <p>Breakdown of Toronto's daily cases by status--active, recovered, ever hospitalized, or dead. Note that 'hospitalized' is a status that applies to any of the other 3 categories. These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.
                                    <br/>Left: <a href="toronto_breakdown.png" target="_blank">PNG</a> | <a href="toronto_breakdown.pdf" target="_blank">PDF</a>
