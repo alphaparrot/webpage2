@@ -1228,9 +1228,9 @@ if __name__=="__main__":
     plt.savefig("toronto_breakdown_3wk_log.pdf",bbox_inches='tight')
     plt.close('all')
 
-    orontott = ontario["TORONTO"][:]
-    oronto = np.diff(torontott)
-    orontopop = 2.93e6
+    torontott = ontario["TORONTO"][:]
+    toronto = np.diff(torontott)
+    torontopop = 2.93e6
 
 
     fig,axes=plt.subplots(figsize=(14,7))
