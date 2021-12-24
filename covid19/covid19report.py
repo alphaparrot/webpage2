@@ -448,7 +448,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/dataset["units"][neighborhood]["POP"] * 1e5,marker='.',
              label=neighborhood)
-    curve2 = day5avg(np.diff(dataset["ProvincialTO"]["CASES"])/2.93e6 * 1e5)
+    curve2 = day5avg(dataset["ProvincialTO"]["CASES"]/2.93e6 * 1e5)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,linestyle='--',color='k',alpha=1.0,label="Toronto")
     plt.legend()
     plt.xlabel("Days Before Present")
@@ -467,7 +467,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.',color='C0',label=neighborhood)
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,alpha=0.4,
              color='C0',label="%s Instantaneous R$_t$"%neighborhood)
-    rt14,post14,like14 = Rt(day5avg(np.diff(dataset["ProvincialTO"]["CASES"])),interval=7)
+    rt14,post14,like14 = Rt(day5avg(dataset["ProvincialTO"]["CASES"]),interval=7)
     curve2 = week2avg(rt14)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.7,label="Toronto")
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,alpha=0.4,linestyle='--',color='k')
@@ -532,7 +532,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/dataset["units"][neighborhood]["POP"] * 1e5,marker='.',
              label=neighborhood)
-    curve2 = day5avg(np.diff(dataset["ProvincialTO"]["CASES"])/2.93e6 * 1e5)
+    curve2 = day5avg(dataset["ProvincialTO"]["CASES"]/2.93e6 * 1e5)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,linestyle='--',color='k',alpha=1.0,label="Toronto")
     plt.legend()
     plt.xlabel("Days Before Present")
@@ -544,6 +544,98 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
+    
+def plotOntario(phu,cases,deaths,active,recovered,population=None):
+    
+    fstub = str.title(phu).replace("/","_")
+    if not os.path.isdir("ontario_%s"%fstub):
+        os.system("mkdir ontario_%s"%fstub)
+    phuname = str.title(phu)
+    
+    plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per Day")
+    plt.title("%s, ON Raw Cases per Day"%phuname)
+    if population is not None:
+        plt.annotate("%1.2f% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
+    plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per Day")
+    plt.title("%s, ON Raw Cases per Day"%phuname)
+    if population is not None:
+        plt.annotate("%1.2f% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
+    plt.yscale('log')
+    plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_rawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(cases[phu])
+    plt.plot(np.arange(len(curve))-len(curve),curve)
+    plt.xlabel("Days before Present")
+    plt.ylabel("Average New Cases per Day")
+    plt.title("%s, ON Average Cases per Day"%phuname)
+    if population is not None:
+        plt.annotate("%1.2f% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
+    plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(curve))-len(curve),curve)
+    plt.xlabel("Days before Present")
+    plt.ylabel("Average New Cases per Day")
+    plt.title("%s, ON Average Cases per Day"%phuname)
+    if population is not None:
+        plt.annotate("%1.2f% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
+    plt.yscale('log')
+    plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_avgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
+    plt.xlabel("Days before Present")
+    plt.ylabel("Active Cases")
+    plt.title("%s, ON Daily Active Cases"%phuname)
+    plt.savefig("ontario_%s/%s_active.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_active.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    
+    plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
+    plt.xlabel("Days before Present")
+    plt.ylabel("Active Cases")
+    plt.title("%s, ON Daily Active Cases"%phuname)
+    plt.yscale('log')
+    plt.savefig("ontario_%s/%s_active_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_active_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve=day5avg(np.diff(deaths[phu]))
+    plt.plot(np.arange(len(curve))-len(curve),curve)
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-day Average Deaths per Day")
+    plt.title("Average daily deaths from COVID-19 in %s, ON"%phuname)
+    plt.savefig("ontario_%s/%s_deaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_deaths.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    fig,axes=plt.subplots(figsize=(14,9))
+    rt,post14,like14 = Rt(day5avg(cases),interval=7,override=True)
+    rt14 = week2avg(rt)
+    plt.plot(np.arange(len(rt14))-len(rt14),rt14,color='k',label="2-Week Average")
+    plt.plot(np.arange(len(rt))-len(rt),rt,color='k',linestyle='--',alpha=0.4,label="Instantaneous")
+    plt.axhline(1.0,color='r',linestyle=':')
+    plt.title("%s, ON Effective Reproductive Number"%phuname)
+    plt.xlabel("Days before Present")
+    plt.ylabel("Effective Reproductive Number R$_t$")
+    
+    plt.savefig("ontario_%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
 
 def plotgroup(group,directory='mygroup'):
     if not os.path.isdir(directory):
@@ -949,13 +1041,16 @@ if __name__=="__main__":
             except:
                 print(timestamp)
     for phu in otimes.keys():
-        ontario[phu] = ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
         order = np.argsort(otimes[phu])
         otimes[phu] = otimes[phu][order]
-        ontario[phu] = ontario[phu][order]
         ontario_a[phu] = ontario_a[phu][order]
         ontario_r[phu] = ontario_r[phu][order]
         ontario_d[phu] = ontario_d[phu][order]
+        ontario[phu] = (np.diff(np.append([0,],ontario_a[phu]))
+                       +np.diff(np.append([0,],ontario_r[phu]))
+                       +np.diff(np.append([0,],ontario_d[phu]))) 
+                     #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
+
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -1259,8 +1354,8 @@ if __name__=="__main__":
     plt.savefig("toronto_breakdown_3wk_log.pdf",bbox_inches='tight')
     plt.close('all')
 
-    torontott = ontario["TORONTO"][:]
-    toronto = np.diff(torontott)
+    torontott = np.cumsum(ontario["TORONTO"][:])
+    toronto = ontario["TORONTO"][:]
     torontopop = 2.93e6
 
 
@@ -1324,7 +1419,7 @@ if __name__=="__main__":
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario.keys()):
         try:
-            y = day5avg(np.diff(ontario[k][:-2]))
+            y = day5avg(ontario[k])
             plt.plot(range(len(y)),y,label=k)
             plt.annotate(k,(len(y),y[-1]))
         except:
@@ -1352,6 +1447,40 @@ if __name__=="__main__":
     plt.savefig("ontario_newdeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
+    
+    for k in sorted(ontario_a.keys()):
+        try:
+            plotOntario(k,ontario[k],ontario_d[k],ontario_a[k],ontario_r[k])
+        except:
+            traceback.print_exc()
+        
+    for k in sorted(ontario_a.keys()):
+        fstub = str.title(k).replace("/","_")
+        if os.path.isdir("ontario_%s"):
+            makehtml.makephu(str.title(k),"ontario_%s/%s"%(fstub,fstub))
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- ONTARIOFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(ontario_a.keys()):
+                    phu = "%s"%str.title(k)
+                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--ON-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
          
