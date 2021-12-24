@@ -164,10 +164,10 @@ sub {
 	    left:0px;  
 	    width:100%;  
 	    /* styling bellow */  
-	    background-color:#323338;
+	    background-color:#FFFFFF;
 	    text-align: center;    
 	    font-size:15px;  
-	    color:white;  
+	    color:black;  
 	}  
 	p.description_content{  
 	    padding:10px;  
