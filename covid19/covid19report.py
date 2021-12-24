@@ -984,11 +984,14 @@ if __name__=="__main__":
         if not skipnext:
             if "<!-- TORONTOFORM -->" in line:
                 html.append(line)
-                for neighborhood in TOneighborhoods["units"]:
+                skipnext=True
+                for neighborhood in sorted(TOneighborhoods["units"].keys()):
                     html.append('\t\t\t\t<option value="%s">%s</option>'%(neighborhood,
                                                                           neighborhood))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
+            elif "<option" in line:
+                pass #skip thi line too 
             else:
                 html.append(line)
         else:
