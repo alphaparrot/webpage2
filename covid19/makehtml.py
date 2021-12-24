@@ -35,7 +35,7 @@ def makeneighborhood(neighborhood,pathdir):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, Toronto</a></li>'%(filename,neighborhood)
     header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%neighborhood
     
-    body = ("<header><h2>%s Plots</h2></header>    \n"+
+    body = ("<header><h2>%s Plots</h2></header>    \n"%neighborhood+
             imgplate%("%s_rawcases.png"%pathdir,"%s cases per day"%neighborhood,
                       "New COVID-19 cases per day in %s, Toronto. These data "%neighborhood+
                       "have not had a rolling average applied.","%s_rawcases.png"%pathdir,

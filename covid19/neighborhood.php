@@ -4,6 +4,7 @@ if(isset($_POST['submit'])){
 $neighborhood = $_POST['name'];
 $filename = str_replace(" ","_",$neighborhood);
 $filename = str_replace("-","_",$filename);
+$filename = str_replace("+","_",$filename);
 if($neighborhood !=''&& $neighborhood !='placeholder')
 {
 //  To redirect form on a particular page

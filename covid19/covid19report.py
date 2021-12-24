@@ -971,7 +971,6 @@ if __name__=="__main__":
     
     #Generate HTML pages
     import makehtml
-    os.system("rm -rf *.html.html")
     for neighborhood in TOneighborhoods["units"]:
         fstub = neighborhood.replace("/","-")
         makehtml.makeneighborhood(neighborhood,"%s/%s"%(fstub,fstub))
