@@ -5,7 +5,8 @@
     Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)-->
 <html>
 	<head>
-		<title>Adiv Paradise | COVID-19 Dashboard</title>
+<!-- TITLE -->
+<!-- 		<title>Adiv Paradise | Research</title> -->
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -124,11 +125,6 @@
 
     <script src="js/prefixfree.min.js"></script>
 
-    <script>
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-    </script>
 
 	</head>
 	<body>
@@ -138,9 +134,10 @@
         <h2><a id="toc" href="#">Table of Contents</a></h2>
         <div class="sectionsWrapper closed">
         <dl class="sections">
-<!--           <dt><a class="subsection" href="#ChemTag">1. PhD Research</a></dt> -->
+<!-- TOC -->
+<!--          <dt><a class="subsection" href="#ChemTag">1. PhD Research</a></dt>
             <div class="subsectionContent">
-              <dd><a href="#Toronto" data=""-offset="70">Toronto</a></dd>
+              <dd><a href="#habz" data=""-offset="70">1.1. Tidally-locked Planets</a></dd>
               <dd><a href="#stability" data=""-offset="70">1.2. Climate stability</a></dd>
               <dd><a href="#observ" data=""-offset="70">1.2. Observability</a></dd>
             </div>
@@ -157,7 +154,7 @@
               <dd><a href="#first" data=""-offset="80">3.1. First Author</a></dd>
               <dd><a href="#author" data=""-offset="80">3.2. Author</a></dd>
               <dd><a href="#draft" data=""-offset="80">3.3. Drafts</a></dd>
-            </div>
+            </div>-->
         </dl><!-- / sections -->
         </div><!-- / sectionsWrapper -->
       </div><!-- / tableOfContents -->
@@ -175,29 +172,27 @@
 					
 					<!-- Logo -->
 					<div id="logo">
-						<h1><a href="https://www.adivparadise.ca/index.html">Adiv Paradise</a></h1>
+						<h1><a href="https://adivparadise.ca/index.html">Adiv Paradise</a></h1>
 						<span>Astrophysicist | Climate Scientist | Programmer | Storyteller</span>
 					</div>
 					
 					<!-- Nav -->
 					<nav id="nav">
 						<ul>
-							<li><a href="https://wwww.adivparadise.ca/index.html">Homepage</a></li>
-							<li class="active"><a href="index.html">COVID-19 Dashboard</a></li>
-			<!--				<li class="active"><a href="research.html">Research</a></li>
-							<li><a href="extracurriculars.html">Extracurriculars</a></li>
-							<li><a href="outreach.html">Outreach</a></li>
-							<li><a href="cv_dossier.html">CV/Resume</a></li>-->
+							<li><a href="https://adivparadise.ca/index.html">Homepage</a></li>
+<!-- NAVBAR -->
+<!-- <li class="active"><a href="currentpage.html">currentpage</a></li> -->
+							<li><a href="index.html">COVID-19 Dashboard</a></li>
 						</ul>
 					</nav>
 					<br/>
 					<nav id="nav2">
                                         <ul>
-                                        <li class="active"><a href="#Toronto">Toronto</a></li>
-                                        <li><a href="#Ontario">Ontario</a></li>
-                                        <li><a href="#Canada">Canada</a></li>
-                                        <li><a href="#USA">USA</a></li>
-                                        <li><a href="#Global">Global</a></li>
+                                        <li><a href="index.html#Toronto">Toronto</a></li>
+                                        <li><a href="index.html#Ontario">Ontario</a></li>
+                                        <li><a href="index.html#Canada">Canada</a></li>
+                                        <li><a href="index.html#USA">USA</a></li>
+                                        <li><a href="index.html#Global">Global</a></li>
                                         </ul>
                                         </nav>
 				</div>
@@ -224,16 +219,16 @@ function setIFrameSize() {
     $(".iframe-class-resize").css("height", newHeight);
 }
 </script>
-
 			
 <div id="page">
         <div class="container">
                 <div class="row">
                         <div class="9u skel-cell-important">
                                 <section id="content" >
-                              
+                             
                                 <header>
-                                        <h2><a name="current">COVID-19 Data Dashboard</a></h2>
+<!-- HEADER -->
+<!--                                         <h2><a name="current">PhD Research</a></h2> -->
                                 </header>
                                 <p style="font-size:25px">Important Disclaimers</p>
                                 <ul style="font-weight:bold;list-style-type:disc;">
@@ -253,127 +248,25 @@ function setIFrameSize() {
                                 <li><a target="_blank" href="https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/covid-19-cases-in-toronto">Toronto Public Health COVID-19 Cases</a><br/><br/></li>
                                 <li>R<sub>t</sub> is computed using the Bayesian method described in <a target="_blank" href="https://doi.org/10.1101/2020.06.02.20120188">Yap & Yong (2020)</a><br/><br/></li>
                                 </ul>
-                     
-                     
-                     <header>
-                        <h2><a name="Toronto">Toronto</a></p>
-                     </header>
-                     
-                     
-                     <form action="/neighborhood.php">
-                       <label for="neighborhood">Select a Toronto neighborhood: </label>
-                       <select class="js-example-basic-single" name="neighborhood" id="neighborhood">
-<!-- TORONTOFORM -->
-<!-- PLACEHOLDER -->
-                         <option value="placeholder">placeholder</option>
-                       </select>
-                       <input type="submit" value=" View Neighborhood-Specific Plots">
-                     </form>
-                               
-                                <div class="image full">
-                                    <img src="toronto_update_raw.png" alt="Toronto cases per day">
+<!-- BODY -->
+                            
+
+<!--                            <div class="image full">
+                                    <img src="imgs/lprx_1.3bar.gif" alt="True-color rendering of model output">
                                     <div class="description">
-                                    <p class="description content">New COVID-19 cases per day in the City of Toronto. These data have not had a rolling average applied.</p>
-                                    <p><a href="toronto_update_raw.png" target="_blank">PNG</a> | <a href="toronto_update_raw.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
+                                    <p class="description content"> A true-color rendering of a tidally-locked planet viewed at different phases, simulated with the LMD Generic model, using spectral data computed by SBDART. </p>
+                                    </div></a>
+                                </div>-->
+
                                 
-                                <br>
-                                
-                                <div class="image full">
-                                    <img src="toronto_update.png" alt="Toronto average cases per day">
-                                    <div class="description">
-                                    <p class="description content">7-Day average of new COVID-19 cases per day in the City of Toronto. These data have had a rolling average applied.</p>
-                                    <p><a href="toronto_update.png" target="_blank">PNG</a> | <a href="toronto_update.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                <br>
-                                
-                                <div class="image full">
-                                   <img style="width:48%;float:left;" alt="Toronto case breakdown (linear)" src="toronto_breakdown.png">
-                                   <img style="width:48%;float:right;" alt="Toronto case breakdown (logarithmic)" src="toronto_breakdown_log.png">
-                                   <div class="description">
-                                   <p>Breakdown of Toronto's daily cases by status--active, recovered, ever hospitalized, or dead. Note that 'hospitalized' is a status that applies to any of the other 3 categories. These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.</p>
-                                   <p>Left: <a href="toronto_breakdown.png" target="_blank">PNG</a> | <a href="toronto_breakdown.pdf" target="_blank">PDF</a></p>
-                                   <p>Right: <a href="toronto_breakdown_log.png" target="_blank">PNG</a> | <a href="toronto_breakdown_log.pdf" target="_blank">PDF</a></p>
-                                   </div>
-                                </div>
-                                
-                                <br>
-                                
-                                <div class="image full">
-                                    <img src="toronto_rt.png" alt="Toronto effective reproductive number">
-                                    <div class="description">
-                                    <p class="description content">Raw and 2-week average of Toronto's effective reproductive number. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more.</p>
-                                    <p><a href="toronto_rt.png" target="_blank">PNG</a> | <a href="toronto_rt.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                <br>
-                                
-                                <div class="image full">
-                                    <img src="allneighborhoods.png" alt="3-week running sum of cases per day for all Toronto neighborhoods">
-                                    <div class="description">
-                                    <p class="description content">3-week running sum of daily cases for all Toronto neighborhoods. This is analogous to the "Recent Cases" metric on the TPH dashboard.</p>
-                                    <p><a href="allneighborhoods.png" target="_blank">PNG</a> | <a href="allneighborhoods.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                <br>
-                                
-                                <div class="image full">
-                                    <img src="neighbourhood_all_rt_zoom_weightactive.png" alt="Historical effective reproductive numbers for all Toronto neighborhoods, with opacity weighted by current active cases.">
-                                    <div class="description">
-                                    <p class="description content">Effective reproductive numbers for all Toronto neighborhoods. The opacity of each line depends on the number of recent cases in that neighborhood (total in the last 3 weeks). This means that the darkest lines will determine the overall behavior of Toronto's overall effective reproductive number.</p>
-                                    <p><a href="neighbourhood_all_rt_zoom_weightactive.png" target="_blank">PNG</a> | <a href="neighbourhood_all_rt_zoom_weightactive.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                <br>
-                                
-                                <div class="image full">
-                                    <img src="neighborhoodRt_comparisonweighted.png" alt="Current effective reproductive numbers for all Toronto neighborhoods, with opacity weighted by current active cases.">
-                                    <div class="description">
-                                    <p class="description content">Current effective reproductive numbers for all Toronto neighborhoods. The opacity of each bar depends on the number of recent cases in that neighborhood (total in the last 3 weeks). This means that the darkest lines will determine the overall behavior of Toronto's overall effective reproductive number.</p>
-                                    <p><a href="neighborhoodRt_comparisonweighted.png" target="_blank">PNG</a> | <a href="neighborhoodRt_comparisonweighted.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                <div class="image full">
-                                    <img src="neighborhood_DRtdt_comparisonweighted.png" alt="Current derivative of the effective reproductive numbers for all Toronto neighborhoods, with opacity weighted by current active cases.">
-                                    <div class="description">
-                                    <p class="description content">Current time derivative of the effective reproductive number for all Toronto neighborhoods. The opacity of each bar depends on the number of recent cases in that neighborhood (total in the last 3 weeks). This metric indicates how fast transmission is increasing or decreasing. Note that transmission can increase while cases are decreasing, or decrease while cases are still increasing.</p>
-                                    <p><a href="neighborhood_DRtdt_comparisonweighted.png" target="_blank">PNG</a> | <a href="neighborhood_DRtdt_comparisonweighted.pdf" target="_blank">PDF</a></p>
-                                    </div>
-                                </div>
-                                
-                                
-                     <header>
-                        <h2><a name="Ontario">Ontario</a></p>
-                     </header>
-                     
-                     <header>
-                        <h2><a name="Canada">Canada</a></p>
-                     </header>
-                     
-                     <header>
-                        <h2><a name="USA">USA</a></p>
-                     </header>
-                     
-                     <header>
-                        <h2><a name="Global">Global</a></p>
-                     </header>
-                                
-                                <p></p>
-							</section>
-						</div>
-						<div class="3u"> 
-							<section id="sidebard2">
-								<header>
-									<h2>Links</h2>
-								</header>
-								<ul class="style1">
+                                </section>
+                        </div>
+                        <div class="3u"> 
+                                <section id="sidebard2">
+                                        <header>
+                                                <h2>Links</h2>
+                                        </header>
+                                    <ul class="style1">
                                     <li><a target="_blank" href="https://www.linkedin.com/in/adivparadise/">LinkedIn</a></li>
                                     <li><a target="_blank" href="https://github.com/alphaparrot/">GitHub</a></li>
                                     <li><script language="JavaScript">
@@ -387,22 +280,22 @@ function setIFrameSize() {
                                 </ul>
                                     <br>
                                     <br>
-                                                        <header>
-                                                            <h2>Selected Projects</h2>
-                                                        </header>
-                                                        <ul class="style1">
-                                                        <li><a target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a></li>
-                                                        <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
-                                                        <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
-                                                        <li><a target="_blank" href="https://github.com/alphaparrot/gcmtools">gcmtools</a></li>
-                                                        <li><a target="_blank" href="https://github.com/alphaparrot/NagMe">NagMe</a></li>
-                                                        </ul>
-							</section>
-						</div>
-					</div>
+                                    <header>
+                                        <h2>Selected Projects</h2>
+                                    </header>
+                                    <ul class="style1">
+                                    <li><a target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/gcmtools">gcmtools</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/NagMe">NagMe</a></li>
+                                    </ul>
+                                </section>
+                        </div>
+                </div>
 
-				</div>	
-			</div>
+        </div>	
+    </div>
 
 <!-- Footer -->
             <div id="footer">
