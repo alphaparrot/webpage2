@@ -1114,6 +1114,8 @@ if __name__=="__main__":
             else:
                 html.append(line)
         else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
@@ -1505,6 +1507,8 @@ if __name__=="__main__":
             else:
                 html.append(line)
         else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
