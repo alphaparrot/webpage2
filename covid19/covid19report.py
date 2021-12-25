@@ -1477,7 +1477,7 @@ if __name__=="__main__":
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
     
-    ontariokeys = sorted(ontario_a.keys()
+    ontariokeys = sorted(ontario_a.keys())
     for k in sorted(ontario_a.keys()):
         try:
             plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
