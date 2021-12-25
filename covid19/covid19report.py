@@ -1092,7 +1092,7 @@ if __name__=="__main__":
 
     for k in sorted(ontario_a.keys()):
         fstub = str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
-        if os.path.isdir("ontario_%s"):
+        if os.path.isdir("ontario_%s"%fstub):
             makehtml.makephu(str.title(k),"ontario_%s/%s"%(fstub,fstub))
     
     with open("index.html","r") as indexf:
@@ -1477,11 +1477,38 @@ if __name__=="__main__":
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
     
+    ontariokeys = sorted(ontario_a.keys()
     for k in sorted(ontario_a.keys()):
         try:
             plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
         except:
             traceback.print_exc()
+            os.system("rm -rf ontario_%s*"%(str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
+            ontariokeys.remove(k)
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- ONTARIOFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in ontariokeys:
+                    phu = "%s"%str.title(k)
+                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--ON-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+    
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
          
