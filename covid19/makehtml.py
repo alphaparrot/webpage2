@@ -155,7 +155,8 @@ def makephu(phu,pathdir):
         elif "<!-- BODY -->" in line:
             html.append(body)
             
-    with open("%s"%filename,"w") as h
+    with open("%s"%filename,"w") as htmlf:
+        htmlf.write('\n'.join(html))
     
 
     
