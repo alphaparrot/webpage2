@@ -1116,14 +1116,13 @@ if __name__=="__main__":
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
-
-    for neighborhood in TOneighborhoods["units"]:
-        plot_TOneighborhood(neighborhood,TOneighborhoods)
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
-    
-        
+   
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
+    #for neighborhood in TOneighborhoods["units"]:
+        #plot_TOneighborhood(neighborhood,TOneighborhoods)
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    
          
     fig,ax=plt.subplots(figsize=(16,12))
     for neighborhood in TOneighborhoods["units"]:
@@ -1479,7 +1478,7 @@ if __name__=="__main__":
     
     for k in sorted(ontario_a.keys()):
         try:
-            plotOntario(k,ontario[k],ontario_d[k],ontario_a[k],ontario_r[k])
+            plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
         except:
             traceback.print_exc()
 
