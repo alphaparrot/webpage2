@@ -547,7 +547,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     
 def plotOntario(phu,cases,deaths,active,recovered,population=None):
     
-    fstub = str.title(phu).replace("/","_")
+    fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir("ontario_%s"%fstub):
         os.system("mkdir ontario_%s"%fstub)
     phuname = str.title(phu)
@@ -1024,6 +1024,7 @@ if __name__=="__main__":
         elif phu=='LEEDS':
             phu=entry[1]+','+entry[2]
             i0 = 1
+        phu = phu.replace('"','')
         active = int(entry[3+i0])
         rec    = int(entry[4+i0])
         dead   = int(entry[5+i0])
@@ -1090,7 +1091,7 @@ if __name__=="__main__":
         
 
     for k in sorted(ontario_a.keys()):
-        fstub = str.title(k).replace("/","_")
+        fstub = str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
         if os.path.isdir("ontario_%s"):
             makehtml.makephu(str.title(k),"ontario_%s/%s"%(fstub,fstub))
     

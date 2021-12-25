@@ -4,6 +4,10 @@
 if(isset($_POST['submit'])){
 $phu = $_POST['phu'];
 $filename = 'ontario_'.str_replace(" ","_",$phu);
+$filename = str_replace('"','',$filename);
+$filename = str_replace("&","and",$filename);
+$filename = str_replace(",","",$filename);
+$filename = str_replace("/","_",$filename);
 $filename = str_replace("-","_",$filename);
 $filename = str_replace("+","_",$filename);
 // echo $filename.".html";

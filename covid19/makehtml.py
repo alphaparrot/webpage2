@@ -95,7 +95,7 @@ def makeneighborhood(neighborhood,pathdir):
 def makephu(phu,pathdir):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
-    filename = "ontario_%s"%phu.replace("/","_").replace(" ","_").replace("-","_")+".html"
+    filename = "ontario_%s"%phu.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
     title = "\t\t<title>%s, ON | COVID-19 Dashboard</title>"%phu
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, ON</a></li>'%(filename,phu)
     header = '\t\t\t\t\t<h2><a name="current">%s, ON COVID-19 Data</a></h2>'%phu
