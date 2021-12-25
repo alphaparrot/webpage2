@@ -1439,7 +1439,7 @@ if __name__=="__main__":
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario_a.keys()):
         plt.plot(otimes[k],ontario_a[k])
-        plt.annotate(k,(otimes[k][-1],ontario_a[k][-1]))
+        plt.annotate(str.title(k),(otimes[k][-1],ontario_a[k][-1]))
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
     plt.title("Ontario Active Cases")
@@ -1451,12 +1451,13 @@ if __name__=="__main__":
     for k in sorted(ontario.keys()):
         try:
             y = day5avg(ontario[k])
-            plt.plot(range(len(y)),y,label=k)
-            plt.annotate(k,(len(y),y[-1]))
+            plt.plot(np.arange(len(y))-len(y),y,label=k)
+            plt.annotate(str.title(k),(0,y[-1]))
         except:
             pass
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
+    plt.xlabel("Days before Present")
     plt.title("Ontario New Cases [7-day average]")
     plt.savefig("ontario_newcases.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newcases.pdf",bbox_inches='tight')
@@ -1466,14 +1467,15 @@ if __name__=="__main__":
     for k in sorted(ontario_a.keys()):
         try:
             y = day5avg(np.diff(ontario_d[k]))
-            plt.plot(range(len(y)),y,label=k)
-            plt.annotate(k,(len(y),y[-1]))
+            plt.plot(np.arange(len(y))-len(y),y,label=k)
+            plt.annotate(str.title(k),(0,y[-1]))
         except:
             print("Encountered an error with %s"%k)
             pass
     print("Passed the place where errors get thrown....")
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
+    plt.xlabel("Days before Present")
     plt.title("Ontario Daily Deaths [7-day average]")
     plt.savefig("ontario_newdeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
@@ -1488,7 +1490,7 @@ if __name__=="__main__":
             r,p,l = Rt(day5avg(ontario[k]))
             r2wk = week2avg(r)
             ptotals[k] = r2wk[-1]
-            plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,color='k',alpha=0.5)
+            plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,color='k',alpha=0.4)
             plt.annotate("%s"%str.title(k),(0,r2wk[-1]))
         except:
             pass
@@ -1502,13 +1504,13 @@ if __name__=="__main__":
     plt.close('all')
     
     
-    fig,ax = plt.subplots(figsize=(17,4))
+    fig,ax = plt.subplots(figsize=(15,4))
     n=0
     growing=0
     declining=0
     labels=[]
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
-        labels.append(k)
+        labels.append(str.title(k))
         if ptotals[k]<1.0:
             declining+=1
         else:
@@ -1520,7 +1522,7 @@ if __name__=="__main__":
         else:
             color='green'
         active = ontario_a[k][-1]
-        bb = plt.bar(n,ptotals[k],alpha=max(0.05,active/float(maxn)),color=color)
+        bb = plt.bar(n,ptotals[k],alpha=max(0.15,.15+0.85*active/float(maxn)),edgecolor='k',color=color)
         n+=1
     ax.set_xticks(range(n))
     ax.set_xticklabels(labels,rotation='vertical')
@@ -1566,8 +1568,9 @@ if __name__=="__main__":
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
     
-    oncases = canada["Ontario"]#/float(provincepops[province])*1e5
-    cantotal = extract_country(dataset,"Canada")
+    oncases = np.diff(canada["Ontario"])#/float(provincepops[province])*1e5
+    cantotal = np.diff(extract_country(dataset,"Canada")["Total"])
+    
     
     plt.plot(np.arange(len(oncases))-len(oncases),oncases,label='Ontario')
     plt.annotate("%d Raw\nCases per Day"%oncases[-1],(-len(oncases)*0.2,0.7*oncases.max()))
@@ -1579,6 +1582,7 @@ if __name__=="__main__":
     plt.close('all')
     
     curve = day5avg(oncases)
+    curve2 = day5avg(cantotal)
     plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
     plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
@@ -1586,6 +1590,31 @@ if __name__=="__main__":
     plt.title("Ontario Average Daily New Cases")
     plt.savefig("Ontario_avgdaily.png",bbox_inches='tight',facecolor='white')
     plt.savefig("Ontario_avgdaily.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    plt.plot(np.arange(len(oncases))-len(oncases),oncases/float(provincepops['Ontario'])*1e5,
+             label='Ontario')
+    plt.plot(np.arange(len(cantotal))-len(cantotal),cantotal/float(countrypops['Canada'])*1e5,
+             label='Canada',color='k',linestyle='--',alpha=0.6)
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per 100k per Day")
+    plt.title("Ontario Daily New Cases per 100k")
+    plt.savefig("Ontario_relrawdaily.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_relrawdaily.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(oncases)/float(provincepops['Ontario'])*1e5
+    curve2 = day5avg(cantotal)/float(countrypops['Canada'])*1e5
+    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
+             alpha=0.6,linestyle='--',label='Canada')
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Cases per 100k per Day")
+    plt.title("Ontario Average Daily New Cases per 100k")
+    plt.savefig("Ontario_relavgdaily.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_relavgdaily.pdf",bbox_inches='tight')
     plt.close('all')
     
     r,p,l = Rt(curve)
