@@ -688,8 +688,8 @@ def plotgroup(group,directory='mygroup'):
     for place in curves:
         avgcurve = day5avg(np.diff(place["cases"]))
         time = np.arange(len(avgcurve))-len(avgcurve)
-        plt.plot(time,avgcurve/place["population"]*1e5,marker='.',label=place["label"])
-        plt.annotate(place["label"],(1,avgcurve[-1]/place["population"]*1e5))
+        plt.plot(time,avgcurve/float(place["population"])*1e5,marker='.',label=place["label"])
+        plt.annotate(place["label"],(1,avgcurve[-1]/float(place["population"])*1e5))
     plt.yscale('log')
     plt.ylabel("New Confirmed Cases per Day per 100k")
     plt.xlabel("Time Before Present [days]")
@@ -706,8 +706,8 @@ def plotgroup(group,directory='mygroup'):
     for place in curves:
         wk3curve = active3wk(place["cases"])
         time = np.arange(len(wk3curve))-len(wk3curve)
-        plt.plot(time,wk3curve/place["population"]*1e5,marker='.',label=place["label"])
-        plt.annotate(place["label"],(1,wk3curve[-1]/place["population"]*1e5))
+        plt.plot(time,wk3curve/float(place["population"])*1e5,marker='.',label=place["label"])
+        plt.annotate(place["label"],(1,wk3curve[-1]/float(place["population"])*1e5))
     plt.ylabel("3-week Running Sum of Cases per 100k")
     plt.xlabel("Time Before Present [days]")
     #plt.xlim(40,len(hennepin)-21)
@@ -720,8 +720,8 @@ def plotgroup(group,directory='mygroup'):
     for place in curves:
         wk3curve = active3wk(place["cases"])
         time = np.arange(len(wk3curve))-len(wk3curve)
-        plt.plot(time,wk3curve/place["population"]*1e5,marker='.',label=place["label"])
-        plt.annotate(place["label"],(1,wk3curve[-1]/place["population"]*1e5))
+        plt.plot(time,wk3curve/float(place["population"])*1e5,marker='.',label=place["label"])
+        plt.annotate(place["label"],(1,wk3curve[-1]/float(place["population"])*1e5))
     plt.ylabel("3-week Running Sum of Cases per 100k")
     plt.xlabel("Time Before Present [days]")
     plt.yscale('log')
@@ -1479,6 +1479,59 @@ if __name__=="__main__":
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
     
+    ptotals = {}
+    maxn = 0
+    fig,ax = plt.subplots(figsize=(14,9))
+    for k in sorted(ontario_a.keys()):
+        try:
+            maxn = max(maxn,ontario_a[k][-1])
+            r,p,l = Rt(day5avg(ontario[k]))
+            r2wk = week2avg(r)
+            ptotals[k] = r2wk[-1]
+            plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,color='k',alpha=0.5)
+            plt.annotate("%s"%str.title(k),(0,r2wk[-1]))
+        except:
+            pass
+    plt.xlabel("Days before Present")
+    plt.ylabel("2-week Average Effective Reproductive Number R$_tR")
+    plt.title("Effective Reproductive Numbers of Ontario PHUs")
+    plt.axhline(1.0,color='r',linestyle=':')
+    plt.xlim(-len(r2wk),0.2*len(r2wk))
+    plt.savefig("ontario_allRt.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_allRt.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,ax = plt.subplots(figsize=(17,4))
+    n=0
+    growing=0
+    declining=0
+    labels=[]
+    for k in sorted(ptotals, key=ptotals.get,reverse=True):
+        labels.append(k)
+        if ptotals[k]<1.0:
+            declining+=1
+        else:
+            growing+=1
+        if ptotals[k]>1.0:
+            color='orange'
+        elif ptotals[k]==1.0:
+            color='blue'
+        else:
+            color='green'
+        active = ontario_a[k][-1]
+        bb = plt.bar(n,ptotals[k],alpha=max(0.05,active/float(maxn)),color=color)
+        n+=1
+    ax.set_xticks(range(n))
+    ax.set_xticklabels(labels,rotation='vertical')
+    plt.axhline(1.0,linestyle='--',color='k')
+    plt.ylabel("2-week Average R$_t$")
+    plt.title("Ontario PHU Reproductive Numbers, Opacity Weighted by Active Cases")
+    plt.savefig("ontario_phuRtcomparison.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("ontario_phuRtcomparison.pdf",bbox_inches='tight')
+    plt.close("all")
+        
+    
     ontariokeys = sorted(ontario_a.keys())
     for k in sorted(ontario_a.keys()):
         try:
@@ -1513,6 +1566,52 @@ if __name__=="__main__":
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
     
+    oncases = canada["Ontario"]#/float(provincepops[province])*1e5
+    cantotal = extract_country(dataset,"Canada")
+    
+    plt.plot(np.arange(len(oncases))-len(oncases),oncases,label='Ontario')
+    plt.annotate("%d Raw\nCases per Day"%oncases[-1],(-len(oncases)*0.2,0.7*oncases.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per Day")
+    plt.title("Ontario Daily New Cases")
+    plt.savefig("Ontario_rawdaily.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_rawdaily.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(oncases)
+    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
+    plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Cases per Day")
+    plt.title("Ontario Average Daily New Cases")
+    plt.savefig("Ontario_avgdaily.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_avgdaily.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    r,p,l = Rt(curve)
+    r2wk = week2avg(r)
+    fig,ax = plt.subplots(figsize=(14,7))
+    plt.plot(np.arange(len(r))-len(r),r,label="Instantaneous",color='k',linestyle='--',alpha=0.4)
+    plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="2-week Average",color='k')
+    plt.xlabel("Days before Present")
+    plt.ylabel("Effective Reproductive Number R$_t$")
+    plt.title("Ontario Effective Reproductive Number")
+    plt.axhline(1.0,linestyle=':',color='r')
+    plt.savefig("Ontario_Rt.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_Rt.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,ax = plt.subplots(figsize=(14,9))
+    curve = ca_deaths["Ontario"]
+    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
+    plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Deaths per Day")
+    plt.title("Ontario Daily Deaths")
+    plt.savefig("Ontario_rawdeaths.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("Ontario_rawdeaths.pdf",bbox_inches='tight')
+    plt.close('all')
+    
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
          
@@ -1546,7 +1645,7 @@ if __name__=="__main__":
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
         if province != "Total" and canada[province][-1]>150:
-            y = canada[province]/provincepops[province]*1e5
+            y = canada[province]/float(provincepops[province])*1e5
             #y = y[y>=150]
             yp = y[0]
             m = y[1]-y[0]
@@ -1569,8 +1668,8 @@ if __name__=="__main__":
     for place in usa:
         if usa[place][-1]>=20 and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 confirmed cases
-            plt.plot(usa[place]/statepops[place]*1e2,marker='.',label=place)
-            coords = (len(usa[place]),usa[place][-1]/statepops[place]*1e2)
+            plt.plot(usa[place]/float(statepops[place])*1e2,marker='.',label=place)
+            coords = (len(usa[place]),usa[place][-1]/float(statepops[place])*1e2)
             plt.annotate(place,coords,xytext=coords)
     #plt.xscale('log')
     #plt.yscale('log')
@@ -1727,7 +1826,7 @@ if __name__=="__main__":
     for place in usa:
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
-            y = usa[place]#/statepops[place]*1e5
+            y = usa[place]#/float(statepops[place])*1e5
             #y = y[y>=800]
             #yp = y[0]
             #m = y[1]-y[0]
@@ -1776,7 +1875,7 @@ if __name__=="__main__":
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
             y = usa[place]
-            active[place] = active3wk(y)[-1]/statepops[place]
+            active[place] = active3wk(y)[-1]/float(statepops[place])
             nmax = max(nmax,active[place])
             y = day5avg(np.diff(y[y>10]))
             r,p,l = Rt(y,interval=7)
@@ -1816,7 +1915,7 @@ if __name__=="__main__":
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
             y = usa[place]
-            active[place] = active3wk(y)[-1]/statepops[place]
+            active[place] = active3wk(y)[-1]/float(statepops[place])
             nmax = max(nmax,active[place])
             y = day5avg(np.diff(y[y>10]))
             r,p,l = Rt(y,interval=7)
