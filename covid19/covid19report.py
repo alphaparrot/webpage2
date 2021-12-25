@@ -623,7 +623,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.close('all')
     
     fig,axes=plt.subplots(figsize=(14,9))
-    rt,post14,like14 = Rt(day5avg(cases),interval=7,override=True)
+    rt,post14,like14 = Rt(day5avg(cases[phu]),interval=7,override=True)
     rt14 = week2avg(rt)
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,color='k',label="2-Week Average")
     plt.plot(np.arange(len(rt))-len(rt),rt,color='k',linestyle='--',alpha=0.4,label="Instantaneous")
