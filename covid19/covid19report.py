@@ -1059,11 +1059,6 @@ if __name__=="__main__":
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
 
-
-    for neighborhood in TOneighborhoods["units"]:
-        plot_TOneighborhood(neighborhood,TOneighborhoods)
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
-    
     #Generate HTML pages
     import makehtml
     for neighborhood in TOneighborhoods["units"]:
@@ -1092,6 +1087,40 @@ if __name__=="__main__":
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
+        
+
+    for k in sorted(ontario_a.keys()):
+        fstub = str.title(k).replace("/","_")
+        if os.path.isdir("ontario_%s"):
+            makehtml.makephu(str.title(k),"ontario_%s/%s"%(fstub,fstub))
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- ONTARIOFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(ontario_a.keys()):
+                    phu = "%s"%str.title(k)
+                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--ON-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+
+    for neighborhood in TOneighborhoods["units"]:
+        plot_TOneighborhood(neighborhood,TOneighborhoods)
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    
         
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
@@ -1453,34 +1482,6 @@ if __name__=="__main__":
             plotOntario(k,ontario[k],ontario_d[k],ontario_a[k],ontario_r[k])
         except:
             traceback.print_exc()
-        
-    for k in sorted(ontario_a.keys()):
-        fstub = str.title(k).replace("/","_")
-        if os.path.isdir("ontario_%s"):
-            makehtml.makephu(str.title(k),"ontario_%s/%s"%(fstub,fstub))
-    
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- ONTARIOFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for k in sorted(ontario_a.keys()):
-                    phu = "%s"%str.title(k)
-                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and "<!--ON-->" in line:
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            skipnext=False
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
          
