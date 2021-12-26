@@ -3,8 +3,8 @@
 // Fetching variables of the form which travels in URL
 if(isset($_POST['submit'])){
 $location = explode("|",$_POST['county']);
-$state = $location[0];
-$county = $location[1];
+$state = $location[1];
+$county = $location[0];
 $state = str_replace(" ","_",$state);
 $state = str_replace("&","and",$state);
 $state = str_replace(",","",$state);
