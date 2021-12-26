@@ -243,7 +243,7 @@ def makeCounty(county,state,pathdir):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename = "%s_%s"%(state,
-                county.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
+                county.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))+".html"
     print(filename)
     title = "\t\t<title>%s County, %s | COVID-19 Dashboard</title>"%(county,state)
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s County, %s</a></li>'%(filename,county,state)
