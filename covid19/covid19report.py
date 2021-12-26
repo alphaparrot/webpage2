@@ -2359,7 +2359,7 @@ if __name__=="__main__":
             try:
                 plotCounty(county,state,usacsv,usa,statepops[state])
             except:
-                print("Error encountered with %s County, %s:"%(county,state)
+                print("Error encountered with %s County, %s:"%(county,state))
                 traceback.print_exc()
                 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
