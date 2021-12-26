@@ -1375,7 +1375,7 @@ if __name__=="__main__":
         if "//COUNTY" in line:
             html.append(line)
             for state in sorted(uskeys):
-                counties = get_counties(usa,state=state)
+                counties = get_counties(usacsv,state=state)
                 options = '"'
                 for county in counties:
                     options+="<option value='%s'>%s: %s</option>"%(county,state,county)
