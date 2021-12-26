@@ -545,6 +545,179 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
     
+def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population):
+    '''national_cases and national_deaths should be population-adjusted.'''
+    
+    fstub = name.replace(" ","_").replace("&","and")
+    
+    if not os.path.isdir(fstub):
+        os.system("mkdir %s"%fstub)
+    
+    cases = np.diff(dataset[name])
+    
+    plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
+    plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
+    plt.annotate("%1.1f% of the population in %s has tested positive."%(dataset[name]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per Day")
+    plt.title("%s Daily New Cases")
+    plt.savefig("%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(cases)
+    curve2 = day5avg(national_cases)
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Cases per Day")
+    plt.title("%s Average Daily New Cases"%name)
+    plt.savefig("%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    
+    plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
+             label=name)
+    plt.plot(np.arange(len(national_cases))-len(national_cases),national_cases*1e5,
+             label=country,color='k',alpha=0.6)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per 100k per Day")
+    plt.title("%s Daily New Cases per 100k"%name)
+    plt.savefig("%s/%s_relrawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_relrawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(cases)/float(population)*1e5
+    curve2 = day5avg(national_cases)*1e5
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
+             alpha=0.6,label=country)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Cases per 100k per Day")
+    plt.title("%s Average Daily New Cases per 100k"%name)
+    plt.savefig("%s/%s_relavgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_relavgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
+             label=name)
+    plt.plot(np.arange(len(national_cases))-len(national_cases),national_cases*1e5,
+             label=country,color='k',alpha=0.6)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Cases per 100k per Day")
+    plt.yscale('log')
+    plt.title("%s Daily New Cases per 100k"%name)
+    plt.savefig("%s/%s_relrawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_relrawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(cases)/float(population)*1e5
+    curve2 = day5avg(national_cases)*1e5
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
+             alpha=0.6,label=country)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Cases per 100k per Day")
+    plt.yscale('log')
+    plt.title("%s Average Daily New Cases per 100k"%name)
+    plt.savefig("%s/%s_relavgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_relavgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = day5avg(cases)
+    r,p,l = Rt(curve)
+    r2wk = week2avg(r)
+    fig,ax = plt.subplots(figsize=(14,7))
+    plt.plot(np.arange(len(r))-len(r),r,label="Instantaneous",color='k',alpha=0.4)
+    plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="2-week Average",color='k')
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("Effective Reproductive Number R$_t$")
+    plt.title("%s Effective Reproductive Number"%name)
+    plt.axhline(1.0,linestyle=':',color='r')
+    plt.savefig("%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    fig,ax = plt.subplots(figsize=(14,9))
+    curve = np.diff(deaths_dataset[name])
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("New Deaths per Day")
+    plt.title("%s Daily Deaths"%name)
+    plt.savefig("%s/%s_rawdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_rawdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,ax = plt.subplots(figsize=(14,9))
+    curve = day5avg(np.diff(deaths_dataset[name])/float(population)*1e6)
+    ntldeaths = day5avg(national_deaths)*1e6
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/curve[-1])),name,country),
+                 (-len(curve),curve.max()))
+    plt.plot(np.arange(len(ntldeaths))-len(ntldeaths),ntldeaths,color='k',alpha=0.4,label=country)
+    plt.legend()
+    plt.annotate("%1.2f Deaths per Day per 1M"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+    plt.xlabel("Days before Present")
+    plt.ylabel("7-Day Average New Deaths per 1M per Day")
+    plt.title("%s Average Daily Deaths per 1M"%name)
+    plt.savefig("%s/%s_relavgdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_relavgdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    
+    curve = active3wk(np.cumsum(cases))
+    curve2 = active3wk(np.cumsum(national_cases))*1000
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.xlabel("Days before Present")
+    plt.ylabel("3-week Running Sum of Cases per Day")
+    plt.title("Recent COVID-19 Cases"%name)
+    plt.savefig("%s/%s_3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_3wk.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.xlabel("Days before Present")
+    plt.ylabel("3-week Running Sum of Cases per Day")
+    plt.title("Recent COVID-19 Cases"%name)
+    plt.yscale('log')
+    plt.savefig("%s/%s_3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    curve = curve/float(population)*1000
+    
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=country)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
+    plt.title("Recent COVID-19 Cases"%name)
+    plt.savefig("%s/%s_rel3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_rel3wk.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=country)
+    plt.legend()
+    plt.xlabel("Days before Present")
+    plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
+    plt.title("Recent COVID-19 Cases"%name)
+    plt.yscale('log')
+    plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
+    plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
+    plt.close('all')
+    
+    
+    
+    
 def plotOntario(phu,cases,deaths,active,recovered,population=None):
     
     fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
@@ -1120,6 +1293,40 @@ if __name__=="__main__":
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
    
+    cankeys = []
+    for province in canada:
+        if province!= "Total" and canada[province][-1]>150:
+            cankeys.append(province)
+   
+    for k in sorted(cankeys):
+        fstub = name.replace(" ","_").replace("&","and")
+        if os.path.isdir("%s"%fstub):
+            makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+   
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- CANADAFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in cankeys:
+                    html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--CA-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
     #for neighborhood in TOneighborhoods["units"]:
@@ -1567,82 +1774,43 @@ if __name__=="__main__":
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
     
-    oncases = np.diff(canada["Ontario"])#/float(provincepops[province])*1e5
-    cantotal = np.diff(extract_country(dataset,"Canada")["Total"])
+    cankeys = []
+    for province in canada:
+        if province!= "Total" and canada[province][-1]>150:
+            plotStateOrProvince(province,"Canada",canada,ca_deaths,
+                                np.diff(extract_country(dataset,"Canada"))/float(countrypops["Canada"]),
+                                np.diff(extract_country(ddataset,"Canada"))/float(countrypops["Canada"]),
+                                provincepops[province])
+            cankeys.append(province)
     
-    
-    plt.plot(np.arange(len(oncases))-len(oncases),oncases,label='Ontario')
-    plt.annotate("%d Raw\nCases per Day"%oncases[-1],(-len(oncases)*0.2,0.7*oncases.max()))
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Cases per Day")
-    plt.title("Ontario Daily New Cases")
-    plt.savefig("Ontario_rawdaily.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_rawdaily.pdf",bbox_inches='tight')
-    plt.close('all')
-    
-    curve = day5avg(oncases)
-    curve2 = day5avg(cantotal)
-    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
-    plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
-    plt.xlabel("Days before Present")
-    plt.ylabel("7-Day Average New Cases per Day")
-    plt.title("Ontario Average Daily New Cases")
-    plt.savefig("Ontario_avgdaily.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_avgdaily.pdf",bbox_inches='tight')
-    plt.close('all')
-    
-    
-    plt.plot(np.arange(len(oncases))-len(oncases),oncases/float(provincepops['Ontario'])*1e5,
-             label='Ontario')
-    plt.plot(np.arange(len(cantotal))-len(cantotal),cantotal/float(countrypops['Canada'])*1e5,
-             label='Canada',color='k',linestyle='--',alpha=0.6)
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Cases per 100k per Day")
-    plt.title("Ontario Daily New Cases per 100k")
-    plt.savefig("Ontario_relrawdaily.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_relrawdaily.pdf",bbox_inches='tight')
-    plt.close('all')
-    
-    curve = day5avg(oncases)/float(provincepops['Ontario'])*1e5
-    curve2 = day5avg(cantotal)/float(countrypops['Canada'])*1e5
-    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
-    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
-             alpha=0.6,linestyle='--',label='Canada')
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("7-Day Average New Cases per 100k per Day")
-    plt.title("Ontario Average Daily New Cases per 100k")
-    plt.savefig("Ontario_relavgdaily.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_relavgdaily.pdf",bbox_inches='tight')
-    plt.close('all')
-    
-    r,p,l = Rt(curve)
-    r2wk = week2avg(r)
-    fig,ax = plt.subplots(figsize=(14,7))
-    plt.plot(np.arange(len(r))-len(r),r,label="Instantaneous",color='k',linestyle='--',alpha=0.4)
-    plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="2-week Average",color='k')
-    plt.xlabel("Days before Present")
-    plt.ylabel("Effective Reproductive Number R$_t$")
-    plt.title("Ontario Effective Reproductive Number")
-    plt.axhline(1.0,linestyle=':',color='r')
-    plt.savefig("Ontario_Rt.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_Rt.pdf",bbox_inches='tight')
-    plt.close('all')
-    
-    fig,ax = plt.subplots(figsize=(14,9))
-    curve = ca_deaths["Ontario"]
-    plt.plot(np.arange(len(curve))-len(curve),curve,label='Ontario')
-    plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Deaths per Day")
-    plt.title("Ontario Daily Deaths")
-    plt.savefig("Ontario_rawdeaths.png",bbox_inches='tight',facecolor='white')
-    plt.savefig("Ontario_rawdeaths.pdf",bbox_inches='tight')
-    plt.close('all')
-    
+            
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- CANADAFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in cankeys:
+                    html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--CA-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     adivgroup = [{"type":"county","dataset":usacsv,"state/province":"Minnesota",
                   "abbrev":"MN","place":"Hennepin"},

@@ -135,7 +135,7 @@ def makephu(phu,pathdir):
             "<br> \n"+
             imgplate%("%s_deaths.png"%pathdir,
                       "%s, ON average deaths per day"%phu,
-                      "7-day average of new COVID-19 cases per day in %s, ON."%phu+
+                      "7-day average of COVID-19 deaths per day in %s, ON."%phu+
                       "These data have had a rolling average applied.",
                       "%s_deaths.png"%pathdir,"%s_deaths.pdf"%pathdir)+"\n"+
             "<br >\n"+
@@ -160,4 +160,90 @@ def makephu(phu,pathdir):
         htmlf.write('\n'.join(html))
     
 
+def makeStateorProvince(name,pathdir):
+    with open("template.html","r") as templatef:
+        template = templatef.read().split('\n')
+    filename = name.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
+    print(filename)
+    title = "\t\t<title>%s | COVID-19 Dashboard</title>"%name
+    navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s</a></li>'%(filename,name)
+    header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%name
+    
+    body = ("<header><h2>%s Plots</h2></header>    \n"%name+
+            img2plate%("%s_rawdaily.png"%pathdir,
+                      "%s raw cases per day"%name,
+                      "%s_avgdaily.png"%pathdir,
+                      "%s_average cases per day"%name,
+                      "New COVID-19 cases per day in %s"%name+
+                      " These data have not had a rolling average applied. The first plot gives raw cases per day, while the second gives the 7-day moving average.",
+                      "%s_rawdaily.png"%pathdir,"%s_rawdaily.pdf"%pathdir,
+                      "%s_avgdaily.png"%pathdir,"%s_avgdaily.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_relrawdaily.png"%pathdir,
+                      "%s cases per 100k per day, linear scale"%name,
+                      "%s_relrawdaily_log.png"%pathdir,
+                      "%s_cases per 100k per day, logarithmic scale"%name,
+                      "New COVID-19 cases per 100k per day in %s,"%name+
+                      " compared to the national average. These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_relrawdaily.png"%pathdir,"%s_relrawdaily.pdf"%pathdir,
+                      "%s_relrawdaily_log.png"%pathdir,"%s_relrawdaily_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_relavgdaily.png"%pathdir,
+                      "%s average cases per 100k per day, linear scale"%name,
+                      "%s_relavgdaily_log.png"%pathdir,
+                      "%s_average cases per 100k per day, logarithmic scale"%name,
+                      "7-day average of new COVID-19 cases per 100k per day in %s,"%name+
+                      " compared to the national average. These data have had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_relavgdaily.png"%pathdir,"%s_relavgdaily.pdf"%pathdir,
+                      "%s_relavgdaily_log.png"%pathdir,"%s_relavgdaily_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_3wk.png"%pathdir,
+                      "%s active cases, linear scale"%name,
+                      "%s_3wk_log.png"%pathdir,
+                      "%s_active cases, logarithmic scale"%name,
+                      "3-week running sum of COVID-19 cases each day in %s."%name+
+                      " These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_3wk.png"%pathdir,"%s_3wk.pdf"%pathdir,
+                      "%s_3wk_log.png"%pathdir,"%s_3wk_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_rel3wk.png"%pathdir,
+                      "%s active cases per 1000, linear scale"%name,
+                      "%s_rel3wk_log.png"%pathdir,
+                      "%s_active cases per 1000, logarithmic scale"%name,
+                      "3-week running sum of COVID-19 cases per 1000 each day in %s."%name+
+                      " These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_rel3wk.png"%pathdir,"%s_rel3wk.pdf"%pathdir,
+                      "%s_rel3wk_log.png"%pathdir,"%s_rel3wk_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            imgplate%("%s_Rt.png"%pathdir,"Historical %s effective reproductive number"%name,
+                      "Raw and 2-week average of the effective reproductive number in %s. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%name,
+                      "%s_Rt.png"%pathdir,"%s_Rt.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_rawdeaths.png"%pathdir,
+                      "%s raw deaths per day"%name,
+                      "%s_relavgdeaths.png"%pathdir,
+                      "%s average deaths per 1M per day"%name,
+                      "Raw COVID-19 deaths per day in %s, and the 7-day average of deaths per million per day in the same compared to the national average."%name+,
+                      "%s_rawdeaths.png"%pathdir,"%s_rawdeaths.pdf"%pathdir,
+                      "%s_relavgdeaths.png"%pathdir,"%s_relavgdeaths.pdf"%pathdir)+"\n"+
+            "<br >\n"+
+            "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
+            
+            
+    
+    
+    html = []
+    for line in template:
+        html.append(line)
+        if "<!-- TITLE -->" in line:
+            html.append(title)
+        elif "<!-- NAVBAR -->" in line:
+            html.append(navlink)
+        elif "<!-- HEADER -->" in line:
+            html.append(header)
+        elif "<!-- BODY -->" in line:
+            html.append(body)
+            
+    with open("%s"%filename,"w") as htmlf:
+        htmlf.write('\n'.join(html))
     

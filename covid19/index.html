@@ -374,43 +374,58 @@ function setIFrameSize() {
      
                                 <div class="image full">
                                    <div class="flex-container">
-                                   <div class="column"><img alt="Ontario cases per day" src="Ontario_rawdaily.png"></div>
-                                   <div class="column"><img alt="Ontario average cases per day" src="Ontario_avgdaily.png"></div>
+                                   <div class="column"><img alt="Ontario cases per day" src="Ontario/Ontario_rawdaily.png"></div>
+                                   <div class="column"><img alt="Ontario average cases per day" src="Ontario/Ontario_avgdaily.png"></div>
                                    </div>
                                    <div class="description">
                                    <p>Ontario's daily cases, both raw (left) and the 7-day average (right). 
-                                   <br/>Left: <a href="ontario_rawdaily.png" target="_blank">PNG</a> | <a href="Ontario_rawdaily.pdf" target="_blank">PDF</a>
-                                   <br/>Right: <a href="ontario_avgdaily.png" target="_blank">PNG</a> | <a href="Ontario_avgdaily.pdf" target="_blank">PDF</a></p>
+                                   <br/>Left: <a href="ontario_rawdaily.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_rawdaily.pdf" target="_blank">PDF</a>
+                                   <br/>Right: <a href="ontario_avgdaily.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_avgdaily.pdf" target="_blank">PDF</a></p>
                                    </div>
                                 </div>
                                 
                                 <br>
+                                
                                 <div class="image full">
                                    <div class="flex-container">
-                                   <div class="column"><img alt="Ontario cases per 100k per day" src="Ontario_relrawdaily.png"></div>
-                                   <div class="column"><img alt="Ontario average cases per 100k per day" src="Ontario_relavgdaily.png"></div>
+                                   <div class="column"><img alt="Ontario cases per 100k per day (linear)" src="Ontario/Ontario_relrawdaily.png"></div>
+                                   <div class="column"><img alt="Ontario cases per 100k per day (logarithmic)" src="Ontario/Ontario_relrawdaily_log.png"></div>
                                    </div>
                                    <div class="description">
-                                   <p>Ontario's daily cases per 100k, both raw (left) and the 7-day average (right), compared to Canada's daily cases per 100k.
-                                   <br/>Left: <a href="ontario_relrawdaily.png" target="_blank">PNG</a> | <a href="Ontario_relrawdaily.pdf" target="_blank">PDF</a>
-                                   <br/>Right: <a href="ontario_relavgdaily.png" target="_blank">PNG</a> | <a href="Ontario_relavgdaily.pdf" target="_blank">PDF</a></p>
+                                   <p>Ontario's raw daily cases per 100k, compared to Canada's daily cases per 100k. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.
+                                   <br/>Left: <a href="ontario_relrawdaily.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_relrawdaily.pdf" target="_blank">PDF</a>
+                                   <br/>Right: <a href="ontario_relrawdaily_log.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_relrawdaily_log.pdf" target="_blank">PDF</a></p>
+                                   </div>
+                                </div>
+                                
+                                <br>
+                                
+                                <div class="image full">
+                                   <div class="flex-container">
+                                   <div class="column"><img alt="Ontario average cases per 100k per day (linear)" src="Ontario/Ontario_relavgdaily.png"></div>
+                                   <div class="column"><img alt="Ontario average cases per 100k per day (logarithmic)" src="Ontario/Ontario_relavgdaily_log.png"></div>
+                                   </div>
+                                   <div class="description">
+                                   <p>Ontario's 7-day average daily cases per 100k compared to Canada's daily cases per 100k. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.
+                                   <br/>Left: <a href="ontario_relavgdaily.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_relavgdaily.pdf" target="_blank">PDF</a>
+                                   <br/>Right: <a href="ontario_relavgdaily_log.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_relavgdaily_log.pdf" target="_blank">PDF</a></p>
                                    </div>
                                 </div>
                                 
                                 <br>
                      
                                 <div class="image full">
-                                    <img src="Ontario_Rt.png" alt="Historical Ontario effective reproductive number.">
+                                    <img src="Ontario/Ontario_Rt.png" alt="Historical Ontario effective reproductive number.">
                                     <div class="description">
-                                    <p class="description content">Ontario overall effective reproductive number R<sub>t</sub>.<br/><a href="Ontario_Rt.png" target="_blank">PNG</a> | <a href="Ontario_Rt.pdf" target="_blank">PDF</a></p>
+                                    <p class="description content">Ontario overall effective reproductive number R<sub>t</sub>.<br/><a href="Ontario/Ontario_Rt.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_Rt.pdf" target="_blank">PDF</a></p>
                                     </div>
                                 </div>
                                 
                                 <br>
                                 <div class="image full">
-                                    <img src="Ontario_rawdeaths.png" alt="Ontario covid-19 deaths per day.">
+                                    <img src="Ontario/Ontario_rawdeaths.png" alt="Ontario covid-19 deaths per day.">
                                     <div class="description">
-                                    <p class="description content">Ontario daily deaths. These data have not had a rolling average applied.<br/><a href="Ontario_rawdeaths.png" target="_blank">PNG</a> | <a href="Ontario_rawdeaths.pdf" target="_blank">PDF</a></p>
+                                    <p class="description content">Ontario daily deaths. These data have not had a rolling average applied.<br/><a href="Ontario/Ontario_rawdeaths.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_rawdeaths.pdf" target="_blank">PDF</a></p>
                                     </div>
                                 </div>
                                 
@@ -434,9 +449,9 @@ function setIFrameSize() {
                                 
                                 <br>
                                 <div class="image full">
-                                    <img src="Ontario_newdeaths.png" alt="Ontario covid-19 deaths per day.">
+                                    <img src="Ontario/Ontario_newdeaths.png" alt="Ontario covid-19 deaths per day.">
                                     <div class="description">
-                                    <p class="description content">Average daily deaths for each Ontario PHU. These data have had a 7-day rolling average applied.<br/><a href="Ontario_rawdeaths.png" target="_blank">PNG</a> | <a href="Ontario_newdeaths.pdf" target="_blank">PDF</a></p>
+                                    <p class="description content">Average daily deaths for each Ontario PHU. These data have had a 7-day rolling average applied.<br/><a href="Ontario/Ontario_rawdeaths.png" target="_blank">PNG</a> | <a href="Ontario/Ontario_newdeaths.pdf" target="_blank">PDF</a></p>
                                     </div>
                                 </div>
                                 
@@ -463,10 +478,33 @@ function setIFrameSize() {
                      <header>
                         <h2><a name="Canada">Canada</a></h2>
                      </header>
+                                 
+                     <form action="/province.php" method="post">
+                       <label for="province">Select a Canadian province or territory: </label>
+                       <select class="js-example-basic-single" name="province" id="province">
+<!-- CANADAFORM -->
+<!-- PLACEHOLDER -->
+                         <option value="placeholder">placeholder</option>
+<!-- TRIPWIRE -->                         
+                       </select>
+                       <input type="submit" name="submit" value=" View Province-Specific Plots">
+                     </form>                     
+                     
                      
                      <header>
                         <h2><a name="USA">USA</a></h2>
                      </header>
+                         
+                     <form action="/state.php" method="post">
+                       <label for="state">Select a US state or territory: </label>
+                       <select class="js-example-basic-single" name="state" id="state">
+<!-- USAFORM -->
+<!-- PLACEHOLDER -->
+                         <option value="placeholder">placeholder</option>
+<!-- TRIPWIRE -->                         
+                       </select>
+                       <input type="submit" name="submit" value=" View Province-Specific Plots">
+                     </form>                     
                      
                      <header>
                         <h2><a name="Global">Global</a></h2>
