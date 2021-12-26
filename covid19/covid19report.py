@@ -1576,7 +1576,7 @@ if __name__=="__main__":
                 html.append(line)
                 skipnext=True
                 for country in sorted(countries):
-                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")):
+                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))):
                         html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
