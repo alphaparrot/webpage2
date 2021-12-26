@@ -223,7 +223,7 @@ def makeStateorProvince(name,pathdir):
                       "%s raw deaths per day"%name,
                       "%s_relavgdeaths.png"%pathdir,
                       "%s average deaths per 1M per day"%name,
-                      "Raw COVID-19 deaths per day in %s, and the 7-day average of deaths per million per day in the same compared to the national average."%name+,
+                      "Raw COVID-19 deaths per day in %s, and the 7-day average of deaths per million per day in the same compared to the national average."%name,
                       "%s_rawdeaths.png"%pathdir,"%s_rawdeaths.pdf"%pathdir,
                       "%s_relavgdeaths.png"%pathdir,"%s_relavgdeaths.pdf"%pathdir)+"\n"+
             "<br >\n"+
