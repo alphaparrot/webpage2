@@ -557,7 +557,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
-    plt.annotate("%1.1f% of the population in %s has tested positive."%(dataset[name]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
+    plt.annotate("%1.1f% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
     plt.title("%s Daily New Cases")
@@ -1300,8 +1300,7 @@ if __name__=="__main__":
    
     for k in sorted(cankeys):
         fstub = name.replace(" ","_").replace("&","and")
-        if os.path.isdir("%s"%fstub):
-            makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+        makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -1312,7 +1311,7 @@ if __name__=="__main__":
             if "<!-- CANADAFORM -->" in line:
                 html.append(line)
                 skipnext=True
-                for k in cankeys:
+                for k in sorted(cankeys):
                     html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
@@ -1337,8 +1336,7 @@ if __name__=="__main__":
    
     for k in sorted(uskeys):
         fstub = name.replace(" ","_").replace("&","and")
-        if os.path.isdir("%s"%fstub):
-            makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+        makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -1349,7 +1347,7 @@ if __name__=="__main__":
             if "<!-- USAFORM -->" in line:
                 html.append(line)
                 skipnext=True
-                for k in uskeys:
+                for k in sorted(uskeys):
                     html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
