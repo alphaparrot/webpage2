@@ -139,7 +139,25 @@
         $('.js-example-basic-single').select2();
     });
     </script>
+    
+<script>
+    $(document).ready(function() {
 
+    $("#state2").change(function() {
+        var val = $(this).val();
+        $("#county").html(options[val]);
+    });
+
+
+    var options = [
+//COUNTY     
+        "<option value='Dakota'>Minnesota: Dakota</option><option value='Hennepin'>Minnesota: Hennepin</option>",
+    ];
+
+});
+</script>
+    
+    
 	</head>
 	<body>
 
@@ -490,6 +508,7 @@ function setIFrameSize() {
                        <input type="submit" name="submit" value=" View Province-Specific Plots">
                      </form>                     
                      
+                     <br> 
                      
                      <header>
                         <h2><a name="USA">USA</a></h2>
@@ -505,6 +524,24 @@ function setIFrameSize() {
                        </select>
                        <input type="submit" name="submit" value=" View State-Specific Plots">
                      </form>                     
+                     
+                     <p>County-level data is also available. Please note that depending on county population and characteristics, county-level data may not be as reliable.</p>
+                     
+                     <form action="/county.php" method="post">
+                       <label for="state2">Select a US state or territory: </label>
+                       <select class="js-example-basic-single" name="state2" id="state2">
+<!-- COUNTYFORM1 -->
+<!-- PLACEHOLDER -->
+                         <option value="">-- Select one -- </option>
+<!-- TRIPWIRE -->   
+                       </select>
+                       <label for="county">Select a county: </label>
+                       <select class="js-example-basic-single" name="county" id="county">
+                         <option value="">-- Select one -- </option>
+                       </select>
+                       <input type="submit" name="submit" value=" View State-Specific Plots">
+                     </form>  
+                     <br>
                      
                      <header>
                         <h2><a name="Global">Global</a></h2>
