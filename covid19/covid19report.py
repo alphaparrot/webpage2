@@ -1327,6 +1327,44 @@ if __name__=="__main__":
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
         
+    uskeys = []
+    for state in usa:
+        if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+            and "Virgin Islands" not in state and "Military" not in state\
+            and "Recovered" not in state and "Prisons" not in state\
+            and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+            uskeys.append(state)
+   
+    for k in sorted(uskeys):
+        fstub = name.replace(" ","_").replace("&","and")
+        if os.path.isdir("%s"%fstub):
+            makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+   
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- USAFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in uskeys:
+                    html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--US-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
+        
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
     #for neighborhood in TOneighborhoods["units"]:
@@ -1780,35 +1818,10 @@ if __name__=="__main__":
     for province in canada:
         if province!= "Total" and canada[province][-1]>150:
             plotStateOrProvince(province,"Canada",canada,ca_deaths,
-                                np.diff(extract_country(dataset,"Canada"))/float(countrypops["Canada"]),
-                                np.diff(extract_country(ddataset,"Canada"))/float(countrypops["Canada"]),
+                                np.diff(extract_country(dataset,"Canada")["Total"])/float(countrypops["Canada"]),
+                                np.diff(extract_country(ddataset,"Canada")["Total"])/float(countrypops["Canada"]),
                                 provincepops[province])
             cankeys.append(province)
-    
-            
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- CANADAFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for k in cankeys:
-                    html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and "<!--CA-->" in line:
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            if "<!-- TRIPWIRE -->" in line:
-                html.append(line)
-            skipnext=False
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
@@ -2145,6 +2158,11 @@ if __name__=="__main__":
     plt.savefig("usstates_drt_snapshot.pdf",bbox_inches='tight')
     plt.close('all')
 
+    for state in uskeys:
+        plotStateOrProvince(state,"United States",usa,us_deaths,
+                                np.diff(extract_country(dataset,"US")["Total"])/float(countrypops["US"]),
+                                np.diff(extract_country(ddataset,"US")["Total"])/float(countrypops["US"]),
+                                statepops[state])
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
