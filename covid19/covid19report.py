@@ -280,7 +280,7 @@ def get_counties(us_dataset,state="Minnesota"):
         cty = line[5]
         if stte==state:
             counties[cty] = ""
-    return counties.keys()
+    return sorted(counties.keys())
 
 def get_countypop(county,state):
     county_csv = "co-est2019-alldata.csv"
@@ -678,7 +678,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name)
     plt.savefig("%s/%s_3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -686,7 +686,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name)
     plt.yscale('log')
     plt.savefig("%s/%s_3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -699,7 +699,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name)
     plt.savefig("%s/%s_rel3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -709,7 +709,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name)
     plt.yscale('log')
     plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -1349,9 +1349,14 @@ if __name__=="__main__":
                 skipnext=True
                 for k in sorted(uskeys):
                     html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- COUNTYFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(uskeys):
+                    html.append('<!--CY-->\t\t\t<option value="%s">%s</option>'%(k,k))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
-            elif "<option" in line and "<!--US-->" in line:
+            elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
                 pass #skip thi line too 
             else:
                 html.append(line)
@@ -1361,6 +1366,28 @@ if __name__=="__main__":
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
+        
+    #Create linked state/county menus for the USA section    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    for line in index:
+        if "//COUNTY" in line:
+            html.append(line)
+            for state in sorted(uskeys):
+                counties = get_counties(usa,state=state)
+                options = '"'
+                for county in counties:
+                    options+="<option value='%s'>%s: %s</option>"%(county,state,county)
+                options += '",'
+                html.append("\t"+options+" //CY")
+        elif "//CY" in line:
+            pass
+        else:
+            html.append(line)
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(Html))
+                
         
         
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
