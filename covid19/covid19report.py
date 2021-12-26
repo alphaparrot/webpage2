@@ -1386,7 +1386,7 @@ if __name__=="__main__":
         else:
             html.append(line)
     with open("index.html","w") as indexf:
-        indexf.write("\n".join(Html))
+        indexf.write("\n".join(html))
                 
         
         
