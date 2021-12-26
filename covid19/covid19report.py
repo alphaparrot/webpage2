@@ -557,7 +557,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
-    plt.annotate("%1.1f\% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
+    plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
     plt.title("%s Daily New Cases")
@@ -730,7 +730,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.ylabel("New Cases per Day")
     plt.title("%s, ON Raw Cases per Day"%phuname)
     if population is not None:
-        plt.annotate("%1.2f\% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
+        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -740,7 +740,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.ylabel("New Cases per Day")
     plt.title("%s, ON Raw Cases per Day"%phuname)
     if population is not None:
-        plt.annotate("%1.2f\% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
+        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
     plt.yscale('log')
     plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -752,7 +752,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.ylabel("Average New Cases per Day")
     plt.title("%s, ON Average Cases per Day"%phuname)
     if population is not None:
-        plt.annotate("%1.2f\% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
+        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -762,7 +762,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.ylabel("Average New Cases per Day")
     plt.title("%s, ON Average Cases per Day"%phuname)
     if population is not None:
-        plt.annotate("%1.2f\% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
+        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
     plt.yscale('log')
     plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -1249,11 +1249,11 @@ if __name__=="__main__":
                 html.append(line)
                 skipnext=True
                 for neighborhood in sorted(TOneighborhoods["units"].keys()):
-                    html.append('\t\t\t\t<option value="%s">%s</option>'%(neighborhood,
+                    html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
                                                                           neighborhood))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
-            elif "<option" in line:
+            elif "<option" in line and "<!--TO-->" in line:
                 pass #skip thi line too 
             else:
                 html.append(line)
