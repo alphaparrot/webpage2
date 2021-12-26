@@ -239,57 +239,55 @@ def makeStateorProvince(name,pathdir):
         htmlf.write('\n'.join(html))
         
         
-def makeCounty(phu,pathdir):
+def makeCounty(county,state,pathdir):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
-    filename = "ontario_%s"%phu.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
+    filename = "%s_%s"%(state,
+                county.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
     print(filename)
-    title = "\t\t<title>%s, ON | COVID-19 Dashboard</title>"%phu
-    navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, ON</a></li>'%(filename,phu)
-    header = '\t\t\t\t\t<h2><a name="current">%s, ON COVID-19 Data</a></h2>'%phu
+    title = "\t\t<title>%s County, %s | COVID-19 Dashboard</title>"%(county,state)
+    navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s County, %s</a></li>'%(filename,county,state)
+    header = '\t\t\t\t\t<h2><a name="current">%s County, %s COVID-19 Data</a></h2>'%(county,state)
     
-    body = ("<header><h2>%s Plots</h2></header>    \n"%phu+
+    body = ("<header><h2>%s County, %s Plots</h2></header>    \n"%(county,state)+
             img2plate%("%s_rawdaily.png"%pathdir,
-                      "%s raw cases per day, linear scale"%phu,
+                      "%s County, %s raw cases per day, linear scale"%(county,state),
                       "%s_rawdaily_log.png"%pathdir,
-                      "%s_raw cases per day, logarithmic scale"%phu,
-                      "New COVID-19 cases per day in %s, ON."%phu+
+                      "%s County, %s_raw cases per day, logarithmic scale"%(county,state),
+                      "New COVID-19 cases per day in %s County, %s."%(county,state)+
                       "These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
                       "%s_rawdaily.png"%pathdir,"%s_rawdaily.pdf"%pathdir,
                       "%s_rawdaily_log.png"%pathdir,"%s_rawdaily_log.pdf"%pathdir)+"\n"+
             "<br> \n"+
             img2plate%("%s_avgdaily.png"%pathdir,
-                      "%s average cases per day, linear scale"%phu,
+                      "%s County, %s average cases per day, linear scale"%(county,state),
                       "%s_avgdaily_log.png"%pathdir,
-                      "%s_average cases per day, logarithmic scale"%phu,
-                      "7-day average of new COVID-19 cases per day in %s, ON."%phu+
+                      "%s County, %s_average cases per day, logarithmic scale"%(county,state),
+                      "7-day average of new COVID-19 cases per day in %s County, %s."%(county,state)+
                       "These data have had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
                       "%s_avgdaily.png"%pathdir,"%s_avgdaily.pdf"%pathdir,
                       "%s_avgdaily_log.png"%pathdir,"%s_avgdaily_log.pdf"%pathdir)+"\n"+
             "<br> \n"+
             img2plate%("%s_active.png"%pathdir,
-                      "%s, ON active cases, linear scale"%phu,
+                      "%s County, %s active cases, linear scale"%(county,state),
                       "%s_active_log.png"%pathdir,
-                      "%s, ON_active cases, logarithmic scale"%phu,
-                      "Active COVID-19 cases each day in %s, ON."%phu+
+                      "%s County, %s_active cases, logarithmic scale"%(county,state),
+                      "Active COVID-19 cases each day in %s County, %s."%(county,state)+
                       "  These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
                       "%s_active.png"%pathdir,"%s_active.pdf"%pathdir,
                       "%s_active_log.png"%pathdir,"%s_active_log.pdf"%pathdir)+"\n"+
             "<br> \n"+
-            imgplate%("%s_Rt.png"%pathdir,"Historical %s effective reproductive number"%phu,
-                      "Raw and 2-week average of %s and ON's effective reproductive numbers. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%phu,
+            imgplate%("%s_Rt.png"%pathdir,"Historical %s County effective reproductive number"%county,
+                      "Raw and 2-week average of %s and %s's effective reproductive numbers. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%(county,state),
                       "%s_Rt.png"%pathdir,"%s_Rt.pdf"%pathdir)+"\n"+
             "<br> \n"+
             imgplate%("%s_deaths.png"%pathdir,
-                      "%s, ON average deaths per day"%phu,
-                      "7-day average of COVID-19 deaths per day in %s, ON."%phu+
+                      "%s County, %s average deaths per day"%(county,state),
+                      "7-day average of COVID-19 deaths per day in %s County, %s."%(county,state)+
                       "These data have had a rolling average applied.",
                       "%s_deaths.png"%pathdir,"%s_deaths.pdf"%pathdir)+"\n"+
             "<br >\n"+
             "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
-            
-            
-    
     
     html = []
     for line in template:

@@ -660,8 +660,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     curve = day5avg(np.diff(deaths_dataset[name])/float(population)*1e6)
     ntldeaths = day5avg(national_deaths)*1e6
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
-    plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/curve[-1])),name,country),
-                 (-len(curve),curve.max()))
+    if np.cumsum(curve)[-1]>=1:
+        plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/np.cumsum(curve)[-1])),name,country),
+                    (-len(curve),curve.max()))
     plt.plot(np.arange(len(ntldeaths))-len(ntldeaths),ntldeaths,color='k',alpha=0.4,label=country)
     plt.legend()
     plt.annotate("%1.2f Deaths per Day per 1M"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
