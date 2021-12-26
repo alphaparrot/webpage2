@@ -242,9 +242,12 @@ def makeStateorProvince(name,pathdir):
 def makeCounty(county,state,pathdir):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
-    filename = "%s_%s"%(state,
+    filename1 = "%s_%s"%(state,
                 county.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))+".html"
-    print(filename)
+    filename = "%s_%s"%(state.replace(" ","_"),
+                county.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))+".html"
+    os.system('rm -rf "%s"'%filename1)
+    #print(filename)
     title = "\t\t<title>%s County, %s | COVID-19 Dashboard</title>"%(county,state)
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s County, %s</a></li>'%(filename,county,state)
     header = '\t\t\t\t\t<h2><a name="current">%s County, %s COVID-19 Data</a></h2>'%(county,state)
@@ -315,4 +318,35 @@ def makeCounty(county,state,pathdir):
             
     with open("%s"%filename,"w") as htmlf:
         htmlf.write('\n'.join(html))
+        
+        
+def makeCountry(country):
+    with open("template.html","r") as templatef:
+        template = templatef.read().split('\n')
+    filename = "%s_country"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))+".html"
+    #print(filename)
+    title = "\t\t<title>%s | COVID-19 Dashboard</title>"%country
+    navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s</a></li>'%(filename,country)
+    header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%country
+    
+    body = (imgplate%("%s_summary.png"%country,"7-day average of daily cases, 2-week average of the effective reproductive number, 7-day average of daily deaths per million, and total cumulative cases as a percent of the population for %s."%country,
+                      "%s_summary.png"%country,"%s_summary.pdf"%country)+"\n"+
+            "<br >\n"+
+            "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
+    
+    html = []
+    for line in template:
+        html.append(line)
+        if "<!-- TITLE -->" in line:
+            html.append(title)
+        elif "<!-- NAVBAR -->" in line:
+            html.append(navlink)
+        elif "<!-- HEADER -->" in line:
+            html.append(header)
+        elif "<!-- BODY -->" in line:
+            html.append(body)
+            
+    with open("%s"%filename,"w") as htmlf:
+        htmlf.write('\n'.join(html))
+    
     

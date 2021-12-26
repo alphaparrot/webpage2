@@ -328,6 +328,9 @@ def country_summary(country,dataset,deathdata,countrypops):
     t2 = np.arange(len(z))-len(z)
     t2r = np.arange(len(r))-len(r)
     axes[0].plot(t1,y/countrypops[country]*1e6,marker='',label=country)
+    cfrac = cdata["Total"][-1]/countrypops[country]*1e2
+    axes[0].annotate("%1.2f%% of people in %s have tested positive for COVID-19."%(cfrac,country),
+                     (t1[0],y.max()/countrypops[country]))
     #axes[0].axvline((date(2020,12,9)-date.today()).days,color='g',linestyle='--')
     #axes[0].annotate("First Pfizer Shipment",((date(2020,12,9)-date.today()).days+5,100))
     ddata = extract_country(deathdata,country)
@@ -335,6 +338,10 @@ def country_summary(country,dataset,deathdata,countrypops):
     y = day5avg(np.diff(y))/countrypops[country]*1e6
     t4 = np.arange(len(y))-len(y)
     axes[1].plot(t4,y,marker='',label=country)
+    if ddata["Total"][-1]>=1:
+        dfrac = int(round(countrypops[country]/ddata["Total"][-1]))
+        axes[1].annotate("1 in %d people in %s have died from COVID-19."%(dfrac,country),
+                         (t4[0],y.max()))
     axes[2].plot(t2,z,marker='.',label=country)
     axes[2].plot(t2r,r,marker='',color='k',alpha=0.4,label=country)
     axes[2].axhline(1.0,color='r',linestyle=':')
@@ -1500,6 +1507,9 @@ if __name__=="__main__":
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
             
+    ckeys = sorted(uskeys)
+    ckeys.remove('Guam') #No counties in Guam
+    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
     html = []
@@ -1514,8 +1524,10 @@ if __name__=="__main__":
             elif "<!-- COUNTYFORM -->" in line:
                 html.append(line)
                 skipnext=True
-                for k in sorted(uskeys):
-                    html.append('<!--CY-->\t\t\t<option value="%s">%s</option>'%(k,k))
+                n=0
+                for k in sorted(ckeys):
+                    html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
+                    n+=1
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
             elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
@@ -1529,18 +1541,18 @@ if __name__=="__main__":
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
         
-    #Create linked state/county menus for the USA section    
+    #Create linked state/county menus for the USA section
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
     html = []
     for line in index:
         if "//COUNTY" in line:
             html.append(line)
-            for state in sorted(uskeys):
+            for state in ckeys:
                 counties = get_counties(usacsv,state=state)
                 options = '"'
                 for county in counties:
-                    options+="<option value='%s'>%s: %s</option>"%(county,state,county)
+                    options+="<option value='%s|%s'>%s</option>"%(county,state,county)
                 options += '",'
                 html.append("\t"+options+" //CY")
         elif "//CY" in line:
@@ -1549,7 +1561,35 @@ if __name__=="__main__":
             html.append(line)
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
-                
+    
+    for country in sorted(countries):
+        if os.path.exists("%s_summary.png"):
+            makehtml.makeCountry(country)
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- GLOBALFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for country in sorted(countries):
+                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")):
+                        html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--GL-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
         
         
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
@@ -2679,6 +2719,7 @@ if __name__=="__main__":
         try:
             country_summary(country,dataset,ddataset,countrypops)
             _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
+            makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
