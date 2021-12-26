@@ -249,43 +249,55 @@ def makeCounty(county,state,pathdir):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s County, %s</a></li>'%(filename,county,state)
     header = '\t\t\t\t\t<h2><a name="current">%s County, %s COVID-19 Data</a></h2>'%(county,state)
     
-    body = ("<header><h2>%s County, %s Plots</h2></header>    \n"%(county,state)+
+    body = ("<header><h2>%s Plots</h2></header>    \n"%county+
             img2plate%("%s_rawdaily.png"%pathdir,
-                      "%s County, %s raw cases per day, linear scale"%(county,state),
-                      "%s_rawdaily_log.png"%pathdir,
-                      "%s County, %s_raw cases per day, logarithmic scale"%(county,state),
-                      "New COVID-19 cases per day in %s County, %s."%(county,state)+
-                      "These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s County raw cases per day"%county,
+                      "%s_avgdaily.png"%pathdir,
+                      "%s_County average cases per day"%county,
+                      "New COVID-19 cases per day in %s County"%county+
+                      " These data have not had a rolling average applied. The first plot gives raw cases per day, while the second gives the 7-day moving average.",
                       "%s_rawdaily.png"%pathdir,"%s_rawdaily.pdf"%pathdir,
-                      "%s_rawdaily_log.png"%pathdir,"%s_rawdaily_log.pdf"%pathdir)+"\n"+
+                      "%s_avgdaily.png"%pathdir,"%s_avgdaily.pdf"%pathdir)+"\n"+
             "<br> \n"+
-            img2plate%("%s_avgdaily.png"%pathdir,
-                      "%s County, %s average cases per day, linear scale"%(county,state),
-                      "%s_avgdaily_log.png"%pathdir,
-                      "%s County, %s_average cases per day, logarithmic scale"%(county,state),
-                      "7-day average of new COVID-19 cases per day in %s County, %s."%(county,state)+
-                      "These data have had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
-                      "%s_avgdaily.png"%pathdir,"%s_avgdaily.pdf"%pathdir,
-                      "%s_avgdaily_log.png"%pathdir,"%s_avgdaily_log.pdf"%pathdir)+"\n"+
+            img2plate%("%s_relrawdaily.png"%pathdir,
+                      "%s County cases per 100k per day, linear scale"%county,
+                      "%s_relrawdaily_log.png"%pathdir,
+                      "%s_County cases per 100k per day, logarithmic scale"%county,
+                      "New COVID-19 cases per 100k per day in %s County,"%county+
+                      " compared to the national average. These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_relrawdaily.png"%pathdir,"%s_relrawdaily.pdf"%pathdir,
+                      "%s_relrawdaily_log.png"%pathdir,"%s_relrawdaily_log.pdf"%pathdir)+"\n"+
             "<br> \n"+
-            img2plate%("%s_active.png"%pathdir,
-                      "%s County, %s active cases, linear scale"%(county,state),
-                      "%s_active_log.png"%pathdir,
-                      "%s County, %s_active cases, logarithmic scale"%(county,state),
-                      "Active COVID-19 cases each day in %s County, %s."%(county,state)+
-                      "  These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
-                      "%s_active.png"%pathdir,"%s_active.pdf"%pathdir,
-                      "%s_active_log.png"%pathdir,"%s_active_log.pdf"%pathdir)+"\n"+
+            img2plate%("%s_relavgdaily.png"%pathdir,
+                      "%s County average cases per 100k per day, linear scale"%county,
+                      "%s_relavgdaily_log.png"%pathdir,
+                      "%s_County average cases per 100k per day, logarithmic scale"%county,
+                      "7-day average of new COVID-19 cases per 100k per day in %s County,"%county+
+                      " compared to the national average. These data have had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_relavgdaily.png"%pathdir,"%s_relavgdaily.pdf"%pathdir,
+                      "%s_relavgdaily_log.png"%pathdir,"%s_relavgdaily_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_3wk.png"%pathdir,
+                      "%s County active cases, linear scale"%county,
+                      "%s_3wk_log.png"%pathdir,
+                      "%s_County active cases, logarithmic scale"%county,
+                      "3-week running sum of COVID-19 cases each day in %s County."%county+
+                      " These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_3wk.png"%pathdir,"%s_3wk.pdf"%pathdir,
+                      "%s_3wk_log.png"%pathdir,"%s_3wk_log.pdf"%pathdir)+"\n"+
+            "<br> \n"+
+            img2plate%("%s_rel3wk.png"%pathdir,
+                      "%s County active cases per 1000, linear scale"%county,
+                      "%s_rel3wk_log.png"%pathdir,
+                      "%s_County active cases per 1000, logarithmic scale"%county,
+                      "3-week running sum of COVID-19 cases per 1000 each day in %s County."%county+
+                      " These data have not had a rolling average applied. The first plot gives the data on a linear vertical scale, while the second gives the data on a logarithmic vertical scale, which better shows different exponentials.",
+                      "%s_rel3wk.png"%pathdir,"%s_rel3wk.pdf"%pathdir,
+                      "%s_rel3wk_log.png"%pathdir,"%s_rel3wk_log.pdf"%pathdir)+"\n"+
             "<br> \n"+
             imgplate%("%s_Rt.png"%pathdir,"Historical %s County effective reproductive number"%county,
-                      "Raw and 2-week average of %s and %s's effective reproductive numbers. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%(county,state),
+                      "Raw and 2-week average of the effective reproductive number in %s County, compared to the state average. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%county,
                       "%s_Rt.png"%pathdir,"%s_Rt.pdf"%pathdir)+"\n"+
-            "<br> \n"+
-            imgplate%("%s_deaths.png"%pathdir,
-                      "%s County, %s average deaths per day"%(county,state),
-                      "7-day average of COVID-19 deaths per day in %s County, %s."%(county,state)+
-                      "These data have had a rolling average applied.",
-                      "%s_deaths.png"%pathdir,"%s_deaths.pdf"%pathdir)+"\n"+
             "<br >\n"+
             "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
     
