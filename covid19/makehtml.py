@@ -4,7 +4,7 @@ def imgplate(filename,alt,description,png,pdf):
     text = ('\t\t\t\t<div class="image full">                               \n'+
             '\t\t\t\t    <a target="_blank" href="%s"><img src="%s" alt="%s"></a>                    \n'+
             '\t\t\t\t    <div class="description">                          \n'+
-            '\t\t\t\t    <p class="description content"> %s <br/>           \n'+
+            '\t\t\t\t    <p style="text-align:left" class="description content"> %s <br/>           \n'+
             '\t\t\t\t    <a href="%s" target="_blank">PNG</a> | <a href="%s" target="_blank">PDF</a></p> \n'+
             '\t\t\t\t    </div>                                \n '+
             '\t\t\t\t</div> ')%(filename,filename,alt,description,png,pdf)
@@ -17,7 +17,7 @@ def img2plate(file1,alt1,file2,alt2,description,png1,pdf1,png2,pdf2):
             '\t\t\t\t    <div class="column"><a target="_blank" href="%s"><img src="%s" alt="%s"></a></div> \n'+
             '\t\t\t\t    </div>                                             \n'+
             '\t\t\t\t    <div class="description">                          \n'+
-            '\t\t\t\t    <p class="description content"> %s <br/>           \n'+
+            '\t\t\t\t    <p style="text-align:left" class="description content"> %s <br/>           \n'+
             '\t\t\t\t    Left: <a href="%s" target="_blank">PNG</a> | <a href="%s" target="_blank">PDF</a><br/> \n'+
             '\t\t\t\t    Right: <a href="%s" target="_blank">PNG</a> | <a href="%s" target="_blank">PDF</a></p> \n'+
             '\t\t\t\t    </div>                                             \n'+
