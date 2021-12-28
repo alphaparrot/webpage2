@@ -333,7 +333,9 @@ def makeCountry(country):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s</a></li>'%(filename,country)
     header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%country
     
-    body = (imgplate("%s_summary.png"%country,"7-day average of daily cases, 2-week average of the effective reproductive number, 7-day average of daily deaths per million, and total cumulative cases as a percent of the population for %s."%country,
+    body = (imgplate("%s_summary.png"%country,
+                     "COVID-19 summary for %s"%country,
+                     "7-day average of daily cases, 2-week average of the effective reproductive number, 7-day average of daily deaths per million, and total cumulative cases as a percent of the population for %s."%country,
                       "%s_summary.png"%country,"%s_summary.pdf"%country)+"\n"+
             "<br >\n"+
             "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
