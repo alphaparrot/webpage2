@@ -822,8 +822,8 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.close('all')
     
 def plotCounty(county,state,countydataset,statedataset,statepopulation):
-    fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     fstub1 = state.replace(" ","_").replace("&","and")
+    fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir(fstub1):
         os.system("mkdir %s"%fstub)
         
@@ -2096,7 +2096,7 @@ if __name__=="__main__":
             plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
     #plt.xscale('log')
     plt.yscale('log')
-    plt.ylim(1.0e-2,100)
+    plt.ylim(1.0e-2,1000)
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
@@ -2104,6 +2104,322 @@ if __name__=="__main__":
     plt.savefig("ca_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailycasespop.pdf",bbox_inches='tight')
     plt.close('all')
+    
+    fig,ax=plt.subplots(figsize=(14,14))
+    for place in canada:
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150: #Only plot places with >20 confirmed cases
+            plt.plot(canada[place]/float(provincepops[place])*1e2,marker='.',label=place)
+            coords = (len(canada[place]),canada[place][-1]/float(provincepops[place])*1e2)
+            plt.annotate(place,coords,xytext=coords)
+    #plt.xscale('log')
+    #plt.yscale('log')
+    plt.xlim(30,len(canada["Total"]))
+    plt.ylim(0.1,30.0)
+    #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.xlabel("Time [days]")
+    plt.ylabel("Confirmed Cases (percentage of population)")
+    plt.title("Canada Confirmed Cases")
+    plt.savefig("caconfirmed.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("caconfirmed.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in canada:
+        place=province
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150:
+            y = canada[province]/provincepops[province]*1e5
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    #plt.yscale('log')
+    #plt.ylim(1.0e-2,100)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Cases per 100k")
+    plt.title("USA Daily Cases")
+    plt.savefig("canada_dailycasespop.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_dailycasespop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in canada:
+        place=province
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150:
+            y = canada[province]/provincepops[province]*1e5
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    #plt.yscale('log')
+    #plt.ylim(1.0e-2,100)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Cases per 100k")
+    plt.title("USA Daily Cases")
+    plt.savefig("canada_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_dailycasespop_log.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in canada:
+        place=province
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150:
+            y = active3wk(canada[province])/provincepops[province]*1e2
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y))-len(y),y,marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,y[-1]))
+    #plt.xscale('log')
+    #plt.yscale('log')
+    #plt.ylim(1.0,2.0e3)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("3-wk Cumulative Cases [Percent of Population]")
+    plt.title("USA Active Cases")
+    plt.savefig("canada_3wkcasespop.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_3wkcasespop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in canada:
+        place=province
+        if province != "Total" and ca_deaths[province][-1]>25:
+            y = ca_deaths[province]/provincepops[province]*1e6
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    #plt.yscale('log')
+    plt.ylim(0.0,50)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Deaths per 1M")
+    plt.title("USA Daily Deaths")
+    plt.savefig("canada_dailydeathspop.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_dailydeathspop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in canada:
+        place=province
+        if province != "Total" and ca_deaths[province][-1]>25:
+            y = ca_deaths[province]/provincepops[province]*1e6
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    plt.yscale('log')
+    #plt.ylim(0.0,50)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Deaths per 1M")
+    plt.title("USA Daily Deaths")
+    plt.savefig("canada_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_dailydeathspop_log.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    n=0
+    labels=[]
+    ptotals = {}
+    for k in canada:
+        if province != "Total" and ca_deaths[province][-1]>25:
+            ptotals[k] = ca_deaths[k][-1]/provincepops[k]*1e3
+    fig,ax=plt.subplots(figsize=(12,4))
+    for k in sorted(ptotals, key=ptotals.get,reverse=True):
+        labels.append(k)
+        plt.bar(n,ptotals[k])
+        n+=1
+    ax.set_xticks(range(n))
+    ax.set_xticklabels(labels,rotation='vertical')
+    #ax.set_ylim(0,100)
+    plt.ylabel("Deaths per 1000")
+    #plt.yscale('log')
+    plt.title("COVID-19 Death Toll")
+    maxd = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[0]])
+    
+    n=0
+    #labels=[]
+    ptotals = {}
+    for k in canada:
+        if province != "Total" and ca_deaths[province][-1]>25:
+            ptotals[k] = provincepops[k]/ca_deaths[k][-1]
+    
+    worst = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]])
+    plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
+    plt.savefig("canada_deathtoll.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_deathtoll.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,ax=plt.subplots(figsize=(14,12))
+    for place in ca_deaths:
+        if province != "Total" and ca_deaths[province][-1]>3: #Only plot places with >20 deaths
+            y = day5avg(np.diff(ca_deaths[place]))
+            #y = y[y>=800]
+            #yp = y[0]
+            #m = y[1]-y[0]
+            #x0 = (3.0-yp)/m
+            #x = np.arange(len(y)-1)-x0
+            active = active3wk(canada[place])
+            lst = ":"
+            nactive = len(active)
+            diffn = len(y)-nactive
+            y = y[diffn:]/(active/21.0)
+            alpha=0.5
+            if place in ca_deaths:#["Minnesota","Wisconsin","New York","New Jersey","Oregon","Florida","Michigan","Connecticut","Massachusetts"]:
+                lst='-'
+                alpha=0.1
+                plt.annotate(place,(len(y),y[-1]),xytext=(len(y),y[-1]),clip_on=True)
+                    
+            plt.plot(np.array(range(len(y))),y,marker='.',label=place,linestyle=lst,alpha=alpha,color='k')
+            
+    #plt.xscale('log')
+    plt.yscale('log')
+    #plt.legend(loc='best')
+    plt.xlabel("Time [days]")
+    plt.ylabel("Mortality Rate")
+    plt.title("US States Mortality Rate")
+    plt.savefig("ca_dailymortality.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("ca_dailymortality.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,ax=plt.subplots(figsize=(14,12))
+    for place in canada:
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150: #Only plot places with >20 deaths
+            y = canada[place]#/float(provincepops[place])*1e5
+            #y = y[y>=800]
+            #yp = y[0]
+            #m = y[1]-y[0]
+            #x0 = (3.0-yp)/m
+            #x = np.arange(len(y)-1)-x0
+                    
+            r,p,l = Rt(day5avg(np.diff(y)),interval=7)
+            r = week2avg(r)[:-13]
+            z=active3wk(y)[-len(r):]
+            z*=r
+            x=np.array(range(len(r)))-len(r)
+            lst = ":"
+            alpha=0.5
+            if place in canada:#["Minnesota","Wisconsin","New York","New Jersey","Oregon","Florida","Michigan","Connecticut","Massachusetts"]:
+                lst='-'
+                alpha=1.0
+                plt.annotate(place,(0.25,max(r[-1],1)),xytext=(0.25,max(1,r[-1])),clip_on=True)
+            plt.plot(x,r,marker='.',label=place,linestyle=lst,alpha=alpha)
+    #plt.xscale('log')
+    #plt.yscale('log')
+    #plt.ylim(0.0,50)
+    plt.axhline(1.0,linestyle=':',color='k')
+    #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.xlabel("Days before Present")
+    plt.ylabel("Effective Reproductive Number $R_t$ (14-day Average)")
+    plt.title("Canada Transmission")
+    plt.savefig("canada_rt.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("canada_rt.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
+    n=0
+    labels=[]
+    ptotals = {}
+    active = {}
+    nmax = 0
+    for place in canada:
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150: #Only plot places with >20 deaths
+            y = canada[place]
+            active[place] = active3wk(y)[-1]/float(provincepops[place])
+            nmax = max(nmax,active[place])
+            y = day5avg(np.diff(y[y>10]))
+            r,p,l = Rt(y,interval=7)
+            r = week2avg(r)
+            ptotals[place] = r[-1]
+    
+    fig,ax=plt.subplots(figsize=(14,4))
+    for k in sorted(ptotals, key=ptotals.get,reverse=True):
+        labels.append(k)
+        if ptotals[k]>1.0:
+            color='orange'
+        elif ptotals[k]==1.0:
+            color='blue'
+        else:
+            color='green'
+        plt.bar(n,ptotals[k],color=color,edgecolor='k',alpha=max(0.05,active[k]/float(nmax)))
+        n+=1
+    ax.set_xticks(range(n))
+    ax.set_xticklabels(labels,rotation='vertical')
+    #ax.set_ylim(0,100)
+    plt.ylabel("2-week Average R$_t$")
+    #plt.yscale('log')
+    #plt.ylim(5.0e-3,50.0)
+    plt.axhline(1.0,linestyle='--',color='k')
+    plt.title("Canada COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence")
+    plt.xlim(-1.0,n+1.0)
+    plt.savefig("caprov_rt_snapshot.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("caprov_rt_snapshot.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    n=0
+    labels=[]
+    ptotals = {}
+    active = {}
+    nmax = 0
+    for place in canada:
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total" and canada[province][-1]>150: #Only plot places with >20 deaths
+            y = canada[place]
+            active[place] = active3wk(y)[-1]/float(provincepops[place])
+            nmax = max(nmax,active[place])
+            y = day5avg(np.diff(y[y>10]))
+            r,p,l = Rt(y,interval=7)
+            r = week2avg(r)
+            ptotals[place] = week2avg(np.gradient(r))[-1]
+    
+    fig,ax=plt.subplots(figsize=(14,4))
+    for k in sorted(ptotals, key=ptotals.get,reverse=True):
+        labels.append(k)
+        if ptotals[k]>0.0:
+            color='orange'
+        elif ptotals[k]==0.0:
+            color='blue'
+        else:
+            color='green'
+        plt.bar(n,ptotals[k],color=color,edgecolor='k',alpha=max(0.05,active[k]/float(nmax)))
+        n+=1
+    ax.set_xticks(range(n))
+    ax.set_xticklabels(labels,rotation='vertical')
+    #ax.set_ylim(0,100)
+    plt.ylabel("2-week Average Derivative of <R$_t$>\n[Additional average infections per case per day]")
+    #plt.yscale('log')
+    #plt.ylim(5.0e-3,50.0)
+    plt.axhline(0.0,linestyle='--',color='k')
+    plt.title("Canada COVID-19 Reproductive Number Derivative (Transmission Trend), Opacity Weighted by Virus Prevalence")
+    plt.xlim(-1.0,n+1.0)
+    plt.savefig("caprov_drt_snapshot.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("caprov_drt_snapshot.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    #Begin doing US
+    
     
     fig,ax=plt.subplots(figsize=(14,14))
     for place in usa:
@@ -2146,6 +2462,31 @@ if __name__=="__main__":
     plt.title("USA Daily Cases")
     plt.savefig("usa_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in usa:
+        place=province
+        if us_deaths[place][-1]>=20 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
+        and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place and province != "Total" and usa[province][-1]>150:
+            y = usa[province]/statepops[province]*1e5
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    #plt.yscale('log')
+    #plt.ylim(1.0e-2,100)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Cases per 100k")
+    plt.title("USA Daily Cases")
+    plt.savefig("usa_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("usa_dailycasespop_log.pdf",bbox_inches='tight')
     plt.close('all')
     
     fig,axes=plt.subplots(figsize=(14,10))
@@ -2194,6 +2535,31 @@ if __name__=="__main__":
     plt.title("USA Daily Deaths")
     plt.savefig("usa_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    
+    fig,axes=plt.subplots(figsize=(14,10))
+    for province in usa:
+        place=province
+        if us_deaths[place][-1]>=20 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
+        and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place and province != "Total" and usa[province][-1]>150:
+            y = us_deaths[province]/statepops[province]*1e6
+            #y = y[y>=150]
+            yp = y[0]
+            m = y[1]-y[0]
+            x0 = (150.0-yp)/m
+            x = np.arange(len(y)-1)-x0
+            plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
+            plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
+    #plt.xscale('log')
+    plt.yscale('log')
+    #plt.ylim(0.0,50)
+    #plt.legend(loc='best')
+    plt.xlabel("Time before Present [days]")
+    plt.ylabel("New Deaths per 1M")
+    plt.title("USA Daily Deaths")
+    plt.savefig("usa_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("usa_dailydeathspop_log.pdf",bbox_inches='tight')
     plt.close('all')
     
     n=0
@@ -2373,8 +2739,6 @@ if __name__=="__main__":
         else:
             color='green'
         plt.bar(n,ptotals[k],color=color,edgecolor='k',alpha=max(0.05,active[k]/float(nmax)))
-        if k=="Minnesota" or k=="Oregon" or k=="Florida":
-            plt.scatter(n,max(0.0,ptotals[k])+0.1*np.nanmax(list(ptotals.values())),color='k',marker='*')
         n+=1
     ax.set_xticks(range(n))
     ax.set_xticklabels(labels,rotation='vertical')
@@ -2447,6 +2811,47 @@ if __name__=="__main__":
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop.pdf",bbox_inches='tight')
+    plt.close('all')
+    
+    fig,ax=plt.subplots(figsize=(12,12))
+    tmax = 0
+    tmin = 0
+    nmax = 0
+    for country in countries:
+        try:
+            cdata = extract_country(ddataset,country)
+            if cdata["Total"][-1]>=100:
+                y = cdata["Total"]
+                y = y/countrypops[country]*1.0e3
+                x = np.arange(len(y))-len(y)
+                tmax = max(tmax,len(y)*1.1)
+                tmin = min(tmin,x.min())
+                nmax = max(nmax,1.1*max(y))
+                plt.plot(x,y,label=country,marker='.')
+                coords = (x[-1]+0.5,y[-1])
+                plt.annotate(country,coords,xytext=coords,clip_on=True)
+        except:
+            traceback.print_exc()
+    cdata = extract_country(ddataset,"US")
+    y = cdata["Total"]
+    y = y/countrypops["United States"]*1.0e3
+    x = np.arange(len(y))-len(y)
+    tmax = max(tmax,len(y)*1.1)
+    tmin = min(tmin,x.min())
+    nmax = max(nmax,1.1*max(y))
+    plt.plot(x,y,label=country,marker='.')
+    coords = (x[-1]+0.5,y[-1])
+    plt.annotate("USA",coords,xytext=coords,clip_on=True)
+    plt.ylim(1.0e-3,nmax)
+    plt.xlim(tmin,250)
+    #plt.xscale('log')
+    plt.yscale('log')
+    plt.ylabel("Deaths Per 1000 People")
+    plt.xlabel("Days before Present")
+    plt.title("COVID-19 Deaths per Thousand")
+    #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    plt.savefig("deathnumberspop_log.png",bbox_inches='tight',facecolor='white')
+    plt.savefig("deathnumberspop_log.pdf",bbox_inches='tight')
     plt.close('all')
 
     ptotals = {}
