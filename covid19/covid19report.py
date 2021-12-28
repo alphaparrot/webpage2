@@ -672,7 +672,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     ntldeaths = day5avg(national_ddeaths)*1e6
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     if np.cumsum(curve)[-1]>=1:
-        plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/deaths_dataset[name][-1])),name,country),
+        plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(population/float(deaths_dataset[name][-1]))),name,country),
                     (-len(curve),curve.max()))
     plt.plot(np.arange(len(ntldeaths))-len(ntldeaths),ntldeaths,color='k',alpha=0.4,label=country)
     plt.legend()
@@ -824,6 +824,9 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
 def plotCounty(county,state,countydataset,statedataset,statepopulation):
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    
+    print("%s_rawdaily.png"%pathdir)
+    
     if not os.path.isdir(fstub1):
         os.system("mkdir %s"%fstub)
         
@@ -1317,9 +1320,9 @@ if __name__=="__main__":
         
     keys1 = sorted(neighborhoodpops.keys())
     keys2 = sorted(TOneighborhoods["units"].keys())
-    print(len(keys1),len(keys2))
+    #print(len(keys1),len(keys2))
     for n in range(len(keys1)):
-        print("%40s\t%s\t%s"%(keys1[n],str(keys1[n]==keys2[n]),keys2[n]))
+        #print("%40s\t%s\t%s"%(keys1[n],str(keys1[n]==keys2[n]),keys2[n]))
         if keys1[n]!=keys2[n]:
             neighborhoodpops[keys2[n]] = neighborhoodpops[keys1[n]]
             neighborhoodpops.pop(keys1[n])
@@ -1465,7 +1468,7 @@ if __name__=="__main__":
    
     for k in sorted(cankeys):
         fstub = k.replace(" ","_").replace("&","and")
-        makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+        makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -1501,7 +1504,7 @@ if __name__=="__main__":
    
     for k in sorted(uskeys):
         fstub = k.replace(" ","_").replace("&","and")
-        makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
+        makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
    
     for state in uskeys:
         counties = get_counties(usacsv,state=state)
@@ -2012,11 +2015,14 @@ if __name__=="__main__":
     
     ontariokeys = sorted(ontario_a.keys())
     for k in sorted(ontario_a.keys()):
-        try:
-            plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
-        except:
-            traceback.print_exc()
-            os.system("rm -rf ontario_%s*"%(str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
+        if len(ontario[k])>14:
+            try:
+                plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
+            except:
+                traceback.print_exc()
+                os.system("rm -rf ontario_%s*"%(str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
+                ontariokeys.remove(k)
+        else:
             ontariokeys.remove(k)
     
     with open("index.html","r") as indexf:
