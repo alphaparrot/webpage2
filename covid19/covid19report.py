@@ -2091,7 +2091,7 @@ if __name__=="__main__":
          
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
-        if province != "Total":
+        if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
             y = canada[province]/float(provincepops[province])*1e5
             #y = y[y>=150]
             yp = y[0]
