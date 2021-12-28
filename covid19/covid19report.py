@@ -2391,8 +2391,8 @@ if __name__=="__main__":
 
     for state in uskeys:
         plotStateOrProvince(state,"United States",usa,us_deaths,
-                                np.diff(extract_country(dataset,"US")["Total"])/float(countrypops["US"]),
-                                np.diff(extract_country(ddataset,"US")["Total"])/float(countrypops["US"]),
+                                extract_country(dataset,"US")["Total"]/float(countrypops["US"]),
+                                extract_country(ddataset,"US")["Total"]/float(countrypops["US"]),
                                 statepops[state])
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
