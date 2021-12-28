@@ -1460,7 +1460,7 @@ if __name__=="__main__":
             cankeys.append(province)
    
     for k in sorted(cankeys):
-        fstub = name.replace(" ","_").replace("&","and")
+        fstub = k.replace(" ","_").replace("&","and")
         makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
    
     with open("index.html","r") as indexf:
@@ -1496,7 +1496,7 @@ if __name__=="__main__":
             uskeys.append(state)
    
     for k in sorted(uskeys):
-        fstub = name.replace(" ","_").replace("&","and")
+        fstub = k.replace(" ","_").replace("&","and")
         makehtml.makeStateorProvince(str.title(k),"%s/%s"%(fstub,fstub))
    
     for state in uskeys:
@@ -1563,7 +1563,7 @@ if __name__=="__main__":
         indexf.write("\n".join(html))
     
     for country in sorted(countries):
-        if os.path.exists("%s_summary.png"):
+        if os.path.exists("%s_summary.png"%country):
             makehtml.makeCountry(country)
     
     with open("index.html","r") as indexf:
@@ -2724,5 +2724,35 @@ if __name__=="__main__":
         except Exception as e:
             traceback.print_exc()
             _log("/home/adivp416/public_html/covid19/reportlog.txt","No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
+    
+    
+    for country in sorted(countries):
+        if os.path.exists("%s_summary.png"%country):
+            makehtml.makeCountry(country)
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- GLOBALFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for country in sorted(countries):
+                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))):
+                        html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--GL-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
     
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
