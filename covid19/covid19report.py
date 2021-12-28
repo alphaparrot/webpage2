@@ -822,7 +822,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.close('all')
     
 def plotCounty(county,state,countydataset,statedataset,statepopulation):
-    fstub2 = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     fstub1 = state.replace(" ","_").replace("&","and")
     if not os.path.isdir(fstub1):
         os.system("mkdir %s"%fstub)
@@ -1507,7 +1507,7 @@ if __name__=="__main__":
         counties = get_counties(usacsv,state=state)
         for county in counties:
             fstub1 = state.replace(" ","_").replace("&","and")
-            fstub2 = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
             
