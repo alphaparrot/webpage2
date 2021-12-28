@@ -560,7 +560,11 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     if not os.path.isdir(fstub):
         os.system("mkdir %s"%fstub)
     
-    cases = np.diff(dataset[name])
+    cumcases = dataset[name]
+    cases = np.diff(np.append([0,],cumcases))
+    
+    national_dcases = np.diff(np.append([0,],national_cases))
+    national_ddeaths = np.diff(np.append([0,],national_deaths))
     
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
@@ -573,7 +577,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     curve = day5avg(cases)
-    curve2 = day5avg(national_cases)
+    curve2 = day5avg(national_dcases)
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
@@ -586,7 +590,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
-    plt.plot(np.arange(len(national_cases))-len(national_cases),national_cases*1e5,
+    plt.plot(np.arange(len(national_dcases))-len(national_dcases),national_dcases*1e5,
              label=country,color='k',alpha=0.6)
     plt.legend()
     plt.xlabel("Days before Present")
@@ -597,7 +601,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     curve = day5avg(cases)/float(population)*1e5
-    curve2 = day5avg(national_cases)*1e5
+    curve2 = day5avg(national_dcases)*1e5
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
              alpha=0.6,label=country)
@@ -611,7 +615,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
-    plt.plot(np.arange(len(national_cases))-len(national_cases),national_cases*1e5,
+    plt.plot(np.arange(len(national_dcases))-len(national_dcases),national_dcases*1e5,
              label=country,color='k',alpha=0.6)
     plt.legend()
     plt.xlabel("Days before Present")
@@ -623,7 +627,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     curve = day5avg(cases)/float(population)*1e5
-    curve2 = day5avg(national_cases)*1e5
+    curve2 = day5avg(national_dcases)*1e5
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
              alpha=0.6,label=country)
@@ -652,7 +656,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     fig,ax = plt.subplots(figsize=(14,9))
-    curve = np.diff(deaths_dataset[name])
+    curve = np.diff(deaths_dataset[name][1:])
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
@@ -664,11 +668,11 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     
     fig,ax = plt.subplots(figsize=(14,9))
-    curve = day5avg(np.diff(deaths_dataset[name])/float(population)*1e6)
-    ntldeaths = day5avg(national_deaths)*1e6
+    curve = day5avg(np.diff(deaths_dataset[name][1:])/float(population)*1e6)
+    ntldeaths = day5avg(national_ddeaths)*1e6
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     if np.cumsum(curve)[-1]>=1:
-        plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/np.cumsum(curve)[-1])),name,country),
+        plt.annotate("1 in %d people have died in %s, %s from COVID-19."%(int(round(1.0/deaths_dataset[name][-1])),name,country),
                     (-len(curve),curve.max()))
     plt.plot(np.arange(len(ntldeaths))-len(ntldeaths),ntldeaths,color='k',alpha=0.4,label=country)
     plt.legend()
@@ -681,8 +685,8 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     
-    curve = active3wk(np.cumsum(cases))
-    curve2 = active3wk(np.cumsum(national_cases))*1000
+    curve = active3wk(cumcases)
+    curve2 = active3wk(national_cases)*1000
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
@@ -703,7 +707,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     curve = curve/float(population)*1000
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=country)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=country)
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
@@ -713,7 +717,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.close('all')
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=country)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=country)
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
@@ -2045,8 +2049,8 @@ if __name__=="__main__":
     for province in canada:
         if province!= "Total" and canada[province][-1]>150:
             plotStateOrProvince(province,"Canada",canada,ca_deaths,
-                                np.diff(extract_country(dataset,"Canada")["Total"])/float(countrypops["Canada"]),
-                                np.diff(extract_country(ddataset,"Canada")["Total"])/float(countrypops["Canada"]),
+                                extract_country(dataset,"Canada")["Total"]/float(countrypops["Canada"]),
+                                extract_country(ddataset,"Canada")["Total"]/float(countrypops["Canada"]),
                                 provincepops[province])
             cankeys.append(province)
 
