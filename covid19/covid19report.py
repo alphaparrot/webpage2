@@ -2091,6 +2091,7 @@ if __name__=="__main__":
          
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
+        place=province
         if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
             y = canada[province]/float(provincepops[province])*1e5
             #y = y[y>=150]
@@ -2112,7 +2113,8 @@ if __name__=="__main__":
     plt.close('all')
     
     fig,ax=plt.subplots(figsize=(14,14))
-    for place in canada:
+    for province in canada:
+        place=province
         if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total": #Only plot places with >20 confirmed cases
             plt.plot(canada[place]/float(provincepops[place])*1e2,marker='.',label=place)
             coords = (len(canada[place]),canada[place][-1]/float(provincepops[place])*1e2)
@@ -2269,7 +2271,7 @@ if __name__=="__main__":
     #labels=[]
     ptotals = {}
     for k in ca_deaths:
-        if province != "Total" and ca_deaths[province][-1]>25:
+        if k != "Total" and ca_deaths[k][-1]>25:
             ptotals[k] = provincepops[k]/ca_deaths[k][-1]
     
     worst = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]])
@@ -2280,6 +2282,7 @@ if __name__=="__main__":
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in ca_deaths:
+        province=place
         if province != "Total" and ca_deaths[province][-1]>3: #Only plot places with >20 deaths
             y = day5avg(np.diff(ca_deaths[place]))
             #y = y[y>=800]
@@ -2312,6 +2315,7 @@ if __name__=="__main__":
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in canada:
+        province=place
         if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total": #Only plot places with >20 deaths
             y = canada[place]#/float(provincepops[place])*1e5
             #y = y[y>=800]
@@ -2351,6 +2355,7 @@ if __name__=="__main__":
     active = {}
     nmax = 0
     for place in canada:
+        province=place
         if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total": #Only plot places with >20 deaths
             y = canada[place]
             active[place] = active3wk(y)[-1]/float(provincepops[place])
@@ -2390,6 +2395,7 @@ if __name__=="__main__":
     active = {}
     nmax = 0
     for place in canada:
+        province=place
         if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total": #Only plot places with >20 deaths
             y = canada[place]
             active[place] = active3wk(y)[-1]/float(provincepops[place])
