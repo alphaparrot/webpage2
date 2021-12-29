@@ -1493,13 +1493,13 @@ def report():
         fstub = k.replace(" ","_").replace("&","and")
         makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
    
-    for state in uskeys:
-        counties = get_counties(usacsv,state=state)
-        for county in counties:
-            fstub1 = state.replace(" ","_").replace("&","and")
-            fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
-            pathdir = "%s/%s"%(fstub1,fstub2)
-            makehtml.makeCounty(county,state,pathdir)
+    #for state in uskeys:
+        #counties = get_counties(usacsv,state=state)
+        #for county in counties:
+            #fstub1 = state.replace(" ","_").replace("&","and")
+            #fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            #pathdir = "%s/%s"%(fstub1,fstub2)
+            #makehtml.makeCounty(county,state,pathdir)
             
     ckeys = sorted(uskeys)
     ckeys.remove('Guam') #No counties in Guam
@@ -3159,6 +3159,8 @@ def report():
     
 def processcounties(state):
         
+    import makehtml
+        
     state = state.replace("_"," ")
         
     statesetf = "statepopulations.csv"
@@ -3201,6 +3203,11 @@ def processcounties(state):
         try:
             plotCounty(county,state,usacsv,usa,statepops[state])
             _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
+            
+            fstub1 = state.replace(" ","_").replace("&","and")
+            fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            pathdir = "%s/%s"%(fstub1,fstub2)
+            makehtml.makeCounty(county,state,pathdir)
         except:
             _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
             print("Error encountered with %s County, %s:"%(county,state))
