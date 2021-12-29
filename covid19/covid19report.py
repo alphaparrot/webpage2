@@ -825,6 +825,8 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     
+    pathdir = "%s/%s"%(fstub1,fstub2)
+    
     print("%s_rawdaily.png"%pathdir)
     
     if not os.path.isdir(fstub1):
