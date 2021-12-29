@@ -2785,7 +2785,7 @@ if __name__=="__main__":
                 print("Error encountered with %s County, %s:"%(county,state))
                 traceback.print_exc()
                 raise
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime()))
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
                 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
