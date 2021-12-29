@@ -2252,6 +2252,7 @@ if __name__=="__main__":
     labels=[]
     ptotals = {}
     for k in ca_deaths:
+        province=k
         if province != "Total" and ca_deaths[province][-1]>25:
             ptotals[k] = ca_deaths[k][-1]/provincepops[k]*1e3
     fig,ax=plt.subplots(figsize=(12,4))
