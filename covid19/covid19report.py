@@ -1104,6 +1104,8 @@ def _log(destination,string):
     
 def report():
     
+    os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">/home/adivp416/public_html/covid19/reportlog.txt')
+    
     countrysetf = "countrypopulations.csv"
     with open(countrysetf,"r") as df:
         countryset = df.read().split('\n')[1:]
@@ -3274,7 +3276,6 @@ def makeshell():
 
 if __name__=="__main__":
     import os 
-    os.system('echo "beginning imports">/home/adivp416/public_html/covid19/reportlog.txt')
     os.environ['OPENBLAS_NUM_THREADS'] = '2'
     import numpy as np
     from scipy.special import factorial,loggamma
@@ -3287,8 +3288,6 @@ if __name__=="__main__":
     import warnings,traceback
     import sys
     warnings.filterwarnings('ignore')
-    
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Imports completed. \t%s"%systime.asctime(systime.localtime()))
     
     if "report" in sys.argv[:]:
         report()
