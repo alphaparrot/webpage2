@@ -1102,24 +1102,7 @@ def _log(destination,string):
         with open(destination,"a") as f:
             f.write(string+"\n")   
     
-    
-
-if __name__=="__main__":
-    import os 
-    os.system('echo "beginning imports">/home/adivp416/public_html/covid19/reportlog.txt')
-    os.environ['OPENBLAS_NUM_THREADS'] = '2'
-    import numpy as np
-    from scipy.special import factorial,loggamma
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    import csv
-    import time as systime
-    from datetime import date, timedelta
-    import warnings,traceback
-    warnings.filterwarnings('ignore')
-    
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Imports completed. \t%s"%systime.asctime(systime.localtime()))
+def report():
     
     countrysetf = "countrypopulations.csv"
     with open(countrysetf,"r") as df:
@@ -2776,18 +2759,6 @@ if __name__=="__main__":
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
     
-    for state in uskeys:
-        counties = get_counties(usacsv,state=state)
-        for county in counties:
-            try:
-                plotCounty(county,state,usacsv,usa,statepops[state])
-                _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
-            except:
-                _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
-                print("Error encountered with %s County, %s:"%(county,state))
-                traceback.print_exc()
-                #raise
-                
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
     fig,ax=plt.subplots(figsize=(12,12))
@@ -3183,3 +3154,142 @@ if __name__=="__main__":
         indexf.write("\n".join(html))
     
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
+    
+def processcounties(state):
+        
+    state = state.replace("_"," ")
+        
+    statesetf = "statepopulations.csv"
+    with open(statesetf,"r") as df:
+        stateset = df.read().split('\n')[2:]
+    if stateset[-1] == "":
+        stateset = stateset[:-1]
+    statepops = {}
+    for line in stateset:
+        linedata = line.split(',')
+        name = linedata[2]
+        popx = float(linedata[3])
+        statepops[name] = popx
+        
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+        
+    globalconf = "github/time_series_covid19_confirmed_global.csv"
+
+    with open(globalconf,"r") as df:
+        dataset = df.read().split('\n')
+    header = dataset[0].split(',')
+    dataset = dataset[1:]
+    if dataset[-1]=='':
+        dataset = dataset[:-1]
+    
+
+    usacsv = []
+    with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usacsv.append(row)
+            
+    usa = extract_usa(usacsv)
+            
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+
+
+    counties = get_counties(usacsv,state=state)
+    for county in counties:
+        try:
+            plotCounty(county,state,usacsv,usa,statepops[state])
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
+        except:
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
+            print("Error encountered with %s County, %s:"%(county,state))
+            traceback.print_exc()
+            #raise
+
+def makeshell():
+    
+    statesetf = "statepopulations.csv"
+    with open(statesetf,"r") as df:
+        stateset = df.read().split('\n')[2:]
+    if stateset[-1] == "":
+        stateset = stateset[:-1]
+    statepops = {}
+    for line in stateset:
+        linedata = line.split(',')
+        name = linedata[2]
+        popx = float(linedata[3])
+        statepops[name] = popx
+        
+    globalconf = "github/time_series_covid19_confirmed_global.csv"
+
+    with open(globalconf,"r") as df:
+        dataset = df.read().split('\n')
+    header = dataset[0].split(',')
+    dataset = dataset[1:]
+    if dataset[-1]=='':
+        dataset = dataset[:-1]
+    
+
+    usacsv = []
+    with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usacsv.append(row)
+         
+    ddatasetf = "github/time_series_covid19_deaths_global.csv"
+
+    with open(ddatasetf,"r") as df:
+        ddataset = df.read().split('\n')
+    header = ddataset[0].split(',')
+    ddataset = ddataset[1:]
+    if ddataset[-1]=='':
+        ddataset = ddataset[:-1]
+        
+    usadcsv = []
+    with open("github/time_series_covid19_deaths_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usadcsv.append(row)
+    
+    us_deaths = extract_usa(usadcsv)   
+    usa = extract_usa(usacsv)
+    
+    uskeys = []
+    for state in usa:
+        if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+            and "Virgin Islands" not in state and "Military" not in state\
+            and "Recovered" not in state and "Prisons" not in state\
+            and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+            uskeys.append(state)
+    for state in uskeys:
+        place = state.replace(" ","_")
+        text = ("#!/bin/bash \n"+
+                "python covid19report.py counties %s \n"%place)
+        with open("countyreport_%s.sh"%place,"w") as shellf:
+            shellf.write(text)
+        os.system("chmod a+x countyreport_%s.sh"%place)
+
+if __name__=="__main__":
+    import os 
+    os.system('echo "beginning imports">/home/adivp416/public_html/covid19/reportlog.txt')
+    os.environ['OPENBLAS_NUM_THREADS'] = '2'
+    import numpy as np
+    from scipy.special import factorial,loggamma
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    import csv
+    import time as systime
+    from datetime import date, timedelta
+    import warnings,traceback
+    import sys
+    warnings.filterwarnings('ignore')
+    
+    _log("/home/adivp416/public_html/covid19/reportlog.txt","Imports completed. \t%s"%systime.asctime(systime.localtime()))
+    
+    if "report" in sys.argv[:]:
+        report()
+    if "counties" in sys.argv[:]:
+        processcounties(sys.argv[2]) #call pattern python covid19report.py counties Minnesota
+    if "makeshell" in sys.argv[:]:
+        makeshell()
+        

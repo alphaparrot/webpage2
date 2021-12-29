@@ -23,6 +23,10 @@ wget -O /home/adivp416/public_html/covid19/ontario_cases.csv https://data.ontari
 cd $cdir
 
 cd /home/adivp416/public_html/covid19
-python /home/adivp416/public_html/covid19/covid19report.py
+
+git stash
+git pull
+
+python /home/adivp416/public_html/covid19/covid19report.py report
 cat /home/adivp416/public_html/covid19/reportlog.txt
 cd $cdir
