@@ -3260,13 +3260,16 @@ def makeshell():
             and "Recovered" not in state and "Prisons" not in state\
             and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
             uskeys.append(state)
+            
+    cdir = os.getcwd()
+    
     for state in uskeys:
         place = state.replace(" ","_")
         text = ("#!/bin/bash \n"+
-                "python covid19report.py counties %s \n"%place)
+                "python %s/covid19report.py counties %s \n"%(cdir,place))
         with open("countyreport_%s.sh"%place,"w") as shellf:
             shellf.write(text)
-        os.system("chmod a+x countyreport_%s.sh"%place)
+        os.system("chmod a+x %s/countyreport_%s.sh"%(cdir,place))
 
 if __name__=="__main__":
     import os 
