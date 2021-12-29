@@ -2900,7 +2900,7 @@ def report():
     for country in countries:
         try:
             cdata = extract_country(ddataset,country)
-            if cdata["Total"][-1]>=10:
+            if cdata["Total"][-1]>=10 and "Princess" not in country and "Olympics" not in country:
                 y = cdata["Total"]
                 y = day5avg(np.diff(y/countrypops[country]*1.0e6))
                 #y = y[y>=1]
@@ -3029,7 +3029,7 @@ def report():
     for country in countries:
         try:
             cdata = extract_country(dataset,country)
-            if cdata["Total"][-1]>=25:
+            if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country:
                 y = cdata["Total"]
                 y = day5avg(np.diff(y/float(countrypops[country])*1.0e6))
                 ptotals[country] = y[-1]
@@ -3070,7 +3070,7 @@ def report():
         try:
             if country!="US":
                 cdata = extract_country(dataset,country)
-                if cdata["Total"][-1]>=25:
+                if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country:
                     y = cdata["Total"]
                     active[country] = active3wk(y)[-1]/countrypops[country]
                     nmax = max(nmax,active[country])
