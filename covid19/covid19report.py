@@ -2781,11 +2781,12 @@ if __name__=="__main__":
         for county in counties:
             try:
                 plotCounty(county,state,usacsv,usa,statepops[state])
+                _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             except:
+                _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
                 print("Error encountered with %s County, %s:"%(county,state))
                 traceback.print_exc()
-                raise
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
+                #raise
                 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
