@@ -3266,6 +3266,7 @@ def makeshell():
     for state in uskeys:
         place = state.replace(" ","_")
         text = ("#!/bin/bash \n"+
+                "cd /home/adivp416/public_html/covid19/ \n"+
                 "python %s/covid19report.py counties %s \n"%(cdir,place))
         with open("countyreport_%s.sh"%place,"w") as shellf:
             shellf.write(text)
