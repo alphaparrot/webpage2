@@ -827,7 +827,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     
     pathdir = "%s/%s"%(fstub1,fstub2)
     
-    print("%s_rawdaily.png"%pathdir)
+    #print("%s_rawdaily.png"%pathdir)
     
     if not os.path.isdir(fstub1):
         os.system("mkdir %s"%fstub)
@@ -902,7 +902,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.close('all')
     
     curve = day5avg(dcases)/float(population)*1e5
-    curve2 = day5avg(dstatecases)*1e5
+    curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
              alpha=0.6,label=state)
@@ -957,7 +957,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     curve = curve/float(population)*1000
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=state)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
@@ -967,7 +967,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.close('all')
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve,color='k',alpha=0.4,label=state)
+    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
@@ -2784,6 +2784,8 @@ if __name__=="__main__":
             except:
                 print("Error encountered with %s County, %s:"%(county,state))
                 traceback.print_exc()
+                raise
+            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime()))
                 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
