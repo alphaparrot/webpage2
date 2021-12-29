@@ -2151,7 +2151,7 @@ if __name__=="__main__":
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("USA Daily Cases")
+    plt.title("Canada Daily Cases")
     plt.savefig("canada_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2170,12 +2170,12 @@ if __name__=="__main__":
             plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
             plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
     #plt.xscale('log')
-    #plt.yscale('log')
+    plt.yscale('log')
     #plt.ylim(1.0e-2,100)
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("USA Daily Cases")
+    plt.title("Canada Daily Cases")
     plt.savefig("canada_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2198,7 +2198,7 @@ if __name__=="__main__":
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("3-wk Cumulative Cases [Percent of Population]")
-    plt.title("USA Active Cases")
+    plt.title("Canada Active Cases")
     plt.savefig("canada_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_3wkcasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2221,7 +2221,7 @@ if __name__=="__main__":
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("USA Daily Deaths")
+    plt.title("Canada Daily Deaths")
     plt.savefig("canada_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2245,7 +2245,7 @@ if __name__=="__main__":
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("USA Daily Deaths")
+    plt.title("Canada Daily Deaths")
     plt.savefig("canada_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2255,7 +2255,7 @@ if __name__=="__main__":
     ptotals = {}
     for k in ca_deaths:
         province=k
-        if province != "Total" and ca_deaths[province][-1]>25:
+        if province != "Total" and ca_deaths[province][-1]>2:
             ptotals[k] = ca_deaths[k][-1]/provincepops[k]*1e3
     fig,ax=plt.subplots(figsize=(12,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
@@ -2494,7 +2494,7 @@ if __name__=="__main__":
             plt.plot(np.arange(len(y)-7)-(len(y)-6),day5avg(np.diff(y)),marker='.',label=province,linestyle=':')
             plt.annotate(province,(0,day5avg(np.diff(y))[-1]))
     #plt.xscale('log')
-    #plt.yscale('log')
+    plt.yscale('log')
     #plt.ylim(1.0e-2,100)
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
