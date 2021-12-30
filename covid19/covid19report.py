@@ -3117,9 +3117,10 @@ def report():
 
     for country in countries:
         try:
-            country_summary(country,dataset,ddataset,countrypops)
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
-            makehtml.makeCountry(country)
+            if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
+                country_summary(country,dataset,ddataset,countrypops)
+                _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
+                makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
