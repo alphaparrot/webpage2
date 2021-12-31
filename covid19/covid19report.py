@@ -3816,7 +3816,7 @@ def netcdf():
         
         ncd.sync()
         
-        for neighborhood = sorted(TOneighborhoods["units"]):
+        for neighborhood in sorted(TOneighborhoods["units"]):
             ckey = neighborhood.replace("/","-")
             areagrp = ncd["Canada/Ontario/Toronto"].createGroup(ckey)
             areacases = ncd["Canada/Ontario/Toronto"][ckey].createVariable("cases","i2",("time",),zlib=True)
