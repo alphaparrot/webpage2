@@ -5,4 +5,5 @@
 #python -m pip install --user numpy scipy matplotlib
 cd /home/adivp416/public_html/
 python -c "import sys; print(sys.version)"
-python -m pip install --user -U netCDF4
+python -m pip uninstall netCDF4
+python -m pip install --user netCDF4==1.5.5
