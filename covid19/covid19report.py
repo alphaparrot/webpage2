@@ -3881,7 +3881,7 @@ def netcdf():
         for state in sorted(usa):
             if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
                 and "Virgin Islands" not in state and "Military" not in state\
-                and "Recovered" not in state and "Prisons" not in state\
+                and "Recovered" not in state and "Prisons" not in state and state!="Guam"\
                 and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
                 
                 counties = get_counties(usacsv,state=state)
@@ -3930,7 +3930,7 @@ def netcdf():
         raise
     ncd.close()
         
-    
+        
 def hdf5():
     import h5py as h5
     
@@ -4214,20 +4214,1472 @@ def hdf5():
                                        "ACTIVE":ontario_a["TORONTO"],
                                        "RECOVERED":ontario_r["TORONTO"]}
     
-    hdfile = h5.File("adivparadise_covid19data.h5","w")
-    #try:
+    hdf = h5.File("adivparadise_covid19data.hdf5","w")
+    
+    nr = 100
+    
+    rrange = np.geomspace(0.1,10.0,num=nr)
+    hdf.create_dataset("/rtrange",data=rrange.astype("float32"),compression='gzip',
+                       compression_opts=9,shuffle=True,fletcher32=True)
+    hdf["rtrange"].attrs['long_name'] = "Possible R$_t$ Values"
+    rbase = np.geomspace(0.01,10.0,num=1000)
+    
+    print("doing countries")
+    try:
+        for country in sorted(countries):
+            if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
+                key = country
+                if key=="US":
+                    key="United States"
+                ckey = str.title(key)
+                ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
+                dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    
+                countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=ctotal.astype(np.short))
+                countrydeaths = hdf.create_dataset("/"+ckey+"/deaths",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=dtotal.astype(np.short))
+                countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=r.astype("float32"))
+                countryRpost = hdf.create_dataset("/"+ckey+"/Rpost",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=pd)
+                countryRlike = hdf.create_dataset("/"+ckey+"/Rlike",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=ld)
+                countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
+
+                countrycases.attrs["units"] = "cases day-1"
+                countrydeaths.attrs["units"] = "deaths day-1"
+                countryRt.attrs["units"] = "secondary infections case-1"
+                countrypopulation.attrs["units"] = "people"
+                countrycases.attrs["standard_name"] = "daily_cases"
+                countrydeaths.attrs["standard_name"] = "daily_deaths"
+                countryRt.attrs["standard_name"] = "R_t"
+                countrypopulation.attrs["standard_name"] = "population"
+                countrycases.attrs["long_name"] = "New Cases per Day"
+                countrydeaths.attrs["long_name"] = "New Deaths per Day"
+                countryRt.attrs["long_name"] = "Effective Reproductive Number"
+                countrypopulation.attrs["long_name"] = "Population"
+                
+                countryRpost.attrs["units"] = "n/a"
+                countryRlike.attrs["units"] = "n/a"
+                countryRpost.attrs["standard_name"] = "R_t_posterior"
+                countryRlike.attrs["standard_name"] = "R_t_likelihood"
+                countryRpost.attrs["long_name"] = "Rt Posterior Probability"
+                countryRpost.attrs["long_name"] = "Rt Likelihood Function"
+        print("doing states")
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                    ckey = str.title(state)
+                    ctotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    dtotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    pd = np.zeros((p.shape[0],nr))
+                    ld = np.zeros((l.shape[0],nr))
+                    for t in range(p.shape[0]):
+                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                        
+                    statecases  = hdf.create_dataset("/United States/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                    statedeaths = hdf.create_dataset("/United States/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                    stateRt     = hdf.create_dataset("/United States/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+                    stateRpost  = hdf.create_dataset("/United States/"+ckey+"/Rpost",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=pd)
+                    stateRlike  = hdf.create_dataset("/United States/"+ckey+"/Rlike",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ld)
+                    statepopulation = hdf.create_dataset("/United States/"+ckey+"/population",data=float(statepops[state]))
+  
+                    statecases.attrs["units"] = "cases day-1"
+                    statedeaths.attrs["units"] = "deaths day-1"
+                    statepopulation.attrs["units"] = "people"
+                    statecases.attrs["standard_name"] = "daily_cases"
+                    statedeaths.attrs["standard_name"] = "daily_deaths"
+                    statepopulation.attrs["standard_name"] = "population"
+                    statecases.attrs["long_name"] = "new cases per day"
+                    statedeaths.attrs["long_name"] = "new deaths per day"
+                    statepopulation.attrs["long_name"] = "population"
+                    stateRpost.attrs["units"] = "n/a"
+                    stateRlike.attrs["units"] = "n/a"
+
+                    stateRpost.attrs["standard_name"] = "R_t_posterior"
+                    stateRlike.attrs["standard_name"] = "R_t_likelihood"
+                    stateRpost.attrs["long_name"] = "Rt Posterior Probability"
+                    stateRpost.attrs["long_name"] = "Rt Likelihood Function"     
+        print("Doing provinces")   
+        for province in sorted(canada):
+            if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
+                ckey = str.title(province)
+                ckey = ckey.replace("And","and")
+                ctotal = np.diff(np.append([0,],canada[province])).astype(int)
+                dtotal = np.diff(np.append([0,],canada[province])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    
+                provincecases  = hdf.create_dataset("/Canada/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                provincedeaths = hdf.create_dataset("/Canada/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                provinceRt     = hdf.create_dataset("/Canada/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+                provinceRpost  = hdf.create_dataset("/Canada/"+ckey+"/Rpost",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=pd)
+                provinceRlike  = hdf.create_dataset("/Canada/"+ckey+"/Rlike",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ld)
+                provincepopulation = hdf.create_dataset("/Canada/"+ckey+"/population",data=float(provincepops[province]))
+
+                provincecases.attrs["units"] = "cases day-1"
+                provincedeaths.attrs["units"] = "deaths day-1"
+                provincepopulation.attrs["units"] = "people"
+                provincecases.attrs["standard_name"] = "daily_cases"
+                provincedeaths.attrs["standard_name"] = "daily_deaths"
+                provincepopulation.attrs["standard_name"] = "population"
+                provincecases.attrs["long_name"] = "new cases per day"
+                provincedeaths.attrs["long_name"] = "new deaths per day"
+                provincepopulation.attrs["long_name"] = "population"
+                provinceRpost.attrs["units"] = "n/a"
+                provinceRlike.attrs["units"] = "n/a"
+
+                provinceRpost.attrs["standard_name"] = "R_t_posterior"
+                provinceRlike.attrs["standard_name"] = "R_t_likelihood"
+                provinceRpost.attrs["long_name"] = "Rt Posterior Probability"
+                provinceRpost.attrs["long_name"] = "Rt Likelihood Function"
+        
+        print("Doing PHUs")
+        for phu in sorted(ontario):
+            if len(ontario[phu][:])>10:
+                ckey = str.title(phu)
+                ctotal = ontario[phu].astype(int)
+                dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
+                atotal = ontario_a[phu].astype(int)
+                rtotal = np.diff(np.append([0,],ontario_r[phu])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                phucases = hdf.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                phudeaths = hdf.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                phuactive = hdf.create_dataset("/Canada/Ontario/"+ckey+"/active",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=atotal.astype(np.short))
+                phurecovered = hdf.create_dataset("/Canada/Ontario/"+ckey+"/recovered",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=rtotal.astype(np.short))
+                phuRt = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype('float32'))
+                phuRpost = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rpost",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=pd)
+                phuRlike = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rlike",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ld)
+                #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
+                #phupopulation.set_auto_mask(False)
+                phucases.attrs["units"] = "cases day-1"
+                phudeaths.attrs["units"] = "deaths day-1"
+                phuactive.attrs["units"] = "cases"
+                phurecovered.attrs["units"] = "recoveries day-1"
+                #phupopulation.units = "people"
+                phucases.attrs["standard_name"] = "daily_cases"
+                phudeaths.attrs["standard_name"] = "daily_deaths"
+                phuactive.attrs["standard_name"] = "active_cases"
+                phurecovered.attrs["standard_name"] = "daily_recoveries"
+                #phupopulation.standard_name = "population"
+                phucases.attrs["long_name"] = "new cases per day"
+                phudeaths.attrs["long_name"] = "new deaths per day"
+                phuactive.attrs["long_name"] = "active cases"
+                phurecovered.attrs["long_name"] = "newly-recovered cases per day"
+                #phupopulation.long_name = "population"
+                phuRpost.attrs["units"] = "n/a"
+                phuRlike.attrs["units"] = "n/a"
+                phuRpost.attrs["standard_name"] = "R_t_posterior"
+                phuRlike.attrs["standard_name"] = "R_t_likelihood"
+                phuRpost.attrs["long_name"] = "Rt Posterior Probability"
+                phuRpost.attrs["long_name"] = "Rt Likelihood Function"
+            
+        TOpop = hdf.create_dataset("/Canada/Ontario/Toronto/population",data=2.732e6)
+
+        TOpop.attrs["units"] = "people"
+        TOpop.attrs["standard_name"]="population"
+        TOpop.attrs["long_name"]="population"
+        
+        TOhosp = hdf.create_dataset("/Canada/Ontario/Toronto/hospitalized",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=TOneighborhoods["hosptTO"].astype(np.short))
+
+        TOhosp.attrs["units"] = "hospitalizations day-1"
+        TOhosp.attrs["standard_name"] = "daily_hospitalizations"
+        TOhosp.attrs["long_name"] = "day's cases which ever required hospitalization"
+        
+        print("doing neighborhoods")
+        for neighborhood in sorted(TOneighborhoods["units"]):
+            ckey = neighborhood.replace("/","-")
+            ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
+            dtotal = TOneighborhoods["units"][neighborhood]["FATAL"].astype(int)
+            htotal = TOneighborhoods["units"][neighborhood]["HOSPITALIZED"].astype(int)
+            rtotal = TOneighborhoods["units"][neighborhood]["RECOVERED"].astype(int)
+            r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+            p = np.exp(lp)
+            l = np.exp(ll)
+            pd = np.zeros((p.shape[0],nr))
+            ld = np.zeros((l.shape[0],nr))
+            for t in range(p.shape[0]):
+                pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+
+            areacases = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+            areadeaths = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+            areahosp = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/hospitalized",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=htotal.astype(np.short))
+            arearecovered = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/recovered",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=rtotal.astype(np.short))
+            areaRt = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+            areaRpost = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rpost",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=pd)
+            areaRlike = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rlike",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ld)
+            areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
+                                                data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+
+            areacases.attrs["units"] = "cases day-1"
+            areadeaths.attrs["units"] = "deaths day-1"
+            areahosp.attrs["units"] = "hospitalizations day-1"
+            arearecovered.attrs["units"] = "recoveries day-1"
+            areapopulation.attrs["units"] = "people"
+            areacases.attrs["standard_name"] = "daily_cases"
+            areadeaths.attrs["standard_name"] = "daily_deaths"
+            areahosp.attrs["standard_name"] = "daily_hospitalizations"
+            arearecovered.attrs["standard_name"] = "daily_recoveries"
+            areapopulation.attrs["standard_name"] = "population"
+            areacases.attrs["long_name"] = "new cases per day"
+            areadeaths.attrs["long_name"] = "new deaths per day"
+            areahosp.attrs["long_name"] = "day's cases which ever required hospitalization"
+            arearecovered.attrs["long_name"] = "day's cases which have recovered"
+            areapopulation.attrs["long_name"] = "population"
+            areaRpost.attrs["units"] = "n/a"
+            areaRlike.attrs["units"] = "n/a"
+            areaRpost.attrs["standard_name"] = "R_t_posterior"
+            areaRlike.attrs["standard_name"] = "R_t_likelihood"
+            areaRpost.attrs["long_name"] = "Rt Posterior Probability"
+            areaRpost.attrs["long_name"] = "Rt Likelihood Function"
+        print("Doing counties")          
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state and state!="Guam"\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                
+                counties = get_counties(usacsv,state=state)
+                for county in counties:
+                    ckey = county.replace("/","-")
+                    ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    pd = np.zeros((p.shape[0],nr))
+                    ld = np.zeros((l.shape[0],nr))
+                    for t in range(p.shape[0]):
+                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                        
+                    countycases = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/cases",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=ctotal.astype(np.short))
+                    countyRt = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/Rt",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=r.astype('float'))
+                    countyRpost = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/Rpost",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=pd)
+                    countyRlike = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/Rlike",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=ld)
+                    countypopulation = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/population",
+                                                     data=float(get_countypop(county,state)))
+
+                    countycases.attrs["units"] = "cases day-1"
+                    countypopulation.attrs["units"] = "people"
+                    countycases.attrs["standard_name"] = "daily_cases"
+                    countypopulation.attrs["standard_name"] = "population"
+                    countycases.attrs["long_name"] = "New Cases per Day"
+                    countypopulation.attrs["long_name"] = "Population"
+                    countyRpost.attrs["units"] = "n/a"
+                    countyRlike.attrs["units"] = "n/a"
+                    countyRpost.attrs["standard_name"] = "R_t_posterior"
+                    countyRlike.attrs["standard_name"] = "R_t_likelihood"
+                    countyRpost.attrs["long_name"] = "Rt Posterior Probability"
+                    countyRpost.attrs["long_name"] = "Rt Likelihood Function"
+        
+    except:
+        hdf.close()
+        raise
+    
+    hdf.close()
+    print("File completed and closed")
+ 
+def netcdf_slim():
+    import netCDF4 as nc
+    
+    ncd = nc.Dataset("adivparadise_covid19data_slim.nc","w")
+    
+    countrysetf = "countrypopulations.csv"
+    with open(countrysetf,"r") as df:
+        countryset = df.read().split('\n')[1:]
+    if countryset[-1] == "":
+        countryset = countryset[:-1]
+    countrypops = {}
+    for line in countryset:
+        linedata = line.split(',')
+        name = linedata[0]
+        popx = float(linedata[4])
+        countrypops[name] = popx
+    
+    canadasetf = "provincepopulations.csv"
+    with open(canadasetf,"r") as df:
+        canadaset = df.read().split('\n')[2:]
+    if canadaset[-1] == "":
+        canadaset = canadaset[:-1]
+    provincepops = {}
+    for line in canadaset:
+        linedata = line.split(',')
+        name = linedata[1]
+        popx = float(linedata[-3])
+        provincepops[name] = popx
+        
+    statesetf = "statepopulations.csv"
+    with open(statesetf,"r") as df:
+        stateset = df.read().split('\n')[2:]
+    if stateset[-1] == "":
+        stateset = stateset[:-1]
+    statepops = {}
+    for line in stateset:
+        linedata = line.split(',')
+        name = linedata[2]
+        popx = float(linedata[3])
+        statepops[name] = popx
+        
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+        
+    globalconf = "github/time_series_covid19_confirmed_global.csv"
+
+    with open(globalconf,"r") as df:
+        dataset = df.read().split('\n')
+    header = dataset[0].split(',')
+    dataset = dataset[1:]
+    if dataset[-1]=='':
+        dataset = dataset[:-1]
+        
+    countries = getcountries(dataset)
+    
+
+    usacsv = []
+    with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usacsv.append(row)
+            
+    usa = extract_usa(usacsv)
+
+    canada = extract_country(dataset,"Canada")
+
+    ddatasetf = "github/time_series_covid19_deaths_global.csv"
+
+    with open(ddatasetf,"r") as df:
+        ddataset = df.read().split('\n')
+    header = ddataset[0].split(',')
+    ddataset = ddataset[1:]
+    if ddataset[-1]=='':
+        ddataset = ddataset[:-1]
+        
+    usadcsv = []
+    with open("github/time_series_covid19_deaths_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usadcsv.append(row)
+            
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    
+    ca_deaths = extract_country(ddataset,"Canada")
+    us_deaths = extract_usa(usadcsv)
+
+    timestamps = []
+    rtimes = []
+    ftimes = []
+    htimes = []
+    TOneighborhoods = {"units":{}}
+    with open("toronto_cases.csv","r") as df:
+        torontocsv = df.read().split('\n')[1:]
+        while torontocsv[-1]=="":
+            torontocsv = torontocsv[:-1]
+        torontoraw = np.zeros(len(torontocsv))
+        for line in range(len(torontoraw)):
+            timestamp = torontocsv[line].split(',')[9].split('-')
+            timestamps.append(date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+            entry = torontocsv[line].split(',')
+            if entry[11]=="ACTIVE":
+                pass
+            elif entry[11]=="FATAL":
+                ftimes.append(timestamps[-1])
+            else:
+                rtimes.append(timestamps[-1])
+            if entry[15]=="Yes":
+                htimes.append(timestamps[-1])
+                
+            if entry[4] not in TOneighborhoods["units"]:
+                TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
+            TOneighborhoods["units"][entry[4]]["CASES"].append(timestamps[-1])
+            if entry[11]=="ACTIVE":
+                pass
+            elif entry[11]=="FATAL":
+                TOneighborhoods["units"][entry[4]]["FATAL"].append(timestamps[-1])
+            else:
+                TOneighborhoods["units"][entry[4]]["RECOVERED"].append(timestamps[-1])
+            if entry[15]=="Yes":
+                TOneighborhoods["units"][entry[4]]["HOSPITALIZED"].append(timestamps[-1])
+            
+    #for neighborhood in TOneighborhoods["units"]:
+    #    TOneighborhoods["units"][neighborhood]["CASES"] = np.array(TOneighborhoods["units"][neighborhood]["CASES"])
+    #    TOneighborhoods["units"][neighborhood]["FATAL"] = np.array(TOneighborhoods["units"][neighborhood]["FATAL"])
+    #    TOneighborhoods["units"][neighborhood]["HOSPITALIZED"] = np.array(TOneighborhoods["units"][neighborhood]["HOSPITALIZED"])
+    #    TOneighborhoods["units"][neighborhood]["RECOVERED"] = np.array(TOneighborhoods["units"][neighborhood]["RECOVERED"])
+            
+    #All cases
+    origin = np.array(timestamps).min()
+    for line in range(len(timestamps)):
+        day = ((timestamps[line]-origin).days)
+        torontoraw[line] = int(day)
+    #Recovered cases
+    torontorraw = np.zeros(len(rtimes))
+    for line in range(len(rtimes)):
+        day = ((rtimes[line]-origin).days)
+        torontorraw[line] = int(day)
+    #Hospitalized cases
+    torontohraw = np.zeros(len(htimes))
+    for line in range(len(htimes)):
+        day = ((htimes[line]-origin).days)
+        torontohraw[line] = int(day)
+    #Fatal cases
+    torontofraw = np.zeros(len(ftimes))
+    for line in range(len(ftimes)):
+        day = ((ftimes[line]-origin).days)
+        torontofraw[line] = int(day)
+    
+    timestamps = np.array(timestamps)
+    times,toronto = np.unique(torontoraw,return_counts=True)
+    rtimes,torontor = np.unique(torontorraw,return_counts=True)
+    htimes,torontoh = np.unique(torontohraw,return_counts=True)
+    ftimes,torontof = np.unique(torontofraw,return_counts=True)
+    torontor = np.array(matchtimes(times,rtimes,torontor))
+    torontoh = np.array(matchtimes(times,htimes,torontoh))
+    torontof = np.array(matchtimes(times,ftimes,torontof))
+    TOneighborhoods["casesTO"] = toronto
+    TOneighborhoods["fatalTO"] = torontof
+    TOneighborhoods["hosptTO"] = torontoh
+    TOneighborhoods["recovTO"] = torontor
+    for neighborhood in TOneighborhoods["units"]:
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["CASES"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["CASES"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["CASES"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["FATAL"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["FATAL"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["FATAL"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["HOSPITALIZED"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["HOSPITALIZED"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["HOSPITALIZED"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["RECOVERED"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["RECOVERED"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["RECOVERED"] = np.array(matchtimes(times,time,cases))
+
+    popfile = open("neighbourhood-profiles-2016-csv.csv","r")
+    popcsv = csv.reader(popfile,delimiter=',',quotechar='"',quoting=csv.QUOTE_ALL,skipinitialspace=True)
+    n = 0
+    for row in popcsv:
+        if n==0:
+            header = row[6:]
+        elif n==3:
+            poprow = row[6:]
+            break
+        n+=1
+        
+    neighborhoodpops = {}
+    for n in range(len(header)):
+        neighborhoodpops[header[n]] = float(poprow[n].replace(",",""))
+    #neighborhoodpops.keys()
+
+    if "" in TOneighborhoods["units"]:
+        TOneighborhoods["units"].pop("")
+        
+    keys1 = sorted(neighborhoodpops.keys())
+    keys2 = sorted(TOneighborhoods["units"].keys())
+    #print(len(keys1),len(keys2))
+    for n in range(len(keys1)):
+        #print("%40s\t%s\t%s"%(keys1[n],str(keys1[n]==keys2[n]),keys2[n]))
+        if keys1[n]!=keys2[n]:
+            neighborhoodpops[keys2[n]] = neighborhoodpops[keys1[n]]
+            neighborhoodpops.pop(keys1[n])
+            
+    for neighborhood in neighborhoodpops:
+        TOneighborhoods["units"][neighborhood]["POP"] = neighborhoodpops[neighborhood]
+            
+    otimes = {}
+    ontario = {}
+    ontario_d = {}
+    ontario_a = {}
+    ontario_r = {}
+    with open("ontario_cases.csv","r") as df:
+        ontariocsv =df.read().split("\n")[1:]
+        while ontariocsv[-1]=="":
+            ontariocsv = ontariocsv[:-1]
+    for line in ontariocsv:
+        entry = line.split(',')
+        if entry[1]=="":
+            entry[1]="UNKNOWN"
+        if entry[1][0]=='"':
+            entry[1] = entry[1][1:]
+        if entry[1][-1]=='"':
+            entry[1] = entry[1][:-1]
+        phu = entry[1]
+        i0 = 0
+        if entry[0][0]=='"':
+            entry[0]=entry[0][1:]
+        if entry[0][-1]=='"':
+            entry[0]=entry[0][:-1]
+        timestamp = entry[0].split('-')
+        try:
+            x = timestamp[1]
+        except:
+            timestamp = timestamp[0]
+            timestamp = [timestamp[:4],timestamp[4:6],timestamp[6:]]
+        if phu=='HALIBURTON' or phu=='KINGSTON':
+            phu=entry[1]+','+entry[2]+','+entry[3]
+            i0 = 2
+        elif phu=='LEEDS':
+            phu=entry[1]+','+entry[2]
+            i0 = 1
+        phu = phu.replace('"','')
+        active = int(entry[3+i0])
+        rec    = int(entry[4+i0])
+        dead   = int(entry[5+i0])
+        if phu not in otimes.keys():
+            otimes[phu] = np.array([date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])),])
+            ontario_a[phu] = np.array([active,])
+            ontario_r[phu] = np.array([rec,])
+            ontario_d[phu] = np.array([dead,])
+        else:
+            try:
+                otimes[phu] = np.append(otimes[phu],date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+                ontario_a[phu] = np.append(ontario_a[phu],active)
+                ontario_r[phu] = np.append(ontario_r[phu],rec)
+                ontario_d[phu] = np.append(ontario_d[phu],dead)
+            except:
+                print(timestamp)
+    for phu in otimes.keys():
+        order = np.argsort(otimes[phu])
+        otimes[phu] = otimes[phu][order]
+        ontario_a[phu] = ontario_a[phu][order]
+        ontario_r[phu] = ontario_r[phu][order]
+        ontario_d[phu] = ontario_d[phu][order]
+        ontario[phu] = (np.diff(np.append([0,],ontario_a[phu]))
+                       +np.diff(np.append([0,],ontario_r[phu]))
+                       +np.diff(np.append([0,],ontario_d[phu]))) 
+                     #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
+
+        
+    TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
+                                       "FATAL":ontario_d["TORONTO"],
+                                       "ACTIVE":ontario_a["TORONTO"],
+                                       "RECOVERED":ontario_r["TORONTO"]}
+    
+    time = ncd.createDimension("time",None)
+    scalar = ncd.createDimension("scalar",1)
+    
+    ncd.set_auto_mask(False)
+    
+    nr = 100
+    
+    rdim = ncd.createDimension("Rt",nr)
+    rrange = np.geomspace(0.1,10.0,num=nr)
+    rbase = np.geomspace(0.01,10.0,num=1000)
+    
+    try:
+        
+        for country in sorted(countries):
+            if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
+                key = country
+                if key=="US":
+                    key="United States"
+                ckey = str.title(key)
+                countrygrp = ncd.createGroup(ckey)
+                countrycases = ncd[ckey].createVariable("cases","i2",("time",),zlib=True)
+                countrydeaths = ncd[ckey].createVariable("deaths","i2",("time",),zlib=True)
+                countryRt = ncd[ckey].createVariable("Rt","f4",("time",),zlib=True)
+                countrypopulation = ncd[ckey].createVariable("population","f4",("scalar",),zlib=True)
+                ncd[ckey]["population"][:] = float(countrypops[country])
+                ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
+                dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal))
+                ncd[ckey]["Rt"][:] = r
+                ncd[ckey]["cases"][:] = ctotal
+                ncd[ckey]["deaths"][:] = dtotal
+                countrycases.set_auto_mask(False)
+                countrydeaths.set_auto_mask(False)
+                countryRt.set_auto_mask(False)
+                countrypopulation.set_auto_mask(False)
+                countrycases.units = "cases day-1"
+                countrydeaths.units = "deaths day-1"
+                countryRt.units = "secondary infections case-1"
+                countrypopulation.units = "people"
+                countrycases.standard_name = "daily_cases"
+                countrydeaths.standard_name = "daily_deaths"
+                countryRt.standard_name = "R_t"
+                countrypopulation.standard_name = "population"
+                countrycases.long_name = "New Cases per Day"
+                countrydeaths.long_name = "New Deaths per Day"
+                countryRt.long_name = "Effective Reproductive Number"
+                countrypopulation.long_name = "Population"
+                
+                
+        ncd.sync()
+        
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                    ckey = str.title(state)
+                    stategrp = ncd["United States"].createGroup(ckey)
+                    statecases = ncd["United States"][ckey].createVariable("cases","i2",("time",),zlib=True)
+                    statedeaths = ncd["United States"][ckey].createVariable("deaths","i2",("time",),zlib=True)
+                    stateRt = ncd["United States"][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                    statepopulation = ncd["United States"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                    ncd["United States"][ckey]["population"][:] = float(statepops[state])
+                    ctotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    dtotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    pd = np.zeros((p.shape[0],nr))
+                    ld = np.zeros((l.shape[0],nr))
+                    for t in range(p.shape[0]):
+                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    ncd["United States"][ckey]["Rt"][:] = r
+                    ncd["United States"][ckey]["cases"][:] = ctotal
+                    ncd["United States"][ckey]["deaths"][:] = dtotal
+                    statecases.set_auto_mask(False)
+                    statedeaths.set_auto_mask(False)
+                    statepopulation.set_auto_mask(False)
+                    statecases.units = "cases day-1"
+                    statedeaths.units = "deaths day-1"
+                    statepopulation.units = "people"
+                    statecases.standard_name = "daily_cases"
+                    statedeaths.standard_name = "daily_deaths"
+                    statepopulation.standard_name = "population"
+                    statecases.long_name = "new cases per day"
+                    statedeaths.long_name = "new deaths per day"
+                    statepopulation.long_name = "population"
+                    stateRpost.units = "n/a"
+                    stateRlike.units = "n/a"
+                    stateRpost.set_auto_mask(False)
+                    stateRlike.set_auto_mask(False)
+        ncd.sync()
+        
+        for province in sorted(canada):
+            if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
+                ckey = str.title(province)
+                ckey = ckey.replace("And","and")
+                provincegrp = ncd["Canada"].createGroup(ckey)
+                provincecases = ncd["Canada"][ckey].createVariable("cases","i2",("time",),zlib=True)
+                provincedeaths = ncd["Canada"][ckey].createVariable("deaths","i2",("time",),zlib=True)
+                provinceRt = ncd["Canada"][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                provincepopulation = ncd["Canada"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                ncd["Canada"][ckey]["population"][:] = float(provincepops[province])
+                ctotal = np.diff(np.append([0,],canada[province])).astype(int)
+                dtotal = np.diff(np.append([0,],canada[province])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                ncd["Canada"][ckey]["Rt"][:] = r
+                ncd["Canada"][ckey]["cases"][:] = ctotal
+                ncd["Canada"][ckey]["deaths"][:] = dtotal
+                provincecases.set_auto_mask(False)
+                provincedeaths.set_auto_mask(False)
+                provincepopulation.set_auto_mask(False)
+                provincecases.units = "cases day-1"
+                provincedeaths.units = "deaths day-1"
+                provincepopulation.units = "people"
+                provincecases.standard_name = "daily_cases"
+                provincedeaths.standard_name = "daily_deaths"
+                provincepopulation.standard_name = "population"
+                provincecases.long_name = "new cases per day"
+                provincedeaths.long_name = "new deaths per day"
+                provincepopulation.long_name = "population"
+        
+        ncd.sync()
+        
+        for phu in sorted(ontario):
+            if len(ontario[phu][:])>10:
+                ckey = str.title(phu)
+                phugrp = ncd["Canada"]["Ontario"].createGroup(ckey)
+                phucases = ncd["Canada/Ontario"][ckey].createVariable("cases","i2",("time",),zlib=True)
+                phudeaths = ncd["Canada/Ontario"][ckey].createVariable("deaths","i2",("time",),zlib=True)
+                phuactive = ncd["Canada/Ontario"][ckey].createVariable("active","i2",("time",),zlib=True)
+                phurecovered = ncd["Canada/Ontario"][ckey].createVariable("recovered","i2",("time",),zlib=True)
+                phuRt = ncd["Canada/Ontario"][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
+                ctotal = ontario[phu].astype(int)
+                dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
+                atotal = ontario_a[phu].astype(int)
+                rtotal = np.diff(np.append([0,],ontario_r[phu])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                ncd["Canada/Ontario"][ckey]["Rt"][:] = r
+                ncd["Canada/Ontario"][ckey]["cases"][:] = ctotal
+                ncd["Canada/Ontario"][ckey]["deaths"][:] = dtotal
+                ncd["Canada/Ontario"][ckey]["active"][:] = atotal
+                ncd["Canada/Ontario"][ckey]["recovered"][:] = rtotal
+                phucases.set_auto_mask(False)
+                phudeaths.set_auto_mask(False)
+                phuactive.set_auto_mask(False)
+                phurecovered.set_auto_mask(False)
+                #phupopulation.set_auto_mask(False)
+                phucases.units = "cases day-1"
+                phudeaths.units = "deaths day-1"
+                phuactive.units = "cases"
+                phurecovered.units = "recoveries day-1"
+                #phupopulation.units = "people"
+                phucases.standard_name = "daily_cases"
+                phudeaths.standard_name = "daily_deaths"
+                phuactive.standard_name = "active_cases"
+                phurecovered.standard_name = "daily_recoveries"
+                #phupopulation.standard_name = "population"
+                phucases.long_name = "new cases per day"
+                phudeaths.long_name = "new deaths per day"
+                phuactive.long_name = "active cases"
+                phurecovered.long_name = "newly-recovered cases per day"
+                #phupopulation.long_name = "population"
+            
+        TOpop = ncd["Canada/Ontario/Toronto"].createVariable("population","f4",("scalar",),zlib=True)
+        TOpop[:] = 2.732e6
+        TOpop.set_auto_mask(False)
+        TOpop.units = "people"
+        TOpop.standard_name="population"
+        TOpop.long_name="population"
+        
+        TOhosp = ncd["Canada/Ontario/Toronto"].createVariable("hospitalized","i2",("time",),zlib=True)
+        TOhosp[:] = TOneighborhoods["hosptTO"].astype(int)
+        TOhosp.set_auto_mask(False)
+        TOhosp.units = "hospitalizations day-1"
+        TOhosp.standard_name = "daily_hospitalizations"
+        TOhosp.long_name = "day's cases which ever required hospitalization"
+        
+        ncd.sync()
+        
+        for neighborhood in sorted(TOneighborhoods["units"]):
+            ckey = neighborhood.replace("/","-")
+            areagrp = ncd["Canada/Ontario/Toronto"].createGroup(ckey)
+            areacases = ncd["Canada/Ontario/Toronto"][ckey].createVariable("cases","i2",("time",),zlib=True)
+            areadeaths = ncd["Canada/Ontario/Toronto"][ckey].createVariable("deaths","i2",("time",),zlib=True)
+            areahosp = ncd["Canada/Ontario/Toronto"][ckey].createVariable("hospitalized","i2",("time",),zlib=True)
+            arearecovered = ncd["Canada/Ontario/Toronto"][ckey].createVariable("recovered","i2",("time",),zlib=True)
+            areaRt = ncd["Canada/Ontario/Toronto"][ckey].createVariable("Rt","f4",("time",),zlib=True)
+            areapopulation = ncd["Canada/Ontario/Toronto"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+            ncd["Canada/Ontario/Toronto"][ckey]["population"][:] = float(TOneighborhoods["units"][neighborhood]["POP"])
+            ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
+            dtotal = TOneighborhoods["units"][neighborhood]["FATAL"].astype(int)
+            htotal = TOneighborhoods["units"][neighborhood]["HOSPITALIZED"].astype(int)
+            rtotal = TOneighborhoods["units"][neighborhood]["RECOVERED"].astype(int)
+            r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+            p = np.exp(lp)
+            l = np.exp(ll)
+            pd = np.zeros((p.shape[0],nr))
+            ld = np.zeros((l.shape[0],nr))
+            for t in range(p.shape[0]):
+                pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+            ncd["Canada/Ontario/Toronto"][ckey]["Rt"][:] = r
+            ncd["Canada/Ontario/Toronto"][ckey]["cases"][:] = ctotal
+            ncd["Canada/Ontario/Toronto"][ckey]["deaths"][:] = dtotal
+            ncd["Canada/Ontario/Toronto"][ckey]["hospitalized"][:] = htotal
+            ncd["Canada/Ontario/Toronto"][ckey]["recovered"][:] = rtotal
+            areacases.set_auto_mask(False)
+            areadeaths.set_auto_mask(False)
+            areahosp.set_auto_mask(False)
+            arearecovered.set_auto_mask(False)
+            areapopulation.set_auto_mask(False)
+            areacases.units = "cases day-1"
+            areadeaths.units = "deaths day-1"
+            areahosp.units = "hospitalizations day-1"
+            arearecovered.units = "recoveries day-1"
+            areapopulation.units = "people"
+            areacases.standard_name = "daily_cases"
+            areadeaths.standard_name = "daily_deaths"
+            areahosp.standard_name = "daily_hospitalizations"
+            arearecovered.standard_name = "daily_recoveries"
+            areapopulation.standard_name = "population"
+            areacases.long_name = "new cases per day"
+            areadeaths.long_name = "new deaths per day"
+            areahosp.long_name = "day's cases which ever required hospitalization"
+            arearecovered.long_name = "day's cases which have recovered"
+            areapopulation.long_name = "population"
+            
+        ncd.sync()
+        
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state and state!="Guam"\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                
+                counties = get_counties(usacsv,state=state)
+                for county in counties:
+                    ckey = county.replace("/","-")
+                    countygrp = ncd["United States/%s"%str.title(state)].createGroup(ckey)
+                    countycases = ncd["United States/%s"%str.title(state)][ckey].createVariable("cases","i2",("time",),zlib=True)
+                    countyRt = ncd["United States/%s"%str.title(state)][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                    countypopulation = ncd["United States/%s"%str.title(state)][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                    ncd["United States/%s"%str.title(state)][ckey]["population"][:] = float(get_countypop(county,state))
+                    ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    pd = np.zeros((p.shape[0],nr))
+                    ld = np.zeros((l.shape[0],nr))
+                    for t in range(p.shape[0]):
+                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    ncd["United States/%s"%str.title(state)][ckey]["Rt"][:] = r
+                    ncd["United States/%s"%str.title(state)][ckey]["cases"][:] = ctotal
+                    countycases.set_auto_mask(False)
+                    countypopulation.set_auto_mask(False)
+                    countycases.units = "cases day-1"
+                    countypopulation.units = "people"
+                    countycases.standard_name = "daily_cases"
+                    countypopulation.standard_name = "population"
+                    countycases.long_name = "New Cases per Day"
+                    countypopulation.long_name = "Population"
+                    
+                ncd.sync()
+    except:
+        ncd.close()
+        raise
+    ncd.close()
+       
+def hdf5_slim():
+    import h5py as h5
+    
+    countrysetf = "countrypopulations.csv"
+    with open(countrysetf,"r") as df:
+        countryset = df.read().split('\n')[1:]
+    if countryset[-1] == "":
+        countryset = countryset[:-1]
+    countrypops = {}
+    for line in countryset:
+        linedata = line.split(',')
+        name = linedata[0]
+        popx = float(linedata[4])
+        countrypops[name] = popx
+    
+    canadasetf = "provincepopulations.csv"
+    with open(canadasetf,"r") as df:
+        canadaset = df.read().split('\n')[2:]
+    if canadaset[-1] == "":
+        canadaset = canadaset[:-1]
+    provincepops = {}
+    for line in canadaset:
+        linedata = line.split(',')
+        name = linedata[1]
+        popx = float(linedata[-3])
+        provincepops[name] = popx
+        
+    statesetf = "statepopulations.csv"
+    with open(statesetf,"r") as df:
+        stateset = df.read().split('\n')[2:]
+    if stateset[-1] == "":
+        stateset = stateset[:-1]
+    statepops = {}
+    for line in stateset:
+        linedata = line.split(',')
+        name = linedata[2]
+        popx = float(linedata[3])
+        statepops[name] = popx
+        
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+        
+    globalconf = "github/time_series_covid19_confirmed_global.csv"
+
+    with open(globalconf,"r") as df:
+        dataset = df.read().split('\n')
+    header = dataset[0].split(',')
+    dataset = dataset[1:]
+    if dataset[-1]=='':
+        dataset = dataset[:-1]
+        
+    countries = getcountries(dataset)
+    
+
+    usacsv = []
+    with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usacsv.append(row)
+            
+    usa = extract_usa(usacsv)
+
+    canada = extract_country(dataset,"Canada")
+
+    ddatasetf = "github/time_series_covid19_deaths_global.csv"
+
+    with open(ddatasetf,"r") as df:
+        ddataset = df.read().split('\n')
+    header = ddataset[0].split(',')
+    ddataset = ddataset[1:]
+    if ddataset[-1]=='':
+        ddataset = ddataset[:-1]
+        
+    usadcsv = []
+    with open("github/time_series_covid19_deaths_US.csv") as csvfile:
+        creader = csv.reader(csvfile,delimiter=',',quotechar='"')
+        for row in creader:
+            usadcsv.append(row)
+            
+    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    
+    ca_deaths = extract_country(ddataset,"Canada")
+    us_deaths = extract_usa(usadcsv)
+
+    timestamps = []
+    rtimes = []
+    ftimes = []
+    htimes = []
+    TOneighborhoods = {"units":{}}
+    with open("toronto_cases.csv","r") as df:
+        torontocsv = df.read().split('\n')[1:]
+        while torontocsv[-1]=="":
+            torontocsv = torontocsv[:-1]
+        torontoraw = np.zeros(len(torontocsv))
+        for line in range(len(torontoraw)):
+            timestamp = torontocsv[line].split(',')[9].split('-')
+            timestamps.append(date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+            entry = torontocsv[line].split(',')
+            if entry[11]=="ACTIVE":
+                pass
+            elif entry[11]=="FATAL":
+                ftimes.append(timestamps[-1])
+            else:
+                rtimes.append(timestamps[-1])
+            if entry[15]=="Yes":
+                htimes.append(timestamps[-1])
+                
+            if entry[4] not in TOneighborhoods["units"]:
+                TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
+            TOneighborhoods["units"][entry[4]]["CASES"].append(timestamps[-1])
+            if entry[11]=="ACTIVE":
+                pass
+            elif entry[11]=="FATAL":
+                TOneighborhoods["units"][entry[4]]["FATAL"].append(timestamps[-1])
+            else:
+                TOneighborhoods["units"][entry[4]]["RECOVERED"].append(timestamps[-1])
+            if entry[15]=="Yes":
+                TOneighborhoods["units"][entry[4]]["HOSPITALIZED"].append(timestamps[-1])
+            
+    #for neighborhood in TOneighborhoods["units"]:
+    #    TOneighborhoods["units"][neighborhood]["CASES"] = np.array(TOneighborhoods["units"][neighborhood]["CASES"])
+    #    TOneighborhoods["units"][neighborhood]["FATAL"] = np.array(TOneighborhoods["units"][neighborhood]["FATAL"])
+    #    TOneighborhoods["units"][neighborhood]["HOSPITALIZED"] = np.array(TOneighborhoods["units"][neighborhood]["HOSPITALIZED"])
+    #    TOneighborhoods["units"][neighborhood]["RECOVERED"] = np.array(TOneighborhoods["units"][neighborhood]["RECOVERED"])
+            
+    #All cases
+    origin = np.array(timestamps).min()
+    for line in range(len(timestamps)):
+        day = ((timestamps[line]-origin).days)
+        torontoraw[line] = int(day)
+    #Recovered cases
+    torontorraw = np.zeros(len(rtimes))
+    for line in range(len(rtimes)):
+        day = ((rtimes[line]-origin).days)
+        torontorraw[line] = int(day)
+    #Hospitalized cases
+    torontohraw = np.zeros(len(htimes))
+    for line in range(len(htimes)):
+        day = ((htimes[line]-origin).days)
+        torontohraw[line] = int(day)
+    #Fatal cases
+    torontofraw = np.zeros(len(ftimes))
+    for line in range(len(ftimes)):
+        day = ((ftimes[line]-origin).days)
+        torontofraw[line] = int(day)
+    
+    timestamps = np.array(timestamps)
+    times,toronto = np.unique(torontoraw,return_counts=True)
+    rtimes,torontor = np.unique(torontorraw,return_counts=True)
+    htimes,torontoh = np.unique(torontohraw,return_counts=True)
+    ftimes,torontof = np.unique(torontofraw,return_counts=True)
+    torontor = np.array(matchtimes(times,rtimes,torontor))
+    torontoh = np.array(matchtimes(times,htimes,torontoh))
+    torontof = np.array(matchtimes(times,ftimes,torontof))
+    TOneighborhoods["casesTO"] = toronto
+    TOneighborhoods["fatalTO"] = torontof
+    TOneighborhoods["hosptTO"] = torontoh
+    TOneighborhoods["recovTO"] = torontor
+    for neighborhood in TOneighborhoods["units"]:
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["CASES"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["CASES"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["CASES"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["FATAL"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["FATAL"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["FATAL"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["HOSPITALIZED"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["HOSPITALIZED"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["HOSPITALIZED"] = np.array(matchtimes(times,time,cases))
+        raw  = np.zeros(len(TOneighborhoods["units"][neighborhood]["RECOVERED"]))
+        for line in range(len(raw)):
+            day = (TOneighborhoods["units"][neighborhood]["RECOVERED"][line]-origin).days
+            raw[line] = int(day)
+        time,cases = np.unique(raw,return_counts=True)
+        TOneighborhoods["units"][neighborhood]["RECOVERED"] = np.array(matchtimes(times,time,cases))
+
+    popfile = open("neighbourhood-profiles-2016-csv.csv","r")
+    popcsv = csv.reader(popfile,delimiter=',',quotechar='"',quoting=csv.QUOTE_ALL,skipinitialspace=True)
+    n = 0
+    for row in popcsv:
+        if n==0:
+            header = row[6:]
+        elif n==3:
+            poprow = row[6:]
+            break
+        n+=1
+        
+    neighborhoodpops = {}
+    for n in range(len(header)):
+        neighborhoodpops[header[n]] = float(poprow[n].replace(",",""))
+    #neighborhoodpops.keys()
+
+    if "" in TOneighborhoods["units"]:
+        TOneighborhoods["units"].pop("")
+        
+    keys1 = sorted(neighborhoodpops.keys())
+    keys2 = sorted(TOneighborhoods["units"].keys())
+    #print(len(keys1),len(keys2))
+    for n in range(len(keys1)):
+        #print("%40s\t%s\t%s"%(keys1[n],str(keys1[n]==keys2[n]),keys2[n]))
+        if keys1[n]!=keys2[n]:
+            neighborhoodpops[keys2[n]] = neighborhoodpops[keys1[n]]
+            neighborhoodpops.pop(keys1[n])
+            
+    for neighborhood in neighborhoodpops:
+        TOneighborhoods["units"][neighborhood]["POP"] = neighborhoodpops[neighborhood]
+            
+    otimes = {}
+    ontario = {}
+    ontario_d = {}
+    ontario_a = {}
+    ontario_r = {}
+    with open("ontario_cases.csv","r") as df:
+        ontariocsv =df.read().split("\n")[1:]
+        while ontariocsv[-1]=="":
+            ontariocsv = ontariocsv[:-1]
+    for line in ontariocsv:
+        entry = line.split(',')
+        if entry[1]=="":
+            entry[1]="UNKNOWN"
+        if entry[1][0]=='"':
+            entry[1] = entry[1][1:]
+        if entry[1][-1]=='"':
+            entry[1] = entry[1][:-1]
+        phu = entry[1]
+        i0 = 0
+        if entry[0][0]=='"':
+            entry[0]=entry[0][1:]
+        if entry[0][-1]=='"':
+            entry[0]=entry[0][:-1]
+        timestamp = entry[0].split('-')
+        try:
+            x = timestamp[1]
+        except:
+            timestamp = timestamp[0]
+            timestamp = [timestamp[:4],timestamp[4:6],timestamp[6:]]
+        if phu=='HALIBURTON' or phu=='KINGSTON':
+            phu=entry[1]+','+entry[2]+','+entry[3]
+            i0 = 2
+        elif phu=='LEEDS':
+            phu=entry[1]+','+entry[2]
+            i0 = 1
+        phu = phu.replace('"','')
+        active = int(entry[3+i0])
+        rec    = int(entry[4+i0])
+        dead   = int(entry[5+i0])
+        if phu not in otimes.keys():
+            otimes[phu] = np.array([date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])),])
+            ontario_a[phu] = np.array([active,])
+            ontario_r[phu] = np.array([rec,])
+            ontario_d[phu] = np.array([dead,])
+        else:
+            try:
+                otimes[phu] = np.append(otimes[phu],date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+                ontario_a[phu] = np.append(ontario_a[phu],active)
+                ontario_r[phu] = np.append(ontario_r[phu],rec)
+                ontario_d[phu] = np.append(ontario_d[phu],dead)
+            except:
+                print(timestamp)
+    for phu in otimes.keys():
+        order = np.argsort(otimes[phu])
+        otimes[phu] = otimes[phu][order]
+        ontario_a[phu] = ontario_a[phu][order]
+        ontario_r[phu] = ontario_r[phu][order]
+        ontario_d[phu] = ontario_d[phu][order]
+        ontario[phu] = (np.diff(np.append([0,],ontario_a[phu]))
+                       +np.diff(np.append([0,],ontario_r[phu]))
+                       +np.diff(np.append([0,],ontario_d[phu]))) 
+                     #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
+
+        
+    TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
+                                       "FATAL":ontario_d["TORONTO"],
+                                       "ACTIVE":ontario_a["TORONTO"],
+                                       "RECOVERED":ontario_r["TORONTO"]}
+    
+    hdf = h5.File("adivparadise_covid19data_slim.hdf5","w")
+    
+    nr = 100
+    
+    rrange = np.geomspace(0.1,10.0,num=nr)
+    hdf.create_dataset("/rtrange",data=rrange.astype("float32"),compression='gzip',
+                       compression_opts=9,shuffle=True,fletcher32=True)
+    hdf["rtrange"].attrs['long_name'] = "Possible R$_t$ Values"
+    rbase = np.geomspace(0.01,10.0,num=1000)
+    
+    
+    try:
+        for country in sorted(countries):
+            if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
+                key = country
+                if key=="US":
+                    key="United States"
+                ckey = str.title(key)
+                ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
+                dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    
+                countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=ctotal.astype(np.short))
+                countrydeaths = hdf.create_dataset("/"+ckey+"/deaths",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=dtotal.astype(np.short))
+                countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,data=r.astype("float32"))
+                countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
+
+                countrycases.attrs["units"] = "cases day-1"
+                countrydeaths.attrs["units"] = "deaths day-1"
+                countryRt.attrs["units"] = "secondary infections case-1"
+                countrypopulation.attrs["units"] = "people"
+                countrycases.attrs["standard_name"] = "daily_cases"
+                countrydeaths.attrs["standard_name"] = "daily_deaths"
+                countryRt.attrs["standard_name"] = "R_t"
+                countrypopulation.attrs["standard_name"] = "population"
+                countrycases.attrs["long_name"] = "New Cases per Day"
+                countrydeaths.attrs["long_name"] = "New Deaths per Day"
+                countryRt.attrs["long_name"] = "Effective Reproductive Number"
+                countrypopulation.attrs["long_name"] = "Population"
+                
+           
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                    ckey = str.title(state)
+                    ctotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    dtotal = np.diff(np.append([0,],usa[state])).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    pd = np.zeros((p.shape[0],nr))
+                    ld = np.zeros((l.shape[0],nr))
+                    for t in range(p.shape[0]):
+                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                        
+                    statecases  = hdf.create_dataset("/United States/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                    statedeaths = hdf.create_dataset("/United States/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                    stateRt     = hdf.create_dataset("/United States/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+                    statepopulation = hdf.create_dataset("/United States/"+ckey+"/population",data=float(statepops[state]))
+  
+                    statecases.attrs["units"] = "cases day-1"
+                    statedeaths.attrs["units"] = "deaths day-1"
+                    statepopulation.attrs["units"] = "people"
+                    statecases.attrs["standard_name"] = "daily_cases"
+                    statedeaths.attrs["standard_name"] = "daily_deaths"
+                    statepopulation.attrs["standard_name"] = "population"
+                    statecases.attrs["long_name"] = "new cases per day"
+                    statedeaths.attrs["long_name"] = "new deaths per day"
+                    statepopulation.attrs["long_name"] = "population"
+   
+           
+        for province in sorted(canada):
+            if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
+                ckey = str.title(province)
+                ckey = ckey.replace("And","and")
+                ctotal = np.diff(np.append([0,],canada[province])).astype(int)
+                dtotal = np.diff(np.append([0,],canada[province])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                p = np.exp(lp)
+                l = np.exp(ll)
+                pd = np.zeros((p.shape[0],nr))
+                ld = np.zeros((l.shape[0],nr))
+                for t in range(p.shape[0]):
+                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
+                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    
+                provincecases  = hdf.create_dataset("/Canada/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                provincedeaths = hdf.create_dataset("/Canada/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                provinceRt     = hdf.create_dataset("/Canada/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+                provincepopulation = hdf.create_dataset("/Canada/"+ckey+"/population",data=float(provincepops[province]))
+
+                provincecases.attrs["units"] = "cases day-1"
+                provincedeaths.attrs["units"] = "deaths day-1"
+                provincepopulation.attrs["units"] = "people"
+                provincecases.attrs["standard_name"] = "daily_cases"
+                provincedeaths.attrs["standard_name"] = "daily_deaths"
+                provincepopulation.attrs["standard_name"] = "population"
+                provincecases.attrs["long_name"] = "new cases per day"
+                provincedeaths.attrs["long_name"] = "new deaths per day"
+                provincepopulation.attrs["long_name"] = "population"
+                provinceRpost.attrs["units"] = "n/a"
+                provinceRlike.attrs["units"] = "n/a"
+
         
         
-    #except:
-        #hdfile.close()
-        #raise
+        for phu in sorted(ontario):
+            if len(ontario[phu][:])>10:
+                ckey = str.title(phu)
+                ctotal = ontario[phu].astype(int)
+                dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
+                atotal = ontario_a[phu].astype(int)
+                rtotal = np.diff(np.append([0,],ontario_r[phu])).astype(int)
+                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                phucases = hdf.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+                phudeaths = hdf.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+                phuactive = hdf.create_dataset("/Canada/Ontario/"+ckey+"/active",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=atotal.astype(np.short))
+                phurecovered = hdf.create_dataset("/Canada/Ontario/"+ckey+"/recovered",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=rtotal.astype(np.short))
+                phuRt = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype('float32'))
+                #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
+                #phupopulation.set_auto_mask(False)
+                phucases.attrs["units"] = "cases day-1"
+                phudeaths.attrs["units"] = "deaths day-1"
+                phuactive.attrs["units"] = "cases"
+                phurecovered.attrs["units"] = "recoveries day-1"
+                #phupopulation.units = "people"
+                phucases.attrs["standard_name"] = "daily_cases"
+                phudeaths.attrs["standard_name"] = "daily_deaths"
+                phuactive.attrs["standard_name"] = "active_cases"
+                phurecovered.attrs["standard_name"] = "daily_recoveries"
+                #phupopulation.standard_name = "population"
+                phucases.attrs["long_name"] = "new cases per day"
+                phudeaths.attrs["long_name"] = "new deaths per day"
+                phuactive.attrs["long_name"] = "active cases"
+                phurecovered.attrs["long_name"] = "newly-recovered cases per day"
+                #phupopulation.long_name = "population"
+            
+        TOpop = hdf.create_dataset("/Canada/Ontario/Toronto/population",data=2.732e6)
+
+        TOpop.attrs["units"] = "people"
+        TOpop.attrs["standard_name"]="population"
+        TOpop.attrs["long_name"]="population"
+        
+        TOhosp = hdf.create_dataset("/Canada/Ontario/Toronto/hospitalized",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=TOneighborhoods["hosptTO"].astype(np.short))
+
+        TOhosp.attrs["units"] = "hospitalizations day-1"
+        TOhosp.attrs["standard_name"] = "daily_hospitalizations"
+        TOhosp.attrs["long_name"] = "day's cases which ever required hospitalization"
+        
+        
+        for neighborhood in sorted(TOneighborhoods["units"]):
+            ckey = neighborhood.replace("/","-")
+            ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
+            dtotal = TOneighborhoods["units"][neighborhood]["FATAL"].astype(int)
+            htotal = TOneighborhoods["units"][neighborhood]["HOSPITALIZED"].astype(int)
+            rtotal = TOneighborhoods["units"][neighborhood]["RECOVERED"].astype(int)
+            r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+
+            areacases = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/cases",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=ctotal.astype(np.short))
+            areadeaths = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/deaths",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=dtotal.astype(np.short))
+            areahosp = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/hospitalized",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=htotal.astype(np.short))
+            arearecovered = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/recovered",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=rtotal.astype(np.short))
+            areaRt = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rt",compression='gzip',
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=r.astype("float32"))
+            areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
+                                                data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+
+            areacases.attrs["units"] = "cases day-1"
+            areadeaths.attrs["units"] = "deaths day-1"
+            areahosp.attrs["units"] = "hospitalizations day-1"
+            arearecovered.attrs["units"] = "recoveries day-1"
+            areapopulation.attrs["units"] = "people"
+            areacases.attrs["standard_name"] = "daily_cases"
+            areadeaths.attrs["standard_name"] = "daily_deaths"
+            areahosp.attrs["standard_name"] = "daily_hospitalizations"
+            arearecovered.attrs["standard_name"] = "daily_recoveries"
+            areapopulation.attrs["standard_name"] = "population"
+            areacases.attrs["long_name"] = "new cases per day"
+            areadeaths.attrs["long_name"] = "new deaths per day"
+            areahosp.attrs["long_name"] = "day's cases which ever required hospitalization"
+            arearecovered.attrs["long_name"] = "day's cases which have recovered"
+            areapopulation.attrs["long_name"] = "population"
+                  
+        for state in sorted(usa):
+            if us_deaths[state][-1]>=20 and state!="Total" and "Princess" not in state\
+                and "Virgin Islands" not in state and "Military" not in state\
+                and "Recovered" not in state and "Prisons" not in state and state!="Guam"\
+                and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
+                
+                counties = get_counties(usacsv,state=state)
+                for county in counties:
+                    ckey = county.replace("/","-")
+                    ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                        
+                    countycases = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/cases",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=ctotal.astype(np.short))
+                    countyRt = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/Rt",
+                                                     compression='gzip',compression_opts=9,shuffle=True,
+                                                     fletcher32=True,data=r.astype('float'))
+                    countypopulation = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/population",
+                                                     data=float(get_countypop(county,state)))
+
+                    countycases.attrs["units"] = "cases day-1"
+                    countypopulation.attrs["units"] = "people"
+                    countycases.attrs["standard_name"] = "daily_cases"
+                    countypopulation.attrs["standard_name"] = "population"
+                    countycases.attrs["long_name"] = "New Cases per Day"
+                    countypopulation.attrs["long_name"] = "Population"
     
+        
+    except:
+        hdf.close()
+        raise
     
+    hdf.close()
     
-    
-    hdfile.close()
-    
-    
+       
         
     
     
@@ -4255,6 +5707,8 @@ if __name__=="__main__":
     if "makeshell" in sys.argv[:]:
         makeshell()
     if "datasets" in sys.argv[:]:
-        netcdf()
-        #hdf5()
+        #netcdf_slim()
+        #netcdf()
+        hdf5_slim()
+        hdf5()
         
