@@ -6,6 +6,7 @@
 cd /home/adivp416/
 export HOME=/home/adivp416
 echo "alias pyenv=/home/adivp416/.pyenv/bin/pyenv">>/home/adivp416/.bashrc
+cat /home/adivp416/.bashrc
 #touch $HOME/.bashrc
 #curl https://pyenv.run | bash
 source $HOME/.bashrc
