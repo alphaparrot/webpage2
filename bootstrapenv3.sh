@@ -5,4 +5,6 @@
 #python -m pip install --user numpy scipy matplotlib
 cd /home/adivp416/
 export HOME=/home/adivp416
+export TMP=/home/adivp416/tmpconda
+export TMPDIR=/home/adivp416/tmpconda
 /home/adivp416/.pyenv/bin/pyenv install 3.9.9
