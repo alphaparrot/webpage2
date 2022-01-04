@@ -3582,6 +3582,7 @@ def netcdf():
     try:
         
         for country in sorted(countries):
+            cdata = extract_country(dataset,country)
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 key = country
                 if key=="US":
@@ -4227,6 +4228,7 @@ def hdf5():
     print("doing countries")
     try:
         for country in sorted(countries):
+            cdata = extract_country(dataset,country)
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 key = country
                 if key=="US":
@@ -4866,6 +4868,7 @@ def netcdf_slim():
     try:
         
         for country in sorted(countries):
+            cdata = extract_country(dataset,country)
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 key = country
                 if key=="US":
@@ -4918,13 +4921,6 @@ def netcdf_slim():
                     ctotal = np.diff(np.append([0,],usa[state])).astype(int)
                     dtotal = np.diff(np.append([0,],usa[state])).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                    p = np.exp(lp)
-                    l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     ncd["United States"][ckey]["Rt"][:] = r
                     ncd["United States"][ckey]["cases"][:] = ctotal
                     ncd["United States"][ckey]["deaths"][:] = dtotal
@@ -4940,10 +4936,6 @@ def netcdf_slim():
                     statecases.long_name = "new cases per day"
                     statedeaths.long_name = "new deaths per day"
                     statepopulation.long_name = "population"
-                    stateRpost.units = "n/a"
-                    stateRlike.units = "n/a"
-                    stateRpost.set_auto_mask(False)
-                    stateRlike.set_auto_mask(False)
         ncd.sync()
         
         for province in sorted(canada):
@@ -4959,13 +4951,6 @@ def netcdf_slim():
                 ctotal = np.diff(np.append([0,],canada[province])).astype(int)
                 dtotal = np.diff(np.append([0,],canada[province])).astype(int)
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                p = np.exp(lp)
-                l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                 ncd["Canada"][ckey]["Rt"][:] = r
                 ncd["Canada"][ckey]["cases"][:] = ctotal
                 ncd["Canada"][ckey]["deaths"][:] = dtotal
@@ -5057,13 +5042,6 @@ def netcdf_slim():
             htotal = TOneighborhoods["units"][neighborhood]["HOSPITALIZED"].astype(int)
             rtotal = TOneighborhoods["units"][neighborhood]["RECOVERED"].astype(int)
             r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-            p = np.exp(lp)
-            l = np.exp(ll)
-            pd = np.zeros((p.shape[0],nr))
-            ld = np.zeros((l.shape[0],nr))
-            for t in range(p.shape[0]):
-                pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
             ncd["Canada/Ontario/Toronto"][ckey]["Rt"][:] = r
             ncd["Canada/Ontario/Toronto"][ckey]["cases"][:] = ctotal
             ncd["Canada/Ontario/Toronto"][ckey]["deaths"][:] = dtotal
@@ -5108,13 +5086,6 @@ def netcdf_slim():
                     ncd["United States/%s"%str.title(state)][ckey]["population"][:] = float(get_countypop(county,state))
                     ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                    p = np.exp(lp)
-                    l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     ncd["United States/%s"%str.title(state)][ckey]["Rt"][:] = r
                     ncd["United States/%s"%str.title(state)][ckey]["cases"][:] = ctotal
                     countycases.set_auto_mask(False)
@@ -5428,6 +5399,7 @@ def hdf5_slim():
     
     try:
         for country in sorted(countries):
+            cdata = extract_country(dataset,country)
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 key = country
                 if key=="US":
