@@ -293,7 +293,7 @@ def get_countypop(county,state):
                     return int(row[18])
     return -1
 
-def plot_stateRt(state,dataset):
+def plot_stateRt(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
     
@@ -309,12 +309,12 @@ def plot_stateRt(state,dataset):
     plt.legend()
     plt.ylabel("$R_t$")
     plt.xlabel("Days Before Present")
-    plt.title("%s Effective Reproductive Number")
+    plt.title("%s Effective Reproductive Number"+timestamp)
     plt.savefig("%s/%s_rt.png"%(state,state),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
     plt.close('all')
 
-def country_summary(country,dataset,deathdata,countrypops):
+def country_summary(country,dataset,deathdata,countrypops,timestamp):
     
     fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
     
@@ -357,13 +357,13 @@ def country_summary(country,dataset,deathdata,countrypops):
     axes[3].set_ylabel("Cumulative Cases [percent of population]")
     axes[0].set_ylabel("New Cases per Day per 1M [7-day Average]")
     axes[0].set_yscale('log')
-    axes[0].set_title(country,size=14,fontweight='bold')
+    axes[0].set_title(country+timestamp,size=14,fontweight='bold')
     plt.tight_layout()
     plt.savefig("%s_summary.png"%country,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
     plt.close('all')
 
-def plot_TOneighborhood(neighborhood,dataset):
+def plot_TOneighborhood(neighborhood,dataset,timestamp):
        
     fnamestub = neighborhood
     if "/" in fnamestub:
@@ -383,7 +383,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     #print("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
     #             (-len(cases),cases.max()*1.1))
     #plt.yscale('log')
-    plt.title("Daily New Cases in %s"%neighborhood)
+    plt.title("Daily New Cases in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("Cases per Day")
     plt.ylim(0,cases.max()*1.3)
@@ -394,7 +394,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
-    plt.title("Average Daily Cases in %s"%neighborhood)
+    plt.title("Average Daily Cases in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("7-day Average Cases per Day")
     plt.savefig("%s/%s_avgcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
@@ -403,7 +403,7 @@ def plot_TOneighborhood(neighborhood,dataset):
 
     plt.plot(np.arange(len(hospt))-len(hospt),hospt,marker='.')
     #plt.yscale('log')
-    plt.title("Daily Hospitalizations in %s"%neighborhood)
+    plt.title("Daily Hospitalizations in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("Hospitalizations per Day")
     plt.savefig("%s/%s_rawhosp.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
@@ -412,7 +412,7 @@ def plot_TOneighborhood(neighborhood,dataset):
 
     plt.plot(np.arange(len(fatal))-len(fatal),fatal,marker='.')
     #plt.yscale('log')
-    plt.title("Daily Deaths in %s"%neighborhood)
+    plt.title("Daily Deaths in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("Deaths per Day")
     plt.savefig("%s/%s_rawdeaths.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
@@ -422,7 +422,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
-    plt.title("3-Week Running Sum of Cases in %s"%neighborhood)
+    plt.title("3-Week Running Sum of Cases in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("3-Wk Running Sum")
     plt.savefig("%s/%s_3wk.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
@@ -446,7 +446,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.xlim(-len(curve4),0)
     plt.ylabel("3-week Running Sum")
     plt.xlabel("Days Before Present")
-    plt.title("%s Cases"%neighborhood)
+    plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
@@ -463,7 +463,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     #plt.yscale('log')
     #plt.ylim(0.1,200.0)
     plt.xlim(-len(curve)+150,0)
-    plt.title("Average Daily Cases per Capita in %s"%neighborhood)
+    plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
@@ -486,7 +486,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.annotate("R$_t$ is the average number of people an infected \nperson will infect over the course of the infection. \nR$_t$>1 means daily cases will increase.",
                 ((-len(curve)+125)/2.0-0.15*(len(curve)-125),1.9))
     plt.axhline(1.0,color='k',linestyle=':')
-    plt.title("%s Effective Reproductive Number"%neighborhood)
+    plt.title("%s Effective Reproductive Number"%neighborhood+timestamp)
     plt.savefig("%s/%s_Rt.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
@@ -494,7 +494,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
-    plt.title("Average Daily Cases in %s"%neighborhood)
+    plt.title("Average Daily Cases in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("7-day Average Cases per Day")
     plt.yscale('log')
@@ -505,7 +505,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
-    plt.title("3-Week Running Sum of Cases in %s"%neighborhood)
+    plt.title("3-Week Running Sum of Cases in %s"%neighborhood+timestamp)
     plt.xlabel("Days Before Present")
     plt.ylabel("3-Wk Running Sum")
     plt.yscale('log')
@@ -530,7 +530,7 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.xlim(-len(curve4),0)
     plt.ylabel("3-week Running Sum")
     plt.xlabel("Days Before Present")
-    plt.title("%s Cases"%neighborhood)
+    plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
@@ -547,12 +547,12 @@ def plot_TOneighborhood(neighborhood,dataset):
     plt.yscale('log')
     #plt.ylim(0.1,200.0)
     plt.xlim(-len(curve)+150,0)
-    plt.title("Average Daily Cases per Capita in %s"%neighborhood)
+    plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all')
     
-def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population):
+def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population,timestamp):
     '''national_cases and national_deaths should be population-adjusted.'''
     
     fstub = name.replace(" ","_").replace("&","and")
@@ -571,7 +571,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
-    plt.title("%s Daily New Cases")
+    plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -582,7 +582,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per Day")
-    plt.title("%s Average Daily New Cases"%name)
+    plt.title("%s Average Daily New Cases"%name+timestamp)
     plt.savefig("%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -595,7 +595,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per 100k per Day")
-    plt.title("%s Daily New Cases per 100k"%name)
+    plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -608,7 +608,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per 100k per Day")
-    plt.title("%s Average Daily New Cases per 100k"%name)
+    plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -621,7 +621,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per 100k per Day")
     plt.yscale('log')
-    plt.title("%s Daily New Cases per 100k"%name)
+    plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -635,7 +635,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per 100k per Day")
     plt.yscale('log')
-    plt.title("%s Average Daily New Cases per 100k"%name)
+    plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -649,7 +649,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("Effective Reproductive Number R$_t$")
-    plt.title("%s Effective Reproductive Number"%name)
+    plt.title("%s Effective Reproductive Number"%name+timestamp)
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -661,7 +661,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Deaths per Day")
-    plt.title("%s Daily Deaths"%name)
+    plt.title("%s Daily Deaths"%name+timestamp)
     plt.savefig("%s/%s_rawdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -679,7 +679,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.annotate("%1.2f Deaths per Day per 1M"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Deaths per 1M per Day")
-    plt.title("%s Average Daily Deaths per 1M"%name)
+    plt.title("%s Average Daily Deaths per 1M"%name+timestamp)
     plt.savefig("%s/%s_relavgdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -690,7 +690,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -698,7 +698,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.yscale('log')
     plt.savefig("%s/%s_3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -711,7 +711,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_rel3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -721,7 +721,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s"%name)
+    plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.yscale('log')
     plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -730,7 +730,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     
     
     
-def plotOntario(phu,cases,deaths,active,recovered,population=None):
+def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     
     fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir("ontario_%s"%fstub):
@@ -740,7 +740,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
-    plt.title("%s, ON Raw Cases per Day"%phuname)
+    plt.title("%s, ON Raw Cases per Day"%phuname+timestamp)
     if population is not None:
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
@@ -750,7 +750,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
-    plt.title("%s, ON Raw Cases per Day"%phuname)
+    plt.title("%s, ON Raw Cases per Day"%phuname+timestamp)
     if population is not None:
         plt.annotate("%1.2f%% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
     plt.yscale('log')
@@ -762,7 +762,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(curve))-len(curve),curve)
     plt.xlabel("Days before Present")
     plt.ylabel("Average New Cases per Day")
-    plt.title("%s, ON Average Cases per Day"%phuname)
+    plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
     if population is not None:
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
@@ -772,7 +772,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(curve))-len(curve),curve)
     plt.xlabel("Days before Present")
     plt.ylabel("Average New Cases per Day")
-    plt.title("%s, ON Average Cases per Day"%phuname)
+    plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
     if population is not None:
         plt.annotate("%1.2f%% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
     plt.yscale('log')
@@ -783,7 +783,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
     plt.xlabel("Days before Present")
     plt.ylabel("Active Cases")
-    plt.title("%s, ON Daily Active Cases"%phuname)
+    plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_active.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -792,7 +792,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
     plt.xlabel("Days before Present")
     plt.ylabel("Active Cases")
-    plt.title("%s, ON Daily Active Cases"%phuname)
+    plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
     plt.yscale('log')
     plt.savefig("ontario_%s/%s_active_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active_log.pdf"%(fstub,fstub),bbox_inches='tight')
@@ -802,7 +802,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(curve))-len(curve),curve)
     plt.xlabel("Days before Present")
     plt.ylabel("7-day Average Deaths per Day")
-    plt.title("Average daily deaths from COVID-19 in %s, ON"%phuname)
+    plt.title("Average daily deaths from COVID-19 in %s, ON"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_deaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_deaths.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
@@ -813,7 +813,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,color='k',label="2-Week Average")
     plt.plot(np.arange(len(rt))-len(rt),rt,color='k',linestyle='--',alpha=0.4,label="Instantaneous")
     plt.axhline(1.0,color='r',linestyle=':')
-    plt.title("%s, ON Effective Reproductive Number"%phuname)
+    plt.title("%s, ON Effective Reproductive Number"%phuname+timestamp)
     plt.xlabel("Days before Present")
     plt.ylabel("Effective Reproductive Number R$_t$")
     
@@ -821,7 +821,7 @@ def plotOntario(phu,cases,deaths,active,recovered,population=None):
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
     
-def plotCounty(county,state,countydataset,statedataset,statepopulation):
+def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = str.title(county).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     
@@ -846,7 +846,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
-    plt.title("%s Daily New Cases")
+    plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -857,7 +857,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per Day")
-    plt.title("%s County Average Daily New Cases"%county)
+    plt.title("%s County Average Daily New Cases"%county+timestamp)
     plt.savefig("%s_avgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_avgdaily.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -870,7 +870,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per 100k per Day")
-    plt.title("%s County Daily New Cases per 100k"%county)
+    plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -883,7 +883,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per 100k per Day")
-    plt.title("%s County Average Daily New Cases per 100k"%county)
+    plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -896,7 +896,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per 100k per Day")
     plt.yscale('log')
-    plt.title("%s County Daily New Cases per 100k"%county)
+    plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily_log.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -910,7 +910,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.xlabel("Days before Present")
     plt.ylabel("7-Day Average New Cases per 100k per Day")
     plt.yscale('log')
-    plt.title("%s County Average Daily New Cases per 100k"%county)
+    plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -929,7 +929,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("Effective Reproductive Number R$_t$")
-    plt.title("%s County Effective Reproductive Number"%county)
+    plt.title("%s County Effective Reproductive Number"%county+timestamp)
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s_Rt.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_Rt.pdf"%pathdir,bbox_inches='tight')
@@ -940,7 +940,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county)
+    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -948,7 +948,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county)
+    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.yscale('log')
     plt.savefig("%s_3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk_log.pdf"%pathdir,bbox_inches='tight')
@@ -961,7 +961,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county)
+    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_rel3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
@@ -971,7 +971,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation):
     plt.legend()
     plt.xlabel("Days before Present")
     plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county)
+    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.yscale('log')
     plt.savefig("%s_rel3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
@@ -1005,6 +1005,7 @@ def plotgroup(group,directory='mygroup'):
             data["population"] = float(location["dataset"]["units"][location["place"]]["POP"])
             data["label"] = "%s, %s"%(location["place"],location["abbrev"])
         data["time"] = np.arange(len(data["cases"]))-len(data["cases"])
+        data["latest"] = location["timestamp"]
         curves.append(data)
       
     for place in curves:
@@ -1152,6 +1153,7 @@ def report():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
         
     countries = getcountries(dataset)
     
@@ -1249,6 +1251,7 @@ def report():
         torontofraw[line] = int(day)
     
     timestamps = np.array(timestamps)
+    
     times,toronto = np.unique(torontoraw,return_counts=True)
     rtimes,torontor = np.unique(torontorraw,return_counts=True)
     htimes,torontoh = np.unique(torontohraw,return_counts=True)
@@ -1380,6 +1383,18 @@ def report():
                        +np.diff(np.append([0,],ontario_d[phu]))) 
                      #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
 
+        
+    latestON = otimes["TORONTO"].max() #datetime.date
+    latestTO = timestamps.max()        #datetime.date
+    latestusa = usacsv[0][-1]
+    usatime = latestusa.split("/")
+    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    globaltime = latestglobal.split("/")
+    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestON = "\nAs of "+' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
+    latestTO = "\nAs of "+' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
+    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestglobal = "\nAs of"+' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -1589,7 +1604,7 @@ def report():
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
     for neighborhood in TOneighborhoods["units"]:
-        plot_TOneighborhood(neighborhood,TOneighborhoods)
+        plot_TOneighborhood(neighborhood,TOneighborhoods,latestTO)
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
     
          
@@ -1603,7 +1618,7 @@ def report():
     plt.xlim(0,len(curve)*1.1)
     plt.xlabel("Days")
     plt.ylabel("3-week Running Sum of Cases per 100k")
-    plt.title("Toronto Neighborhoods")
+    plt.title("Toronto Neighborhoods"+latestTO)
     plt.savefig("allneighborhoods.png",bbox_inches='tight',facecolor='white')
     plt.savefig("allneighborhoods.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1633,7 +1648,7 @@ def report():
     plt.annotate("R$_t$ is the average number of people an infected \nperson will infect over the course of the infection. \nR$_t$>1 means daily cases will increase.",
                 ((xmin+125)/2.0-0.15*(-xmin-125),2.5))
     plt.axhline(1.0,color='r',linestyle=':')
-    plt.title("All Neighbourhood Reproductive Numbers")
+    plt.title("All Neighbourhood Reproductive Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1658,7 +1673,7 @@ def report():
     plt.annotate("R$_t$ is the average number of people an infected \nperson will infect over the course of the infection. \nR$_t$>1 means daily cases will increase.",
                 ((xmin+125)/2.0-0.15*(-xmin-125),2.5))
     plt.axhline(1.0,color='r',linestyle=':')
-    plt.title("All Neighbourhood Reproductive Numbers, Weighted by Current Daily Case Numbers")
+    plt.title("All Neighbourhood Reproductive Numbers, Weighted by Current Daily Case Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1684,7 +1699,7 @@ def report():
     plt.annotate("R$_t$ is the average number of people an infected \nperson will infect over the course of the infection. \nR$_t$>1 means daily cases will increase.",
                 ((xmin+125)/2.0-0.15*(-xmin-125),2.5))
     plt.axhline(1.0,color='r',linestyle=':')
-    plt.title("All Neighbourhood Reproductive Numbers, Weighted by Active Cases")
+    plt.title("All Neighbourhood Reproductive Numbers, Weighted by Active Cases"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1734,7 +1749,7 @@ def report():
     plt.annotate("Cases are increasing if R$_t>1$.",(0.4*len(ptotals),offset))
     plt.annotate("Increasing in %d neighborhoods\nDeclining in %d neighborhoods"%(growing,declining),(0.4*len(ptotals),offset-0.3))
     #plt.yscale('log')
-    plt.title("Toronto Neighborhood Reproductive Numbers, Opacity Weighted by Active Cases")
+    plt.title("Toronto Neighborhood Reproductive Numbers, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhoodRt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhoodRt_comparisonweighted.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1795,7 +1810,7 @@ def report():
                 "people, and eventually without changes in behavior, R$_t$ will\n"+
                 "exceed 1 and cases will rise.",(0.1*len(ptotals),0.2*np.nanmax(list(ptotals.values()))))
     #plt.yscale('log')
-    plt.title("Toronto Neighborhood Transmission, Opacity Weighted by Active Cases")
+    plt.title("Toronto Neighborhood Transmission, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhood_DRtdt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhood_DRtdt_comparisonweighted.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1810,7 +1825,7 @@ def report():
     plt.xlim(-times.max(),0)
     plt.ylabel("Cases per Day")
     plt.xlabel("Days Relative to Present")
-    plt.title("Toronto Cases")
+    plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1825,7 +1840,7 @@ def report():
     plt.xlim(-times.max(),0)
     plt.ylabel("Cases per Day")
     plt.xlabel("Days Relative to Present")
-    plt.title("Toronto Cases")
+    plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1846,7 +1861,7 @@ def report():
     plt.xlim(-len(curve4),0)
     plt.ylabel("3-week Running Sum of Daily Cases")
     plt.xlabel("Days Relative to Present")
-    plt.title("Toronto Cases")
+    plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_3wk_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_3wk_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1868,7 +1883,7 @@ def report():
     plt.ylabel("$R_t$ (Average People Each Sick Person Infects)")
     plt.xlabel("Days Before Present")
     plt.legend()
-    plt.title("Toronto Effective Reproductive Number R$_t$")
+    plt.title("Toronto Effective Reproductive Number R$_t$"+latestON)
     plt.savefig("toronto_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_rt.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1880,7 +1895,7 @@ def report():
     plt.ylim(0,toronto.max())
     plt.xlabel("Days Relative to Present",size=20)
     plt.ylabel("7-Day Average Cases per Day",size=20)
-    plt.title("Toronto",size=24)
+    plt.title("Toronto"+latestON,size=24)
     plt.annotate("%1.1f Average \nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update.pdf",bbox_inches='tight')
     plt.savefig("toronto_update.png",bbox_inches='tight',facecolor='white')
@@ -1893,7 +1908,7 @@ def report():
     plt.ylim(0,toronto.max())
     plt.xlabel("Days Relative to Present",size=20)
     plt.ylabel("Raw Cases per Day",size=20)
-    plt.title("Toronto",size=24)
+    plt.title("Toronto"+latestON,size=24)
     plt.annotate("%1.1f Raw\nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update_raw.pdf",bbox_inches='tight')
     plt.savefig("toronto_update_raw.png",bbox_inches='tight',facecolor='white')
@@ -1908,7 +1923,7 @@ def report():
         plt.annotate(str.title(k),(otimes[k][-1],ontario_a[k][-1]))
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
-    plt.title("Ontario Active Cases")
+    plt.title("Ontario Active Cases"+latestON)
     plt.savefig("ontario_active.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_active.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1924,7 +1939,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
     plt.xlabel("Days before Present")
-    plt.title("Ontario New Cases [7-day average]")
+    plt.title("Ontario New Cases [7-day average]"+latestON)
     plt.savefig("ontario_newcases.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newcases.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1942,7 +1957,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
     plt.xlabel("Days before Present")
-    plt.title("Ontario Daily Deaths [7-day average]")
+    plt.title("Ontario Daily Deaths [7-day average]"+latestON)
     plt.savefig("ontario_newdeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
     plt.close('all')
@@ -1962,7 +1977,7 @@ def report():
             pass
     plt.xlabel("Days before Present")
     plt.ylabel("2-week Average Effective Reproductive Number R$_tR")
-    plt.title("Effective Reproductive Numbers of Ontario PHUs")
+    plt.title("Effective Reproductive Numbers of Ontario PHUs"+latestON)
     plt.axhline(1.0,color='r',linestyle=':')
     plt.xlim(-len(r2wk),0.2*len(r2wk))
     plt.savefig("ontario_allRt.png",bbox_inches='tight',facecolor='white')
@@ -1994,7 +2009,7 @@ def report():
     ax.set_xticklabels(labels,rotation='vertical')
     plt.axhline(1.0,linestyle='--',color='k')
     plt.ylabel("2-week Average R$_t$")
-    plt.title("Ontario PHU Reproductive Numbers, Opacity Weighted by Active Cases")
+    plt.title("Ontario PHU Reproductive Numbers, Opacity Weighted by Active Cases"+latestON)
     plt.savefig("ontario_phuRtcomparison.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_phuRtcomparison.pdf",bbox_inches='tight')
     plt.close("all")
@@ -2004,7 +2019,7 @@ def report():
     for k in sorted(ontario_a.keys()):
         if len(ontario[k])>14:
             try:
-                plotOntario(k,ontario,ontario_d,ontario_a,ontario_r)
+                plotOntario(k,ontario,ontario_d,ontario_a,ontario_r,latestON)
             except:
                 traceback.print_exc()
                 os.system("rm -rf ontario_%s*"%(str.title(k).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
@@ -2050,27 +2065,29 @@ def report():
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     adivgroup = [{"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  "abbrev":"MN","place":"Hennepin"},
+                  "abbrev":"MN","place":"Hennepin","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  "abbrev":"MN","place":"Ramsey"},
+                  "abbrev":"MN","place":"Ramsey","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  "abbrev":"MN","place":"Dakota"},
+                  "abbrev":"MN","place":"Dakota","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  "abbrev":"OR","place":"Polk"},
+                  "abbrev":"OR","place":"Polk","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  "abbrev":"OR","place":"Benton"},
+                  "abbrev":"OR","place":"Benton","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  "abbrev":"OR","place":"Marion"},
+                  "abbrev":"OR","place":"Marion","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Florida",
-                  "abbrev":"FL","place":"Pinellas"},
+                  "abbrev":"FL","place":"Pinellas","timestamp":latestusa},
                  {"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  "abbrev":"MN","place":"Blue Earth"},
+                  "abbrev":"MN","place":"Blue Earth","timestamp":latestusa},
                  {"type":"state/province","dataset":usa,"place":"Minnesota",
-                  "population":statepops["Minnesota"]},
-                 {"type":"city","place":"Toronto","abbrev":"ON","dataset":torontott,"population":torontopop},
+                  "population":statepops["Minnesota"],"timestamp":latestusa},
+                 {"type":"city","place":"Toronto","abbrev":"ON","dataset":torontott,"population":torontopop,
+                  "timestamp":latestON},
                  {"type":"state/province","dataset":canada,"place":"Newfoundland and Labrador",
-                  "population":provincepops["Newfoundland and Labrador"]},
-                 {"type":"neighborhood","dataset":TOneighborhoods,"place":"The Beaches","abbrev":"Toronto"}]
+                  "population":provincepops["Newfoundland and Labrador"],"timestamp":latestglobal},
+                 {"type":"neighborhood","dataset":TOneighborhoods,"place":"The Beaches","abbrev":"Toronto",
+                  "timestamp":latestTO}]
                  
     plotgroup(adivgroup,directory="adiv")
 
@@ -2094,7 +2111,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("Canada Daily Cases")
+    plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("ca_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailycasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2113,7 +2130,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Time [days]")
     plt.ylabel("Confirmed Cases (percentage of population)")
-    plt.title("Canada Confirmed Cases")
+    plt.title("Canada Confirmed Cases"+latestglobal)
     plt.savefig("caconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caconfirmed.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2136,7 +2153,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("Canada Daily Cases")
+    plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2160,7 +2177,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("Canada Daily Cases")
+    plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2183,7 +2200,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("3-wk Cumulative Cases [Percent of Population]")
-    plt.title("Canada Active Cases")
+    plt.title("Canada Active Cases"+latestglobal)
     plt.savefig("canada_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_3wkcasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2206,7 +2223,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("Canada Daily Deaths")
+    plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2230,7 +2247,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("Canada Daily Deaths")
+    plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2252,7 +2269,7 @@ def report():
     #ax.set_ylim(0,100)
     plt.ylabel("Deaths per 1000")
     #plt.yscale('log')
-    plt.title("COVID-19 Death Toll")
+    plt.title("COVID-19 Death Toll"+latestglobal)
     maxd = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[0]])
     
     n=0
@@ -2296,7 +2313,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time [days]")
     plt.ylabel("Mortality Rate")
-    plt.title("US States Mortality Rate")
+    plt.title("US States Mortality Rate"+latestusa)
     plt.savefig("ca_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailymortality.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2331,7 +2348,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Days before Present")
     plt.ylabel("Effective Reproductive Number $R_t$ (14-day Average)")
-    plt.title("Canada Transmission")
+    plt.title("Canada Transmission"+latestglobal)
     plt.savefig("canada_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_rt.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2371,7 +2388,7 @@ def report():
     #plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
     plt.axhline(1.0,linestyle='--',color='k')
-    plt.title("Canada COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence")
+    plt.title("Canada COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_rt_snapshot.pdf",bbox_inches='tight')
@@ -2411,7 +2428,7 @@ def report():
     #plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
     plt.axhline(0.0,linestyle='--',color='k')
-    plt.title("Canada COVID-19 Reproductive Number Derivative (Transmission Trend), Opacity Weighted by Virus Prevalence")
+    plt.title("Canada COVID-19 Reproductive Number Derivative (Transmission Trend), Opacity Weighted by Virus Prevalence"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_drt_snapshot.pdf",bbox_inches='tight')
@@ -2435,7 +2452,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Time [days]")
     plt.ylabel("Confirmed Cases (percentage of population)")
-    plt.title("United States Confirmed Cases")
+    plt.title("United States Confirmed Cases"+latestusa)
     plt.savefig("usconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usconfirmed.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2459,7 +2476,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("USA Daily Cases")
+    plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2484,7 +2501,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Cases per 100k")
-    plt.title("USA Daily Cases")
+    plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2508,7 +2525,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("3-wk Cumulative Cases [Percent of Population]")
-    plt.title("USA Active Cases")
+    plt.title("USA Active Cases"+latestusa)
     plt.savefig("usa_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_3wkcasespop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2532,7 +2549,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("USA Daily Deaths")
+    plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2557,7 +2574,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time before Present [days]")
     plt.ylabel("New Deaths per 1M")
-    plt.title("USA Daily Deaths")
+    plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop_log.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2579,7 +2596,7 @@ def report():
     #ax.set_ylim(0,100)
     plt.ylabel("Deaths per 1000")
     #plt.yscale('log')
-    plt.title("COVID-19 Death Toll")
+    plt.title("COVID-19 Death Toll"+latestusa)
     maxd = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[0]])
     
     n=0
@@ -2624,7 +2641,7 @@ def report():
     #plt.legend(loc='best')
     plt.xlabel("Time [days]")
     plt.ylabel("Mortality Rate")
-    plt.title("US States Mortality Rate")
+    plt.title("US States Mortality Rate"+latestusa)
     plt.savefig("us_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("us_dailymortality.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2659,7 +2676,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Days before Present")
     plt.ylabel("Effective Reproductive Number $R_t$ (14-day Average)")
-    plt.title("US Transmission")
+    plt.title("US Transmission"+latestusa)
     plt.savefig("usa_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_rt.pdf",bbox_inches='tight')
     plt.close('all')
@@ -2670,7 +2687,7 @@ def report():
     for place in usa:
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
-            plot_stateRt(place,usa)
+            plot_stateRt(place,usa,latestusa)
     
     _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
@@ -2707,7 +2724,7 @@ def report():
     #plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
     plt.axhline(1.0,linestyle='--',color='k')
-    plt.title("US COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence")
+    plt.title("US COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence"+latestusa)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_rt_snapshot.pdf",bbox_inches='tight')
@@ -2747,7 +2764,7 @@ def report():
     #plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
     plt.axhline(0.0,linestyle='--',color='k')
-    plt.title("US COVID-19 Reproductive Number Derivative (Transmission Trend), Opacity Weighted by Virus Prevalence")
+    plt.title("US COVID-19 Reproductive Number Derivative (Transmission Trend), Opacity Weighted by Virus Prevalence"+latestusa)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_drt_snapshot.pdf",bbox_inches='tight')
@@ -2798,7 +2815,7 @@ def report():
     #plt.yscale('log')
     plt.ylabel("Deaths Per 1000 People")
     plt.xlabel("Days before Present")
-    plt.title("COVID-19 Deaths per Thousand")
+    plt.title("COVID-19 Deaths per Thousand"+latestglobal)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop.pdf",bbox_inches='tight')
@@ -2839,7 +2856,7 @@ def report():
     plt.yscale('log')
     plt.ylabel("Deaths Per 1000 People")
     plt.xlabel("Days before Present")
-    plt.title("COVID-19 Deaths per Thousand")
+    plt.title("COVID-19 Deaths per Thousand"+latestglobal)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop_log.pdf",bbox_inches='tight')
@@ -2873,7 +2890,7 @@ def report():
     #ax.set_ylim(0,100)
     plt.ylabel("1 death per [x]")
     plt.yscale('log')
-    plt.title("Global COVID-19 Death Toll")
+    plt.title("Global COVID-19 Death Toll"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     print(labels[-1],ptotals[labels[-1]]*1.0e-3)
     print("US",ptotals["United States"]*1.0e-3)
@@ -2945,7 +2962,7 @@ def report():
     plt.yscale('log')
     plt.ylabel("Deaths Per 1 Million People")
     plt.xlabel("Time [days]")
-    plt.title("COVID-19 Deaths per Million per Day")
+    plt.title("COVID-19 Deaths per Million per Day"+latestglobal)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("selectcountriesdailydeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("selectcountriesdailydeaths.pdf",bbox_inches='tight')
@@ -2980,7 +2997,7 @@ def report():
     plt.ylabel("Deaths per Million per Day")
     plt.yscale('log')
     plt.ylim(5.0e-3,50.0)
-    plt.title("Global COVID-19 Daily Deaths")
+    plt.title("Global COVID-19 Daily Deaths"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globaldailydeaths_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldailydeaths_recent.pdf",bbox_inches='tight')
@@ -3017,7 +3034,7 @@ def report():
     plt.xlim(xmin,-xmin*0.2)
     plt.ylabel("New Cases Per Day")
     plt.xlabel("Days Before Present")
-    plt.title("COVID-19 Transmission")
+    plt.title("COVID-19 Transmission"+latestglobal)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("casetransmission.png",bbox_inches='tight',facecolor='white')
     plt.savefig("casetransmission.pdf",bbox_inches='tight')
@@ -3055,7 +3072,7 @@ def report():
     plt.ylabel("Cases per Million per Day")
     plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
-    plt.title("Global COVID-19 Daily Cases")
+    plt.title("Global COVID-19 Daily Cases"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globalcases_pop_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globalcases_pop_recent.pdf",bbox_inches='tight')
@@ -3107,7 +3124,7 @@ def report():
     #plt.yscale('log')
     #plt.ylim(5.0e-3,50.0)
     plt.axhline(1.0,linestyle='--',color='k')
-    plt.title("Global COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence")
+    plt.title("Global COVID-19 Reproductive Numbers, Opacity Weighted by Virus Prevalence"+latestglobal)
     plt.xlim(-1.0,n+1.0)
     plt.savefig("global_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("global_rt.pdf",bbox_inches='tight')
@@ -3118,7 +3135,7 @@ def report():
     for country in countries:
         try:
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
-                country_summary(country,dataset,ddataset,countrypops)
+                country_summary(country,dataset,ddataset,countrypops,latestglobal)
                 _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
                 makehtml.makeCountry(country)
             
@@ -3186,6 +3203,7 @@ def processcounties(state):
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
     
 
     usacsv = []
@@ -3198,11 +3216,15 @@ def processcounties(state):
             
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
 
+    latestusa = usacsv[0][-1]
+    usatime = latestusa.split("/")
+    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
 
     counties = get_counties(usacsv,state=state)
     for county in counties:
         try:
-            plotCounty(county,state,usacsv,usa,statepops[state])
+            plotCounty(county,state,usacsv,usa,statepops[state],latestusa)
             _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
@@ -3237,6 +3259,7 @@ def makeshell():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
     
 
     usacsv = []
@@ -3333,6 +3356,7 @@ def netcdf():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
         
     countries = getcountries(dataset)
     
@@ -3561,6 +3585,13 @@ def netcdf():
                        +np.diff(np.append([0,],ontario_d[phu]))) 
                      #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
 
+    latestON = otimes["TORONTO"].max() #datetime.date
+    latestTO = timestamps.max()        #datetime.date
+    latestusa = usacsv[0][-1]
+    usatime = latestusa.split("/")
+    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    globaltime = latestglobal.split("/")
+    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -3981,6 +4012,7 @@ def hdf5():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
         
     countries = getcountries(dataset)
     
@@ -4209,6 +4241,17 @@ def hdf5():
                        +np.diff(np.append([0,],ontario_d[phu]))) 
                      #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
 
+    latestON = otimes["TORONTO"].max() #datetime.date
+    latestTO = timestamps.max()        #datetime.date
+    latestusa = usacsv[0][-1]
+    usatime = latestusa.split("/")
+    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    globaltime = latestglobal.split("/")
+    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestON = ' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
+    latestTO = ' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
+    latestusa = ' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -4256,6 +4299,7 @@ def hdf5():
                 countryRlike = hdf.create_dataset("/"+ckey+"/Rlike",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=ld)
                 countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
+                latest = hdf.create_dataset("/"+ckey+"/latestdate",data=latestglobal)
 
                 countrycases.attrs["units"] = "cases day-1"
                 countrydeaths.attrs["units"] = "deaths day-1"
@@ -4310,6 +4354,7 @@ def hdf5():
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=ld)
                     statepopulation = hdf.create_dataset("/United States/"+ckey+"/population",data=float(statepops[state]))
+                    latest = hdf.create_dataset("/United States/"+ckey+"/latestdate",data=latestusa)
   
                     statecases.attrs["units"] = "cases day-1"
                     statedeaths.attrs["units"] = "deaths day-1"
@@ -4359,6 +4404,7 @@ def hdf5():
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=ld)
                 provincepopulation = hdf.create_dataset("/Canada/"+ckey+"/population",data=float(provincepops[province]))
+                latest = hdf.create_dataset("/Canada/"+ckey+"/latestdate",data=latestglobal)
 
                 provincecases.attrs["units"] = "cases day-1"
                 provincedeaths.attrs["units"] = "deaths day-1"
@@ -4414,6 +4460,7 @@ def hdf5():
                 phuRlike = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rlike",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=ld)
+                latest = hdf.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
@@ -4492,6 +4539,7 @@ def hdf5():
                                                      data=ld)
             areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
                                                 data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+            latest = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/latestdate",data=latestTO)
 
             areacases.attrs["units"] = "cases day-1"
             areadeaths.attrs["units"] = "deaths day-1"
@@ -4548,6 +4596,8 @@ def hdf5():
                                                      fletcher32=True,data=ld)
                     countypopulation = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/population",
                                                      data=float(get_countypop(county,state)))
+                    latest = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/latestdate",
+                                                data=latestusa)
 
                     countycases.attrs["units"] = "cases day-1"
                     countypopulation.attrs["units"] = "people"
@@ -4620,6 +4670,7 @@ def netcdf_slim():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
         
     countries = getcountries(dataset)
     
@@ -5152,6 +5203,7 @@ def hdf5_slim():
     dataset = dataset[1:]
     if dataset[-1]=='':
         dataset = dataset[:-1]
+    latestglobal = header[-1]
         
     countries = getcountries(dataset)
     
@@ -5380,6 +5432,17 @@ def hdf5_slim():
                        +np.diff(np.append([0,],ontario_d[phu]))) 
                      #ontario_a[phu]+ontario_d[phu]+ontario_r[phu]
 
+    latestON = otimes["TORONTO"].max() #datetime.date
+    latestTO = timestamps.max()        #datetime.date
+    latestusa = usacsv[0][-1]
+    usatime = latestusa.split("/")
+    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    globaltime = latestglobal.split("/")
+    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestON = "\nAs of "+' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
+    latestTO = "\nAs of "+' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
+    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestglobal = "\nAs of"+' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -5423,6 +5486,7 @@ def hdf5_slim():
                 countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=r.astype("float32"))
                 countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
+                latest = hdf.create_dataset("/"+ckey+"/latestdate",data=latestglobal)
 
                 countrycases.attrs["units"] = "cases day-1"
                 countrydeaths.attrs["units"] = "deaths day-1"
@@ -5465,6 +5529,7 @@ def hdf5_slim():
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=r.astype("float32"))
                     statepopulation = hdf.create_dataset("/United States/"+ckey+"/population",data=float(statepops[state]))
+                    latest = hdf.create_dataset("/United States/"+ckey+"/latestdate",data=latestusa)
   
                     statecases.attrs["units"] = "cases day-1"
                     statedeaths.attrs["units"] = "deaths day-1"
@@ -5502,6 +5567,7 @@ def hdf5_slim():
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=r.astype("float32"))
                 provincepopulation = hdf.create_dataset("/Canada/"+ckey+"/population",data=float(provincepops[province]))
+                latest = hdf.create_dataset("/Canada/"+ckey+"/latestdate",data=latestglobal)
 
                 provincecases.attrs["units"] = "cases day-1"
                 provincedeaths.attrs["units"] = "deaths day-1"
@@ -5538,6 +5604,7 @@ def hdf5_slim():
                 phuRt = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=r.astype('float32'))
+                latest = hdf.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
@@ -5597,6 +5664,7 @@ def hdf5_slim():
                                                      data=r.astype("float32"))
             areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
                                                 data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+            latest = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/latestdate",data=latestTO)
 
             areacases.attrs["units"] = "cases day-1"
             areadeaths.attrs["units"] = "deaths day-1"
@@ -5634,6 +5702,8 @@ def hdf5_slim():
                                                      fletcher32=True,data=r.astype('float'))
                     countypopulation = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/population",
                                                      data=float(get_countypop(county,state)))
+                    latest = hdf.create_dataset("/United States/%s"%str.title(state)+"/"+ckey+"/latestdate",
+                                                data = latestusa)
 
                     countycases.attrs["units"] = "cases day-1"
                     countypopulation.attrs["units"] = "people"
