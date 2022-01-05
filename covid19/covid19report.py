@@ -5512,8 +5512,6 @@ def hdf5_slim():
                 provincecases.attrs["long_name"] = "new cases per day"
                 provincedeaths.attrs["long_name"] = "new deaths per day"
                 provincepopulation.attrs["long_name"] = "population"
-                provinceRpost.attrs["units"] = "n/a"
-                provinceRlike.attrs["units"] = "n/a"
 
         
         
