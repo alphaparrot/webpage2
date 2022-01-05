@@ -3620,8 +3620,8 @@ def netcdf():
                     key="United States"
                 ckey = str.title(key)
                 countrygrp = ncd.createGroup(ckey)
-                countrycases = ncd[ckey].createVariable("cases","i2",("time",),zlib=True)
-                countrydeaths = ncd[ckey].createVariable("deaths","i2",("time",),zlib=True)
+                countrycases = ncd[ckey].createVariable("cases","i4",("time",),zlib=True)
+                countrydeaths = ncd[ckey].createVariable("deaths","i4",("time",),zlib=True)
                 countryRt = ncd[ckey].createVariable("Rt","f4",("time",),zlib=True)
                 countryRpost = ncd[ckey].createVariable("Rpost","f8",("time","Rt"),zlib=True)
                 countryRlike = ncd[ckey].createVariable("Rlike","f8",("time","Rt"),zlib=True)
@@ -4289,9 +4289,9 @@ def hdf5():
                     ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     
                 countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=ctotal.astype(np.short))
+                                                  shuffle=True,fletcher32=True,data=ctotal)
                 countrydeaths = hdf.create_dataset("/"+ckey+"/deaths",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=dtotal.astype(np.short))
+                                                  shuffle=True,fletcher32=True,data=dtotal)
                 countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=r.astype("float32"))
                 countryRpost = hdf.create_dataset("/"+ckey+"/Rpost",compression='gzip',compression_opts=9,
@@ -4926,8 +4926,8 @@ def netcdf_slim():
                     key="United States"
                 ckey = str.title(key)
                 countrygrp = ncd.createGroup(ckey)
-                countrycases = ncd[ckey].createVariable("cases","i2",("time",),zlib=True)
-                countrydeaths = ncd[ckey].createVariable("deaths","i2",("time",),zlib=True)
+                countrycases = ncd[ckey].createVariable("cases","i4",("time",),zlib=True)
+                countrydeaths = ncd[ckey].createVariable("deaths","i4",("time",),zlib=True)
                 countryRt = ncd[ckey].createVariable("Rt","f4",("time",),zlib=True)
                 countrypopulation = ncd[ckey].createVariable("population","f4",("scalar",),zlib=True)
                 ncd[ckey]["population"][:] = float(countrypops[country])
@@ -5480,9 +5480,9 @@ def hdf5_slim():
                     ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     
                 countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=ctotal.astype(np.short))
+                                                  shuffle=True,fletcher32=True,data=ctotal)
                 countrydeaths = hdf.create_dataset("/"+ckey+"/deaths",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=dtotal.astype(np.short))
+                                                  shuffle=True,fletcher32=True,data=dtotal)
                 countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=r.astype("float32"))
                 countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
