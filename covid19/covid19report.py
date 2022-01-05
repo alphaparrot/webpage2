@@ -2059,7 +2059,7 @@ def report():
             plotStateOrProvince(province,"Canada",canada,ca_deaths,
                                 extract_country(dataset,"Canada")["Total"]/float(countrypops["Canada"]),
                                 extract_country(ddataset,"Canada")["Total"]/float(countrypops["Canada"]),
-                                provincepops[province])
+                                provincepops[province],latestglobal)
             cankeys.append(province)
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
