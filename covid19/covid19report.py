@@ -2774,7 +2774,7 @@ def report():
         plotStateOrProvince(state,"United States",usa,us_deaths,
                                 extract_country(dataset,"US")["Total"]/float(countrypops["US"]),
                                 extract_country(ddataset,"US")["Total"]/float(countrypops["US"]),
-                                statepops[state])
+                                statepops[state],latestusa)
 
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
     
