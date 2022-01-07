@@ -5711,7 +5711,25 @@ def hdf5_slim():
                     countypopulation.attrs["standard_name"] = "population"
                     countycases.attrs["long_name"] = "New Cases per Day"
                     countypopulation.attrs["long_name"] = "Population"
-    
+        
+        import matplotlib.pyplot as plt
+        cases = hdf["United Kingdom/cases"][:]
+        population = hdf["United Kingdom/population"][()]
+        latest_date = hdf["United Kingdom/latestdate"][()]
+        
+        cases_per_100k = cases/population * 1.0e5 #Multiply by 100k to get cases per 100k
+        
+        cases_per_100k_7day = np.convolve(cases_per_100k,np.ones(7),'valid')/7.0
+        
+        days_before = np.arange(len(cases_per_100k_7day)) - len(cases_per_100k_7day) #max value is now 0
+        
+        #Create the plot
+        fig,axes = plt.subplots(figsize=(14,8))
+        axes.plot(days_before, cases_per_100k_7day)
+        axes.set_xlabel("Days before "+latest_date)
+        axes.set_ylabel("7-day Average of Daily Cases per 100k")
+        axes.set_title("Average Daily cases for the UK as of "+latest_date)
+        plt.savefig("UK_example.png",bbox_inches='tight',facecolor='white')
         
     except:
         hdf.close()
