@@ -758,7 +758,7 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     if population is not None:
         plt.annotate("%1.2f%% of the population of %s has been infected."%(np.cumsum(cases[phu])[-1]/population,phu))
     plt.yscale('symlog',linthreshy=1.0)
-    plt.ylim(0,curve.max())
+    plt.ylim(0,cases[phu].max())
     plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all')
