@@ -1388,13 +1388,13 @@ def report():
     latestTO = timestamps.max()        #datetime.date
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
-    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = date(2000+int(usatime[2]),int(usatime[0]),int(usatime[1]))
     globaltime = latestglobal.split("/")
-    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
     latestON = "\nAs of "+' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
     latestTO = "\nAs of "+' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
-    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
-    latestglobal = "\nAs of"+' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
+    latestusa = "\nAs of "+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestglobal = "\nAs of "+' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -3218,8 +3218,8 @@ def processcounties(state):
 
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
-    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
-    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestusa = date(2000+int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = "\nAs of "+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
 
     counties = get_counties(usacsv,state=state)
     for county in counties:
@@ -3589,9 +3589,9 @@ def netcdf():
     latestTO = timestamps.max()        #datetime.date
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
-    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = date(2000+int(usatime[2]),int(usatime[0]),int(usatime[1]))
     globaltime = latestglobal.split("/")
-    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],
@@ -4245,9 +4245,9 @@ def hdf5():
     latestTO = timestamps.max()        #datetime.date
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
-    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = date(2000+int(usatime[2]),int(usatime[0]),int(usatime[1]))
     globaltime = latestglobal.split("/")
-    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
     latestON = ' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
     latestTO = ' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
     latestusa = ' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
@@ -5436,13 +5436,13 @@ def hdf5_slim():
     latestTO = timestamps.max()        #datetime.date
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
-    latestusa = date(int(usatime[2]),int(usatime[0]),int(usatime[1]))
+    latestusa = date(2000+int(usatime[2]),int(usatime[0]),int(usatime[1]))
     globaltime = latestglobal.split("/")
-    latestglobal = date(int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
-    latestON = "\nAs of "+' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
-    latestTO = "\nAs of "+' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
-    latestusa = "\nAs of"+' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
-    latestglobal = "\nAs of"+' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
+    latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
+    latestON = ' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
+    latestTO = ' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
+    latestusa = ' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
+    latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
         
     TOneighborhoods["ProvincialTO"] = {"CASES":ontario["TORONTO"],
                                        "FATAL":ontario_d["TORONTO"],

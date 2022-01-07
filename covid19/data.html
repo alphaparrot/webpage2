@@ -136,11 +136,176 @@
     </style>
 
     <script src="js/prefixfree.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 
+  <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/lib/codemirror.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/addon/runmode/runmode-standalone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/python/python.min.js"></script>
+ 
 
 	</head>
 	<body>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code1");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
 
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code2");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code3");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code4");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code5");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code6");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code7");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code8");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code9");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code10");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>-->
+    
 <!--    <div class="globalWrapper">
         <div id="tableOfContents">
         <h2><a id="toc" href="#">Table of Contents</a></h2>
@@ -205,7 +370,7 @@
                                         <li><a href="index.html#Canada">Canada</a></li>
                                         <li><a href="index.html#USA">USA</a></li>
                                         <li><a href="index.html#Global">Global</a></li>
-                                        <li><a href="data.html">How to Use</a></li>
+                                        <li><a class="active" href="data.html">Data</a></li>
                                         </ul>
                                         </nav>
 				</div>
@@ -242,6 +407,7 @@ function setIFrameSize() {
                                 <header>
 <!-- HEADER -->
 <!--                                         <h2><a name="current">PhD Research</a></h2> -->
+                                <h2><a name="current">Using the HDF5 Datasets</a></h2>
                                 </header>
                                 <p style="font-size:25px">Important Disclaimers</p>
                                 <ul style="font-weight:bold;list-style-type:disc;">
@@ -263,16 +429,79 @@ function setIFrameSize() {
                                 </ul>
                                 <p>I have repackaged the data from the various datasets into a hierarchical data format (HDF-5) that is available to download using the links on the right-hand side of the page. These datasets contain data all formatted the same way, with similar reference patterns, from national to local scales. The datasets also include my R<sub>t</sub> values, along with the posterior probability distributions and likelihood functions (this accounts for the bulk of the dataset's size). A slim version that omits the posteriors and likelihoods is also available.</p>
 <!-- BODY -->
+                            <br>
+                                <h2>Accessing the HDF5 Datasets with h5py</h2>
+                                <br>
+                                <p>My preferred way to access data is via Python, and while the Hierarchical Data Format is language-agnostic and can be accessed in many different languages, I am most familiar with the Python bindings via the <a href="https://pypi.org/project/h5py/" target="_blank">h5py library</a>. A short primer on accessing and plotting data from my datasets in Python using <a href="https://matplotlib.org/" target="_blank">matplotlib</a> is shown below.</p>
+                                <br>
+                                <h3>Opening the file and accessing variables</h3><br>
+                                <p>First we'll start a python interpreter, import the h5py library, open a file, and extract the cases timeseries for the state of Ohio (I'm just picking a random location here). Remember that once a file has been opened, it is in use until either it is closed or the Python interpreter exits.</p>
                             
+<pre style="all:revert; background-color:#e6e6e6; font-size:small"><code class="prettyprint lang-bsh">$ python</code></pre>
+<pre style="all:revert; background-color:#e6e6e6; font-size:small"><code class="prettyprint lang-py" id="python_code1">import h5py as h5
 
-<!--                            <div class="image full">
-                                    <img src="imgs/lprx_1.3bar.gif" alt="True-color rendering of model output">
-                                    <div class="description">
-                                    <p class="description content"> A true-color rendering of a tidally-locked planet viewed at different phases, simulated with the LMD Generic model, using spectral data computed by SBDART. </p>
-                                    </div></a>
-                                </div>-->
+hfile = h5.File("adivparadise_covid19data_slim.hdf5","r")
+ohio_cases = hfile["United States/Ohio/cases"][:]
+</code></pre>
 
+<p>Note that we needed to use the <code style="all:revert; font-size:small" class="prettyprint lang-py">[:]</code> slice operator to retrieve the data from the file; this is because h5py will not load data into memory unless it is explicitly asked to--this is very important for large datasets. The <code style="all:revert; font-size:small" class="prettyprint lang-py">[:]</code> operator tells h5py to retrieve all the data from the variable; we could also have specified that only a portion should be read.</p>
+<p>Note as well that the dataset has a hierarchical structure, similar to a file tree (this is in fact where the format's name, "Hierarchical Data Format", comes from). The datasets are structured by geographical units, so Ohio is housed within the United States, and individual Ohio counties are housed with Ohio. For example, Fulton County, Ohio, could be accessed with <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code2">hfile["United States/Ohio/Fulton/cases"][:]</code>.</p>
+<p>Note as well that we had to specify that we wanted <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code3">"cases"</code>. This is because for each geographical unit, there are multiple variables you could access. <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code4">hfile["United States/Ohio"]</code> on its own is a <b>group</b>, within which you may find variables as well as other groups, such as the Fulton County group.</p>
+<p>To get a list of all the variables and groups contained within a group, we can use h5py's <code style="all:revert; font-size:small">visit</code> function:</p>
+
+<pre style="all:revert; background-color:#e6e6e6; font-size:small"><code class="prettyprint lang-py" id="python_code5">def printname(name):
+   print(name)
+   
+hfile.visit(printname)
+</code></pre>
+
+<p>The <code style="all:revert; font-size:small">printname</code> routine we defined is iteratively called over everything in the file's hierarchy, and simply receives the name of each variable or group and prints it to the standard output. We can also use this for specific groups within the larger dataset:</p>
+
+<pre style="all:revert; background-color:#e6e6e6; font-size:small"><code class="prettyprint lang-py" id="python_code6">
+hfile["United States/Ohio"].visit(printname)
+
+
+</pre></code>
+
+<p>Every group is guaranteed to have at minimum <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code7">"cases"</code>, <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code8">"Rt"</code> (the effective reproductive number), and <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code9">"latestdate"</code>, the latest date for which data was found in the source dataset (John's Hopkins for US and global data, Ontario Public Health for Ontario public health units (PHUs), and Toronto Public Health for Toronto neighborhoods). Some groups may have more data, such as deaths, hospitalizations, population, active cases per day, and in the non-slim file, the posterior distributions and likelihood functions for the R<sub>t</sub> values.</p>
+<br>
+    <h3>An example: plotting the 7-day average cases per 100k for the United Kingdom</h3><br>
+    
+<p>For this example, we will need <a href="https://matplotlib.org/" target="_blank">matplotlib</a> as well as <a href="https://numpy.org/install/" target="_blank">numpy</a>, the latter of which will be used to compute the 7-day average using the <code style="all:revert; font-size:small" class="prettyprint lang-py" id="python_code">numpy.convolve</code> function.</p>
+
+<pre style="all:revert; background-color:#e6e6e6; font-size:small"><code class="prettyprint lang-py" id="python_code10">import numpy as np
+import matplotlib.pyplot as plt
+
+cases = hfile["United Kingdom/cases"][:]
+population = hfile["United Kingdom/population"][()]
+latest_date = hfile["United Kingdom/latestdate"][()]
+
+cases_per_100k = cases/population * 1.0e5 #Multiply by 100k to get cases per 100k
+
+cases_per_100k_7day = np.convolve(cases_per_100k,np.ones(7),'valid')/7.0
+
+days_before = np.arange(len(cases_per_100k_7day)) - len(cases_per_100k_7day) #max value is now 0
+
+#Create the plot
+fig,axes = plt.subplots(figsize=(14,8))
+axes.plot(days_before, cases_per_100k_7day)
+axes.set_xlabel("Days before "+latest_date)
+axes.set_ylabel("7-day Average of Daily Cases per 100k")
+axes.set_title("Average Daily cases for the UK as of "+latest_date)
+plt.show()
+</code></pre>
+
+<p>Note that for the population and latest date, we had to use <code style="all:revert; font-size:small" class="prettyprint lang-py">[()]</code> instead of <code style="all:revert; font-size:small" class="prettyprint lang-py">[:]</code>. This is because those variables have only a single value each. Trying to use the latter would have returned an error. The <code style="all:revert; font-size:small" class="prettyprint lang-py">np.arange</code> function generated a list of integers from 1 to the number given (the length of the averaged cases list), and then we subtracted the maximum value to get a list that represented the number of days before the latest date in the data, which we used for our X-axis.</p>
+                              
+<p>This produces a plot that might look like the following:</p>
+
+     
+                                <br>
                                 
+                                <div class="image full">
+                                    <img src="UK_example.png" alt="Example of UK 7-day average daily cases">
+                                </div>
+                                <br>
                                 </section>
                         </div>
                         
@@ -284,7 +513,7 @@ function setIFrameSize() {
 								<ul class="style1">
 								<li><a href="adivparadise_covid19data_slim.hdf5" download>HDF5 (Slim)</a></li>
 								<li><a href="adivparadise_covid19data.hdf5" download>HDF5</a></li>
-								<li><a href="data.html">How to Use</li>
+								<li>How to Use</li>
 								</ul>
                                                         </section>
                                                 </div>
