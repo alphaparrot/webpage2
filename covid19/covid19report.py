@@ -302,7 +302,7 @@ def plot_stateRt(state,dataset,timestamp):
         os.system('mkdir "%s"'%state)
     
     plt.axhline(1.0,linestyle='--',color='r')
-    data = dataset[state]
+    data = dataset["United States"][state]
     y = day5avg(np.diff(data))
     r,p,l = Rt(y,interval=7)
     week2r = week2avg(r)
@@ -323,7 +323,7 @@ def plot_stateRtH5(state,dataset,timestamp):
         os.system('mkdir "%s"'%state)
     
     plt.axhline(1.0,linestyle='--',color='r')
-    r = dataset[state]["Rt"][:]
+    r = dataset["United States"][state]["Rt"][:]
     week2r = week2avg(r)
     time1 = np.arange(len(r))-len(r)
     time2 = np.arange(len(week2r))-len(week2r)
@@ -1560,12 +1560,12 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
         os.system("mkdir %s"%fstub)
         
     #These are all cumulative
-    cases = np.append([0,],np.cumsum(dataset[state][county]["cases"][:]))
-    population = float(dataset[state][county]["population"][()])
+    cases = np.append([0,],np.cumsum(dataset["United States"][state][county]["cases"][:]))
+    population = float(dataset["United States"][state][county]["population"][()])
     pathdir = "%s/%s"%(fstub1,fstub2)
-    statecases = np.append([0,],np.cumsum(dataset[state]["cases"][:]))
-    statepopulation = float(dataset[state]["population"][()])
-    timestamp = dataset[state][county]["timestamp"][()]
+    statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
+    statepopulation = float(dataset["United States"][state]["population"][()])
+    timestamp = dataset["United States"][state][county]["timestamp"][()]
     
     dcases = np.diff(cases)
     dstatecases = np.diff(statecases)
@@ -1644,9 +1644,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
     plt.close('all')
     
-    r = dataset[state][county]["Rt"][:]
+    r = dataset["United States"][state][county]["Rt"][:]
     r2wk = week2avg(r)
-    r2 = dataset[state]["Rt"][:]
+    r2 = dataset["United States"][state]["Rt"][:]
     r2wk2 = week2avg(r2)
     fig,ax = plt.subplots(figsize=(14,7))
     plt.plot(np.arange(len(r))-len(r),r,label="%s County R$_t$"%county,color='k',alpha=0.4)
