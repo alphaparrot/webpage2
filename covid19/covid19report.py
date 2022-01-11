@@ -5902,14 +5902,11 @@ def netcdf():
                 r,lp,ll = Rt(day5avg(ctotal))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                del lp
+                del ll
                 ncd[ckey]["Rt"][:] = r
-                ncd[ckey]["Rpost"][:] = pd
-                ncd[ckey]["Rlike"][:] = ld
+                ncd[ckey]["Rpost"][:] = p
+                ncd[ckey]["Rlike"][:] = l
                 ncd[ckey]["cases"][:] = ctotal
                 ncd[ckey]["deaths"][:] = dtotal
                 countrycases.set_auto_mask(False)
@@ -5959,14 +5956,11 @@ def netcdf():
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                     p = np.exp(lp)
                     l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    del lp
+                    del ll
                     ncd["United States"][ckey]["Rt"][:] = r
-                    ncd["United States"][ckey]["Rpost"][:] = pd
-                    ncd["United States"][ckey]["Rlike"][:] = ld
+                    ncd["United States"][ckey]["Rpost"][:] = p
+                    ncd["United States"][ckey]["Rlike"][:] = l
                     ncd["United States"][ckey]["cases"][:] = ctotal
                     ncd["United States"][ckey]["deaths"][:] = dtotal
                     statecases.set_auto_mask(False)
@@ -6008,14 +6002,11 @@ def netcdf():
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                del lp
+                del ll
                 ncd["Canada"][ckey]["Rt"][:] = r
-                ncd["Canada"][ckey]["Rpost"][:] = pd
-                ncd["Canada"][ckey]["Rlike"][:] = ld
+                ncd["Canada"][ckey]["Rpost"][:] = p
+                ncd["Canada"][ckey]["Rlike"][:] = l
                 ncd["Canada"][ckey]["cases"][:] = ctotal
                 ncd["Canada"][ckey]["deaths"][:] = dtotal
                 provincecases.set_auto_mask(False)
@@ -6061,14 +6052,11 @@ def netcdf():
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                del lp
+                del ll
                 ncd["Canada/Ontario"][ckey]["Rt"][:] = r
-                ncd["Canada/Ontario"][ckey]["Rpost"][:] = pd
-                ncd["Canada/Ontario"][ckey]["Rlike"][:] = ld
+                ncd["Canada/Ontario"][ckey]["Rpost"][:] = p
+                ncd["Canada/Ontario"][ckey]["Rlike"][:] = l
                 ncd["Canada/Ontario"][ckey]["cases"][:] = ctotal
                 ncd["Canada/Ontario"][ckey]["deaths"][:] = dtotal
                 ncd["Canada/Ontario"][ckey]["active"][:] = atotal
@@ -6137,14 +6125,11 @@ def netcdf():
             r,lp,ll = Rt(day5avg(ctotal.astype(float)))
             p = np.exp(lp)
             l = np.exp(ll)
-            pd = np.zeros((p.shape[0],nr))
-            ld = np.zeros((l.shape[0],nr))
-            for t in range(p.shape[0]):
-                pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+            del lp
+            del ll
             ncd["Canada/Ontario/Toronto"][ckey]["Rt"][:] = r
-            ncd["Canada/Ontario/Toronto"][ckey]["Rpost"][:] = pd
-            ncd["Canada/Ontario/Toronto"][ckey]["Rlike"][:] = ld
+            ncd["Canada/Ontario/Toronto"][ckey]["Rpost"][:] = p
+            ncd["Canada/Ontario/Toronto"][ckey]["Rlike"][:] = l
             ncd["Canada/Ontario/Toronto"][ckey]["cases"][:] = ctotal
             ncd["Canada/Ontario/Toronto"][ckey]["deaths"][:] = dtotal
             ncd["Canada/Ontario/Toronto"][ckey]["hospitalized"][:] = htotal
@@ -6200,14 +6185,11 @@ def netcdf():
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                     p = np.exp(lp)
                     l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
+                    del lp
+                    del ll
                     ncd["United States/%s"%str.title(str(state))][ckey]["Rt"][:] = r
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rpost"][:] = pd
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rlike"][:] = ld
+                    ncd["United States/%s"%str.title(str(state))][ckey]["Rpost"][:] = p
+                    ncd["United States/%s"%str.title(str(state))][ckey]["Rlike"][:] = l
                     ncd["United States/%s"%str.title(str(state))][ckey]["cases"][:] = ctotal
                     countycases.set_auto_mask(False)
                     countypopulation.set_auto_mask(False)
@@ -6556,13 +6538,8 @@ def hdf5():
                 r,lp,ll = Rt(day5avg(ctotal))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
-                del p
-                del l
+                del lp
+                del ll
                     
                 countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=ctotal)
@@ -6571,9 +6548,9 @@ def hdf5():
                 countryRt = hdf.create_dataset("/"+ckey+"/Rt",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=r.astype("float32"))
                 countryRpost = hdf.create_dataset("/"+ckey+"/Rpost",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=pd)
+                                                  shuffle=True,fletcher32=True,data=p)
                 countryRlike = hdf.create_dataset("/"+ckey+"/Rlike",compression='gzip',compression_opts=9,
-                                                  shuffle=True,fletcher32=True,data=ld)
+                                                  shuffle=True,fletcher32=True,data=l)
                 countrypopulation = hdf.create_dataset("/"+ckey+"/population",data=float(countrypops[country]))
                 latest = hdf.create_dataset("/"+ckey+"/latestdate",data=latestglobal)
 
@@ -6631,13 +6608,8 @@ def hdf5():
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                     p = np.exp(lp)
                     l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
-                    del p
-                    del l
+                    del lp
+                    del ll
                         
                     statecases  = hdf.create_dataset("/United States/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
@@ -6650,10 +6622,10 @@ def hdf5():
                                                      data=r.astype("float32"))
                     stateRpost  = hdf.create_dataset("/United States/"+ckey+"/Rpost",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=pd)
+                                                     data=p)
                     stateRlike  = hdf.create_dataset("/United States/"+ckey+"/Rlike",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=ld)
+                                                     data=l)
                     statepopulation = hdf.create_dataset("/United States/"+ckey+"/population",data=float(statepops[state]))
                     latest = hdf.create_dataset("/United States/"+ckey+"/latestdate",data=latestusa)
   
@@ -6707,13 +6679,8 @@ def hdf5():
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
-                del p
-                del l
+                del lp
+                del ll
                     
                 provincecases  = hdf.create_dataset("/Canada/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
@@ -6726,10 +6693,10 @@ def hdf5():
                                                      data=r.astype("float32"))
                 provinceRpost  = hdf.create_dataset("/Canada/"+ckey+"/Rpost",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=pd)
+                                                     data=p)
                 provinceRlike  = hdf.create_dataset("/Canada/"+ckey+"/Rlike",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=ld)
+                                                     data=l)
                 provincepopulation = hdf.create_dataset("/Canada/"+ckey+"/population",data=float(provincepops[province]))
                 latest = hdf.create_dataset("/Canada/"+ckey+"/latestdate",data=latestglobal)
 
@@ -6783,13 +6750,8 @@ def hdf5():
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
-                del p
-                del l
+                del lp
+                del ll
                 phucases = hdf.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
                                                      data=ctotal.astype(np.short))
@@ -6807,10 +6769,10 @@ def hdf5():
                                                      data=r.astype('float32'))
                 phuRpost = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rpost",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=pd)
+                                                     data=p)
                 phuRlike = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rlike",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=ld)
+                                                     data=l)
                 latest = hdf.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
@@ -6953,14 +6915,9 @@ def hdf5():
             r,lp,ll = Rt(day5avg(ctotal.astype(float)))
             p = np.exp(lp)
             l = np.exp(ll)
-            pd = np.zeros((p.shape[0],nr))
-            ld = np.zeros((l.shape[0],nr))
-            for t in range(p.shape[0]):
-                pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
 
-            del p
-            del l
+            del lp
+            del ll
 
             areacases = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
@@ -6979,10 +6936,10 @@ def hdf5():
                                                      data=r.astype("float32"))
             areaRpost = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rpost",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=pd)
+                                                     data=p)
             areaRlike = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rlike",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=ld)
+                                                     data=l)
             areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
                                                 data=float(TOneighborhoods["units"][neighborhood]["POP"]))
             latest = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/latestdate",data=latestTO)
@@ -7058,14 +7015,9 @@ def hdf5():
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                     p = np.exp(lp)
                     l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                         
-                    del p
-                    del l
+                    del lp
+                    del ll
                     countycases = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/cases",
                                                      compression='gzip',compression_opts=9,shuffle=True,
                                                      fletcher32=True,data=ctotal.astype(np.short))
@@ -7074,10 +7026,10 @@ def hdf5():
                                                      fletcher32=True,data=r.astype('float'))
                     countyRpost = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/Rpost",
                                                      compression='gzip',compression_opts=9,shuffle=True,
-                                                     fletcher32=True,data=pd)
+                                                     fletcher32=True,data=p)
                     countyRlike = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/Rlike",
                                                      compression='gzip',compression_opts=9,shuffle=True,
-                                                     fletcher32=True,data=ld)
+                                                     fletcher32=True,data=l)
                     countypopulation = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/population",
                                                      data=float(get_countypop(county,state)))
                     latest = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/latestdate",
@@ -7975,13 +7927,6 @@ def hdf5_slim():
                 ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
                 dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
                 r,lp,ll = Rt(day5avg(ctotal))
-                p = np.exp(lp)
-                l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     
                 countrycases = hdf.create_dataset("/"+ckey+"/cases",compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,data=ctotal)
@@ -8015,13 +7960,6 @@ def hdf5_slim():
                     ctotal = np.diff(np.append([0,],usa[state])).astype(int)
                     dtotal = np.diff(np.append([0,],usa[state])).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                    p = np.exp(lp)
-                    l = np.exp(ll)
-                    pd = np.zeros((p.shape[0],nr))
-                    ld = np.zeros((l.shape[0],nr))
-                    for t in range(p.shape[0]):
-                        pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                        ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                         
                     statecases  = hdf.create_dataset("/United States/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
@@ -8053,13 +7991,6 @@ def hdf5_slim():
                 ctotal = np.diff(np.append([0,],canada[province])).astype(int)
                 dtotal = np.diff(np.append([0,],canada[province])).astype(int)
                 r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                p = np.exp(lp)
-                l = np.exp(ll)
-                pd = np.zeros((p.shape[0],nr))
-                ld = np.zeros((l.shape[0],nr))
-                for t in range(p.shape[0]):
-                    pd[t,:] = np.interp(rrange[:],rbase,p[t,:])
-                    ld[t,:] = np.interp(rrange[:],rbase,l[t,:])
                     
                 provincecases  = hdf.create_dataset("/Canada/"+ckey+"/cases",compression='gzip',
                                                      compression_opts=9,shuffle=True,fletcher32=True,
