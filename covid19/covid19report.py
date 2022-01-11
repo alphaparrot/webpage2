@@ -1565,7 +1565,7 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     pathdir = "%s/%s"%(fstub1,fstub2)
     statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
     statepopulation = float(dataset["United States"][state]["population"][()])
-    timestamp = dataset["United States"][state][county]["timestamp"][()]
+    timestamp = dataset["United States"][state][county]["latestdate"][()]
     
     dcases = np.diff(cases)
     dstatecases = np.diff(statecases)
