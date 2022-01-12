@@ -2011,7 +2011,7 @@ def reportH5():
         indexf.write("\n".join(html))
     
     countries = []
-    for country in hdf:
+    for country in dataset:
         if not isinstance(dataset[country],h5.Dataset):
             countries.append(country)
             if os.path.exists("%s_summary.png"%country):
@@ -6306,6 +6306,8 @@ def hdf5():
     TOneighborhoods = {"units":{}}
     with open("toronto_cases.csv","r") as df:
         torontocsv = df.read().split('\n')[1:]
+        if len(torontocsv)==0:
+            raise Exception("Toronto file appears to be empty!!")
         while torontocsv[-1]=="":
             torontocsv = torontocsv[:-1]
         torontoraw = np.zeros(len(torontocsv))
