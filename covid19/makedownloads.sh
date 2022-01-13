@@ -6,6 +6,9 @@ if [ ! -d "/home/adivp416/public_html/covid19/github" ]; then
 fi
 cd /home/adivp416/public_html/covid19/github
 
+ionice -c 3 git stash
+ionice -c 2 -n 7 git pull
+
 ionice -c 2 -n 7 wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
 ionice -c 2 -n 7 wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_US.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
 ionice -c 2 -n 7 wget -O /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv
