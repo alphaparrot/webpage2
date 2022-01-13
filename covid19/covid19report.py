@@ -622,7 +622,7 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
 
     fig,axes=plt.subplots(figsize=(14,9))
     curve = day5avg(cases)
-    plt.plot(np.arange(len(curve))-len(curve),curve/dataset["units"][neighborhood]["POP"] * 1e5,marker='.',
+    plt.plot(np.arange(len(curve))-len(curve),curve/population * 1e5,marker='.',
              label=neighborhood)
     curve2 = TOcasesavg
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,linestyle='--',color='k',alpha=1.0,label="Toronto")
@@ -6634,6 +6634,10 @@ def hdf5():
             areahosp.attrs["long_name"] = "day's cases which ever required hospitalization"
             arearecovered.attrs["long_name"] = "day's cases which have recovered"
             areapopulation.attrs["long_name"] = "population"
+            
+            
+            hdf.flush()
+            hdfs.flush()
         
         del TOneighborhoods
         
@@ -6824,6 +6828,10 @@ def hdf5():
                 phuactive.attrs["long_name"] = "active cases"
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
                 #phupopulation.long_name = "population"
+                
+                
+                hdf.flush()
+                hdfs.flush()
         
         
         del otimes 
@@ -6954,6 +6962,9 @@ def hdf5():
                         else:
                             hdf["United States/%s/cases"%state][:] += cases
                             hdfs["United States/%s/cases"%state][:] += cases
+                        
+                        hdf.flush()
+                        hdfs.flush()
                             
                 else:
                     first=False
@@ -6998,6 +7009,9 @@ def hdf5():
                 stateRt.attrs["units"] = "secondary infections case-1"
                 stateRt.attrs["standard_name"] = "R_t"
                 stateRt.attrs["long_name"] = "Effective Reproductive Number"
+                
+                hdf.flush()
+                hdfs.flush()
         
         usadcsv = []
         with open("github/time_series_covid19_deaths_US.csv") as csvfile:
@@ -7050,6 +7064,10 @@ def hdf5():
                         else:
                             hdf["United States/%s/deaths"%state][:] += deaths
                             hdfs["United States/%s/deaths"%state][:] += deaths
+                            
+                        
+                        hdf.flush()
+                        hdfs.flush()
                             
                 else:
                     first=False
@@ -7226,6 +7244,9 @@ def hdf5():
                 countrydeaths.attrs["long_name"] = "New Deaths per Day"
                 countryRt.attrs["long_name"] = "Effective Reproductive Number"
                 countrypopulation.attrs["long_name"] = "Population"
+                
+                hdf.flush()
+                hdfs.flush()
             
                     
         print("Doing provinces")   
@@ -7323,6 +7344,9 @@ def hdf5():
                 provincecases.attrs["long_name"] = "new cases per day"
                 provincedeaths.attrs["long_name"] = "new deaths per day"
                 provincepopulation.attrs["long_name"] = "population"
+                
+                hdf.flush()
+                hdfs.flush()
                     
     except:
         hdf.close()
