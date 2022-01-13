@@ -6515,6 +6515,30 @@ def hdf5():
     
     try:
         print("doing neighborhoods")
+        
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        skipnext=False
+        for line in index:
+            if not skipnext:
+                if "<!-- TORONTOFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    for neighborhood in sorted(TOneighborhoods["units"]):
+                        html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
+                                                                              neighborhood))
+                elif "<!-- PLACEHOLDER -->" in line:
+                    skipnext=True
+                elif "<option" in line and "<!--TO-->" in line:
+                    pass #skip thi line too 
+                else:
+                    html.append(line)
+            else:
+                skipnext=False
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+        
         for neighborhood in sorted(TOneighborhoods["units"]):
             ckey = neighborhood.replace("/","-")
             ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
@@ -6679,6 +6703,32 @@ def hdf5():
         latestON = otimes["TORONTO"].max() #datetime.date
         latestON = ' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
         
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        skipnext=False
+        for line in index:
+            if not skipnext:
+                if "<!-- ONTARIOFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    for k in sorted(ontario):
+                        if len(ontario[k][:])>10:
+                           phu = "%s"%str.title(str(k))
+                           html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+                elif "<!-- PLACEHOLDER -->" in line:
+                    skipnext=True
+                elif "<option" in line and "<!--ON-->" in line:
+                    pass #skip thi line too 
+                else:
+                    html.append(line)
+            else:
+                if "<!-- TRIPWIRE -->" in line:
+                    html.append(line)
+                skipnext=False
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+        
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
@@ -6786,6 +6836,9 @@ def hdf5():
         print("doing states")
         
         usacsv = []
+        
+        states = {}
+        
         with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
             creader = csv.reader(csvfile,delimiter=',',quotechar='"')
             first = True
@@ -6798,6 +6851,10 @@ def hdf5():
                     and "Virgin Islands" not in state and "Military" not in state\
                     and "Recovered" not in state and "Prisons" not in state\
                     and "Hospitals" not in state:
+                        if state not in states:
+                            states[state] = [county,]
+                        else:
+                            states[state].append(county)
                         cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
                         countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
@@ -6996,6 +7053,62 @@ def hdf5():
                             
                 else:
                     first=False
+                    
+        uskeys = sorted(states.keys())
+        ckeys = uskeys[:]
+        ckeys.remove('Guam') #No counties in Guam
+        
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        skipnext=False
+        for line in index:
+            if not skipnext:
+                if "<!-- USAFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    for k in uskeys:
+                        html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
+                elif "<!-- COUNTYFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    n=0
+                    for k in ckeys:
+                        html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
+                        n+=1
+                elif "<!-- PLACEHOLDER -->" in line:
+                    skipnext=True
+                elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
+                    pass #skip thi line too 
+                else:
+                    html.append(line)
+            else:
+                if "<!-- TRIPWIRE -->" in line:
+                    html.append(line)
+                skipnext=False
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+            
+        #Create linked state/county menus for the USA section
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        for line in index:
+            if "//COUNTY" in line:
+                html.append(line)
+                for state in ckeys:
+                    options = '"'
+                    for county in sorted(states[state]):
+                        options+="<option value='%s|%s'>%s</option>"%(county,state,county)
+                    options += '",'
+                    html.append("\t"+options+" //CY")
+            elif "//CY" in line:
+                pass
+            else:
+                html.append(line)
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+        
         
         globaltime = latestglobal.split("/")
         latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
@@ -7017,6 +7130,31 @@ def hdf5():
         canada = extract_country(dataset,"Canada")
         ca_deaths = extract_country(ddataset,"Canada")
 
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        skipnext=False
+        for line in index:
+            if not skipnext:
+                if "<!-- GLOBALFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    for country in sorted(countries):
+                        if "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
+                            html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
+                elif "<!-- PLACEHOLDER -->" in line:
+                    skipnext=True
+                elif "<option" in line and "<!--GL-->" in line:
+                    pass #skip thi line too 
+                else:
+                    html.append(line)
+            else:
+                if "<!-- TRIPWIRE -->" in line:
+                    html.append(line)
+                skipnext=False
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+        
         
         print("doing countries")
         for country in sorted(countries):
@@ -7091,6 +7229,32 @@ def hdf5():
             
                     
         print("Doing provinces")   
+        
+        with open("index.html","r") as indexf:
+            index = indexf.read().split('\n')
+        html = []
+        skipnext=False
+        for line in index:
+            if not skipnext:
+                if "<!-- CANADAFORM -->" in line:
+                    html.append(line)
+                    skipnext=True
+                    for k in sorted(canada):
+                        if "Princess" not in k and k!="Recovered" and k!="Repatriated Travellers" and k!="Total":
+                            html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
+                elif "<!-- PLACEHOLDER -->" in line:
+                    skipnext=True
+                elif "<option" in line and "<!--CA-->" in line:
+                    pass #skip thi line too 
+                else:
+                    html.append(line)
+            else:
+                if "<!-- TRIPWIRE -->" in line:
+                    html.append(line)
+                skipnext=False
+        with open("index.html","w") as indexf:
+            indexf.write("\n".join(html))
+        
         for province in sorted(canada):
             if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
                 ckey = str.title(str(province))
@@ -7168,6 +7332,7 @@ def hdf5():
     hdf.close()
     hdfs.close()
     print("Files completed and closed")
+    
  
 def netcdf_slim():
     import netCDF4 as nc
