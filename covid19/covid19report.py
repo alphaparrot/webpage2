@@ -1,4 +1,5 @@
 import gc
+from memory_profiler import profile
 
 def dectime(timeseries,plot=True,baseline=7):
     #Return the time it takes to increase by a factor of 10, in days
@@ -67,6 +68,7 @@ def active2wk(data):
         cumsum[n-14] = np.sum(np.diff(data)[n-14:n])
     return cumsum
 
+@profile
 def Rt(dailycases,interval=7,averaged=True,override=False): #Effective reproductive number, computed using the Bayesian method described in Yap & Yong (2020, https://doi.org/10.1101/2020.06.02.20120188)
     reff = np.geomspace(0.01,10.0,num=1000)
     rrange = np.geomspace(0.1,10.0,num=100)
@@ -121,6 +123,7 @@ def getcountries(dataset):
         countries.append(linedata[1])
     return sorted(list(set(countries)))
 
+@profile
 def extract_country(dataset,country,firstdatecol=5):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -237,6 +240,7 @@ def extract_country(dataset,country,firstdatecol=5):
         #    countrydata["Total"] += countrydata[place]
     return countrydata
 
+@profile
 def extract_usa(dataset,firstdatecol=12):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -261,6 +265,7 @@ def extract_usa(dataset,firstdatecol=12):
     
     return countrydata
 
+@profile
 def extract_county(us_dataset,county,state="Minnesota",firstdatecol=12):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -297,6 +302,7 @@ def get_countypop(county,state):
                     return int(row[18])
     return -1
 
+@profile
 def plot_stateRt(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
@@ -317,7 +323,8 @@ def plot_stateRt(state,dataset,timestamp):
     plt.savefig("%s/%s_rt.png"%(state,state),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
     plt.close('all'); gc.collect()
-    
+
+@profile    
 def plot_stateRtH5(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
@@ -337,6 +344,7 @@ def plot_stateRtH5(state,dataset,timestamp):
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
     plt.close('all'); gc.collect()
 
+@profile
 def country_summary(country,dataset,deathdata,countrypops,timestamp):
     
     fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
@@ -386,7 +394,7 @@ def country_summary(country,dataset,deathdata,countrypops,timestamp):
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-
+@profile
 def country_summaryH5(country,dataset):
     
     fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
@@ -440,6 +448,7 @@ def country_summaryH5(country,dataset):
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
     plt.close('all'); gc.collect()    
 
+@profile
 def plot_TOneighborhoodH5(neighborhood,dataset):
 
     fnamestub = neighborhood
@@ -637,6 +646,7 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
+@profile    
 def plot_TOneighborhood(neighborhood,dataset,timestamp):
        
     fnamestub = neighborhood
@@ -828,7 +838,8 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all'); gc.collect()
-    
+
+@profile    
 def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population,timestamp):
     '''national_cases and national_deaths should be population-adjusted.'''
     
@@ -1005,7 +1016,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-
+@profile
 def plotStateOrProvinceH5(name,country,dataset):
     '''national_cases and national_deaths should be population-adjusted.'''
     
@@ -1191,7 +1202,7 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.close('all'); gc.collect()
         
     
-    
+@profile    
 def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     
     fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
@@ -1286,7 +1297,7 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-
+@profile
 def plotOntarioH5(phu,dataset):
     
     fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
@@ -1390,6 +1401,7 @@ def plotOntarioH5(phu,dataset):
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
+@profile    
 def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
@@ -1547,7 +1559,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-   
+@profile   
 def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulation,timestamp):
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
@@ -1708,7 +1720,7 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
       
           
     
-
+@profile
 def plotgroup(group,directory='mygroup'):
     if not os.path.isdir(directory):
         os.system("mkdir %s"%directory)
@@ -1831,7 +1843,8 @@ def _log(destination,string):
     else:
         with open(destination,"a") as f:
             f.write(string+"\n")   
-    
+
+@profile    
 def reportH5():
     import h5py as h5
     import makehtml
@@ -3342,7 +3355,7 @@ def reportH5():
     
     _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
     
-    
+@profile    
 def report():
     
     os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">/home/adivp416/public_html/covid19/reportlog.txt')
@@ -6237,7 +6250,7 @@ def netcdf():
         raise
     ncd.close()
         
-        
+@profile        
 def hdf5():
     import h5py as h5
         
@@ -7892,7 +7905,8 @@ def netcdf_slim():
         ncd.close()
         raise
     ncd.close()
-       
+
+@profile       
 def hdf5_slim():
     import h5py as h5
     
