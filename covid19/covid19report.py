@@ -1,6 +1,8 @@
 import gc
 from memory_profiler import profile
 
+logfile = "reportlog.txt"
+
 def dectime(timeseries,plot=True,baseline=7):
     #Return the time it takes to increase by a factor of 10, in days
     lastweek = timeseries[-baseline:]
@@ -2056,11 +2058,11 @@ def reportH5():
         indexf.write("\n".join(html))
         
         
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
     for neighborhood in TOneighborhoods:
         plot_TOneighborhoodH5(neighborhood,dataset)
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
     
     latestTO = "\nAs of "+torontogroup["Alderwood/latestdate"][()]
     latestON = "\nAs of "+torontogroup["latestdate"][()]
@@ -2371,7 +2373,7 @@ def reportH5():
     plt.close('all'); gc.collect()
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     ongroup = dataset["Canada/Ontario"]
          
@@ -2508,12 +2510,12 @@ def reportH5():
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
     
     for province in cankeys:
         plotStateOrProvinceH5(province,"Canada",dataset)
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     #adivgroup = ["United States/Minnesota/Hennepin",
     #             "United States/Minnesota/Ramsey",
@@ -2558,7 +2560,7 @@ def reportH5():
                  
     #plotgroup(adivgroup,directory="adiv")
 
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
          
     latestglobal = "\nAs of "+dataset["Canada/latestdate"][()]
          
@@ -2832,7 +2834,7 @@ def reportH5():
     plt.savefig("caprov_drt_snapshot.pdf",bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Canadian provinces plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Canadian provinces plotted. \t%s"%systime.asctime(systime.localtime()))
     
     #Begin doing US
     
@@ -3013,12 +3015,12 @@ def reportH5():
     plt.close('all'); gc.collect()
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
     
     for place in uskeys:
         plot_stateRtH5(place,usa,latestusa)
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
     labels=[]
     ptotals = {}
@@ -3091,9 +3093,9 @@ def reportH5():
     for state in uskeys:
         plotStateOrProvinceH5(state,"United States",dataset)
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
     fig,ax=plt.subplots(figsize=(12,12))
     tmax = 0
@@ -3314,17 +3316,17 @@ def reportH5():
     plt.savefig("global_rt.pdf",bbox_inches='tight')
     plt.close('all'); gc.collect()
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Global data plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
     for country in countries:
         try:
             country_summaryH5(country,dataset)
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
+            _log(logfile,"%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
             makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
+            _log(logfile,"No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
     
     
     
@@ -3353,7 +3355,7 @@ def reportH5():
     #with open("index.html","w") as indexf:
         #indexf.write("\n".join(html))
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
     
 @profile    
 def report():
@@ -3396,7 +3398,7 @@ def report():
         popx = float(linedata[3])
         statepops[name] = popx
         
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -3436,7 +3438,7 @@ def report():
         for row in creader:
             usadcsv.append(row)
             
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
     ca_deaths = extract_country(ddataset,"Canada")
     us_deaths = extract_usa(usadcsv)
@@ -3654,7 +3656,7 @@ def report():
                                        "ACTIVE":ontario_a["TORONTO"],
                                        "RECOVERED":ontario_r["TORONTO"]}
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Toronto data loaded. \t%s"%systime.asctime(systime.localtime()))
 
     #Generate HTML pages
     import makehtml
@@ -3854,11 +3856,11 @@ def report():
         indexf.write("\n".join(html))
         
         
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
 
     for neighborhood in TOneighborhoods["units"]:
         plot_TOneighborhood(neighborhood,TOneighborhoods,latestTO)
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
     
          
     fig,ax=plt.subplots(figsize=(16,12))
@@ -4168,7 +4170,7 @@ def report():
     plt.close('all'); gc.collect()
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario_a.keys()):
@@ -4304,7 +4306,7 @@ def report():
             skipnext=False
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
     
     cankeys = []
     for province in canada:
@@ -4315,7 +4317,7 @@ def report():
                                 provincepops[province],latestglobal)
             cankeys.append(province)
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     adivgroup = [{"type":"county","dataset":usacsv,"state/province":"Minnesota",
                   "abbrev":"MN","place":"Hennepin","timestamp":latestusa},
@@ -4344,7 +4346,7 @@ def report():
                  
     plotgroup(adivgroup,directory="adiv")
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
          
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
@@ -4606,7 +4608,7 @@ def report():
     plt.savefig("canada_rt.pdf",bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
     labels=[]
     ptotals = {}
@@ -4935,14 +4937,14 @@ def report():
     plt.close('all'); gc.collect()
     
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
     
     for place in usa:
         if usa[place][-1]>=500 and place!="Total" and "Princess" not in place and "Virgin Islands" not in place and "Military" not in place\
         and "Recovered" not in place and "Prisons" not in place and "Hospitals" not in place: #Only plot places with >20 deaths
             plot_stateRt(place,usa,latestusa)
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","US states plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
     labels=[]
     ptotals = {}
@@ -5029,9 +5031,9 @@ def report():
                                 extract_country(ddataset,"US")["Total"]/float(countrypops["US"]),
                                 statepops[state],latestusa)
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
     fig,ax=plt.subplots(figsize=(12,12))
     tmax = 0
@@ -5383,18 +5385,18 @@ def report():
     plt.savefig("global_rt.pdf",bbox_inches='tight')
     plt.close('all'); gc.collect()
 
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Global data plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
     for country in countries:
         try:
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 country_summary(country,dataset,ddataset,countrypops,latestglobal)
-                _log("/home/adivp416/public_html/covid19/reportlog.txt","%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
+                _log(logfile,"%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
                 makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
+            _log(logfile,"No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
     
     
     for country in sorted(countries):
@@ -5426,7 +5428,7 @@ def report():
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
     
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
     
 def processcountiesH5(state):
     import h5py as h5
@@ -5444,14 +5446,14 @@ def processcountiesH5(state):
     for county in counties:
         try:
             plotCountyH5(county,state,dataset)
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
+            _log(logfile,"Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
             fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
         except:
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
+            _log(logfile,"Error encountered with %s County, %s:"%(county,state))
             print("Error encountered with %s County, %s:"%(county,state))
             traceback.print_exc()
             #raise
@@ -5476,7 +5478,7 @@ def processcounties(state):
         popx = float(linedata[3])
         statepops[name] = popx
         
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -5497,7 +5499,7 @@ def processcounties(state):
             
     usa = extract_usa(usacsv)
             
-    _log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    _log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
 
     latestusa = usacsv[0][-1]
     usatime = latestusa.split("/")
@@ -5508,14 +5510,14 @@ def processcounties(state):
     for county in counties:
         try:
             plotCounty(county,state,usacsv,usa,statepops[state],latestusa)
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
+            _log(logfile,"Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
             fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
         except:
-            _log("/home/adivp416/public_html/covid19/reportlog.txt","Error encountered with %s County, %s:"%(county,state))
+            _log(logfile,"Error encountered with %s County, %s:"%(county,state))
             print("Error encountered with %s County, %s:"%(county,state))
             traceback.print_exc()
             #raise
@@ -5652,7 +5654,7 @@ def netcdf():
         popx = float(linedata[3])
         statepops[name] = popx
         
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -5692,7 +5694,7 @@ def netcdf():
         for row in creader:
             usadcsv.append(row)
             
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
     ca_deaths = extract_country(ddataset,"Canada")
     us_deaths = extract_usa(usadcsv)
@@ -6254,7 +6256,7 @@ def netcdf():
 def hdf5():
     import h5py as h5
         
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -6302,7 +6304,7 @@ def hdf5():
         statepops[name] = popx
 
             
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
 
     timestamps = []
@@ -7412,7 +7414,7 @@ def netcdf_slim():
         popx = float(linedata[3])
         statepops[name] = popx
         
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -7452,7 +7454,7 @@ def netcdf_slim():
         for row in creader:
             usadcsv.append(row)
             
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
     ca_deaths = extract_country(ddataset,"Canada")
     us_deaths = extract_usa(usadcsv)
@@ -7946,7 +7948,7 @@ def hdf5_slim():
         popx = float(linedata[3])
         statepops[name] = popx
         
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
         
     globalconf = "github/time_series_covid19_confirmed_global.csv"
 
@@ -7986,7 +7988,7 @@ def hdf5_slim():
         for row in creader:
             usadcsv.append(row)
             
-    #_log("/home/adivp416/public_html/covid19/reportlog.txt","Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
+    #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
     ca_deaths = extract_country(ddataset,"Canada")
     us_deaths = extract_usa(usadcsv)
