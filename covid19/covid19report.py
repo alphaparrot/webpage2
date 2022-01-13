@@ -1043,7 +1043,7 @@ def plotStateOrProvinceH5(name,country,dataset):
     
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
-    plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
+    plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[country][name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
     plt.title("%s Daily New Cases"+timestamp)
