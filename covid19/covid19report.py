@@ -1,7 +1,9 @@
 import gc
-from memory_profiler import profile
+#from memory_profiler import profile
 
-logfile = "reportlog.txt"
+logfile = "/home/adivp416/public_html/covid19/reportlog.txt"
+def strtitle(string):
+    return str.title(str(string))
 
 def dectime(timeseries,plot=True,baseline=7):
     #Return the time it takes to increase by a factor of 10, in days
@@ -70,7 +72,7 @@ def active2wk(data):
         cumsum[n-14] = np.sum(np.diff(data)[n-14:n])
     return cumsum
 
-@profile
+#@profile
 def Rt(dailycases,interval=7,averaged=True,override=False): #Effective reproductive number, computed using the Bayesian method described in Yap & Yong (2020, https://doi.org/10.1101/2020.06.02.20120188)
     reff = np.geomspace(0.01,10.0,num=1000)
     rrange = np.geomspace(0.1,10.0,num=100)
@@ -125,7 +127,7 @@ def getcountries(dataset):
         countries.append(linedata[1])
     return sorted(list(set(countries)))
 
-@profile
+#@profile
 def extract_country(dataset,country,firstdatecol=5):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -242,7 +244,7 @@ def extract_country(dataset,country,firstdatecol=5):
         #    countrydata["Total"] += countrydata[place]
     return countrydata
 
-@profile
+#@profile
 def extract_usa(dataset,firstdatecol=12):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -267,7 +269,7 @@ def extract_usa(dataset,firstdatecol=12):
     
     return countrydata
 
-@profile
+#@profile
 def extract_county(us_dataset,county,state="Minnesota",firstdatecol=12):
     '''Give dataset as list of lines, country name, and
     which column is the first date of data (starting from 1)'''
@@ -304,7 +306,7 @@ def get_countypop(county,state):
                     return int(row[18])
     return -1
 
-@profile
+#@profile
 def plot_stateRt(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
@@ -326,7 +328,7 @@ def plot_stateRt(state,dataset,timestamp):
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
     plt.close('all'); gc.collect()
 
-@profile    
+#@profile    
 def plot_stateRtH5(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
@@ -346,7 +348,7 @@ def plot_stateRtH5(state,dataset,timestamp):
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
     plt.close('all'); gc.collect()
 
-@profile
+#@profile
 def country_summary(country,dataset,deathdata,countrypops,timestamp):
     
     fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
@@ -396,7 +398,7 @@ def country_summary(country,dataset,deathdata,countrypops,timestamp):
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile
+#@profile
 def country_summaryH5(country,dataset):
     
     fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
@@ -450,7 +452,7 @@ def country_summaryH5(country,dataset):
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
     plt.close('all'); gc.collect()    
 
-@profile
+#@profile
 def plot_TOneighborhoodH5(neighborhood,dataset):
 
     fnamestub = neighborhood
@@ -648,7 +650,7 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile    
+#@profile    
 def plot_TOneighborhood(neighborhood,dataset,timestamp):
        
     fnamestub = neighborhood
@@ -841,7 +843,7 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.close('all'); gc.collect()
 
-@profile    
+#@profile    
 def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population,timestamp):
     '''national_cases and national_deaths should be population-adjusted.'''
     
@@ -1018,7 +1020,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile
+#@profile
 def plotStateOrProvinceH5(name,country,dataset):
     '''national_cases and national_deaths should be population-adjusted.'''
     
@@ -1204,13 +1206,13 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.close('all'); gc.collect()
         
     
-@profile    
+#@profile    
 def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     
-    fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    fstub = strtitle(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir("ontario_%s"%fstub):
         os.system("mkdir ontario_%s"%fstub)
-    phuname = str.title(phu)
+    phuname = strtitle(phu)
     
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
     plt.xlabel("Days before Present")
@@ -1299,13 +1301,13 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile
+#@profile
 def plotOntarioH5(phu,dataset):
     
-    fstub = str.title(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    fstub = strtitle(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir("ontario_%s"%fstub):
         os.system("mkdir ontario_%s"%fstub)
-    phuname = str.title(phu)
+    phuname = strtitle(phu)
     
     if "population" in dataset["Canada/Ontario/%s"%phu]:
         population = dataset["Canada/Ontario/%s/population"%phu][()]
@@ -1403,10 +1405,10 @@ def plotOntarioH5(phu,dataset):
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile    
+#@profile    
 def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
     fstub1 = state.replace(" ","_").replace("&","and")
-    fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     
     pathdir = "%s/%s"%(fstub1,fstub2)
     
@@ -1561,10 +1563,10 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
     plt.close('all'); gc.collect()
     
-@profile   
+#@profile   
 def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulation,timestamp):
     fstub1 = state.replace(" ","_").replace("&","and")
-    fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+    fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     
     pathdir = "%s/%s"%(fstub1,fstub2)
     
@@ -1722,7 +1724,7 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
       
           
     
-@profile
+#@profile
 def plotgroup(group,directory='mygroup'):
     if not os.path.isdir(directory):
         os.system("mkdir %s"%directory)
@@ -1846,7 +1848,7 @@ def _log(destination,string):
         with open(destination,"a") as f:
             f.write(string+"\n")   
 
-@profile    
+#@profile    
 def reportH5():
     import h5py as h5
     import makehtml
@@ -1892,9 +1894,9 @@ def reportH5():
     for k in ontariogroup:
         if not isinstance(ontariogroup[k],h5.Dataset):
             ontario_phus.append(k)
-            fstub = str.title(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             if os.path.isdir("ontario_%s"%fstub):
-                makehtml.makephu(str.title(str(k)),"ontario_%s/%s"%(fstub,fstub))
+                makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub))
 
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -1906,7 +1908,7 @@ def reportH5():
                 html.append(line)
                 skipnext=True
                 for k in sorted(ontario_phus):
-                    phu = "%s"%str.title(str(k))
+                    phu = "%s"%strtitle(str(k))
                     html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
@@ -1963,7 +1965,7 @@ def reportH5():
         #counties = get_counties(usacsv,state=state)
         #for county in counties:
             #fstub1 = state.replace(" ","_").replace("&","and")
-            #fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            #fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             #pathdir = "%s/%s"%(fstub1,fstub2)
             #makehtml.makeCounty(county,state,pathdir)
             
@@ -2382,7 +2384,7 @@ def reportH5():
         active = ongroup[k]["active"][:]
         otimes = np.arange(len(active))-len(active)
         plt.plot(otimes,active)
-        plt.annotate(str.title(str(k)),(otimes[-1],active[-1]))
+        plt.annotate(strtitle(str(k)),(otimes[-1],active[-1]))
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
     plt.title("Ontario Active Cases"+latestON)
@@ -2395,7 +2397,7 @@ def reportH5():
         try:
             y = day5avg(ongroup[k]["cases"][:])
             plt.plot(np.arange(len(y))-len(y),y,label=k)
-            plt.annotate(str.title(str(k)),(0,y[-1]))
+            plt.annotate(strtitle(str(k)),(0,y[-1]))
         except:
             pass
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
@@ -2411,7 +2413,7 @@ def reportH5():
         try:
             y = day5avg(ongroup[k]["deaths"][:])
             plt.plot(np.arange(len(y))-len(y),y,label=k)
-            plt.annotate(str.title(str(k)),(0,y[-1]))
+            plt.annotate(strtitle(str(k)),(0,y[-1]))
         except:
             print("Encountered an error with %s"%k)
             pass
@@ -2434,7 +2436,7 @@ def reportH5():
             r2wk = week2avg(r)
             ptotals[k] = r2wk[-1]
             plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,color='k',alpha=0.4)
-            plt.annotate("%s"%str.title(str(k)),(0,r2wk[-1]))
+            plt.annotate("%s"%strtitle(str(k)),(0,r2wk[-1]))
         except:
             pass
     plt.xlabel("Days before Present")
@@ -2453,7 +2455,7 @@ def reportH5():
     declining=0
     labels=[]
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
-        labels.append(str.title(str(k)))
+        labels.append(strtitle(str(k)))
         if ptotals[k]<1.0:
             declining+=1
         else:
@@ -2483,7 +2485,7 @@ def reportH5():
             plotOntarioH5(k,dataset)
         except:
             traceback.print_exc()
-            os.system("rm -rf ontario_%s*"%(str.title(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
+            os.system("rm -rf ontario_%s*"%(strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
             ontariokeys.remove(k)
         
     with open("index.html","r") as indexf:
@@ -2496,7 +2498,7 @@ def reportH5():
                 html.append(line)
                 skipnext=True
                 for k in ontariokeys:
-                    phu = "%s"%str.title(str(k))
+                    phu = "%s"%strtitle(str(k))
                     html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
@@ -3357,7 +3359,7 @@ def reportH5():
     
     _log(logfile,"Individual countries plotted. \t%s"%systime.asctime(systime.localtime()))
     
-@profile    
+#@profile    
 def report():
     
     os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">/home/adivp416/public_html/covid19/reportlog.txt')
@@ -3689,9 +3691,9 @@ def report():
         
 
     for k in sorted(ontario_a.keys()):
-        fstub = str.title(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+        fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
         if os.path.isdir("ontario_%s"%fstub):
-            makehtml.makephu(str.title(str(k)),"ontario_%s/%s"%(fstub,fstub))
+            makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub))
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -3703,7 +3705,7 @@ def report():
                 html.append(line)
                 skipnext=True
                 for k in sorted(ontario_a.keys()):
-                    phu = "%s"%str.title(str(k))
+                    phu = "%s"%strtitle(str(k))
                     html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
@@ -3767,7 +3769,7 @@ def report():
         #counties = get_counties(usacsv,state=state)
         #for county in counties:
             #fstub1 = state.replace(" ","_").replace("&","and")
-            #fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            #fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             #pathdir = "%s/%s"%(fstub1,fstub2)
             #makehtml.makeCounty(county,state,pathdir)
             
@@ -4175,7 +4177,7 @@ def report():
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario_a.keys()):
         plt.plot(otimes[k],ontario_a[k])
-        plt.annotate(str.title(str(k)),(otimes[k][-1],ontario_a[k][-1]))
+        plt.annotate(strtitle(str(k)),(otimes[k][-1],ontario_a[k][-1]))
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.yscale('log')
     plt.title("Ontario Active Cases"+latestON)
@@ -4188,7 +4190,7 @@ def report():
         try:
             y = day5avg(ontario[k])
             plt.plot(np.arange(len(y))-len(y),y,label=k)
-            plt.annotate(str.title(str(k)),(0,y[-1]))
+            plt.annotate(strtitle(str(k)),(0,y[-1]))
         except:
             pass
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
@@ -4204,7 +4206,7 @@ def report():
         try:
             y = day5avg(np.diff(ontario_d[k]))
             plt.plot(np.arange(len(y))-len(y),y,label=k)
-            plt.annotate(str.title(str(k)),(0,y[-1]))
+            plt.annotate(strtitle(str(k)),(0,y[-1]))
         except:
             print("Encountered an error with %s"%k)
             pass
@@ -4227,7 +4229,7 @@ def report():
             r2wk = week2avg(r)
             ptotals[k] = r2wk[-1]
             plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,color='k',alpha=0.4)
-            plt.annotate("%s"%str.title(str(k)),(0,r2wk[-1]))
+            plt.annotate("%s"%strtitle(str(k)),(0,r2wk[-1]))
         except:
             pass
     plt.xlabel("Days before Present")
@@ -4246,7 +4248,7 @@ def report():
     declining=0
     labels=[]
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
-        labels.append(str.title(str(k)))
+        labels.append(strtitle(str(k)))
         if ptotals[k]<1.0:
             declining+=1
         else:
@@ -4277,7 +4279,7 @@ def report():
                 plotOntario(k,ontario,ontario_d,ontario_a,ontario_r,latestON)
             except:
                 traceback.print_exc()
-                os.system("rm -rf ontario_%s*"%(str.title(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
+                os.system("rm -rf ontario_%s*"%(strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
                 ontariokeys.remove(k)
         else:
             ontariokeys.remove(k)
@@ -4292,7 +4294,7 @@ def report():
                 html.append(line)
                 skipnext=True
                 for k in ontariokeys:
-                    phu = "%s"%str.title(str(k))
+                    phu = "%s"%strtitle(str(k))
                     html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
@@ -5449,7 +5451,7 @@ def processcountiesH5(state):
             _log(logfile,"Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
-            fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
         except:
@@ -5513,7 +5515,7 @@ def processcounties(state):
             _log(logfile,"Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
-            fstub2 = str.title(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
             makehtml.makeCounty(county,state,pathdir)
         except:
@@ -5926,7 +5928,7 @@ def netcdf():
                 key = country
                 if key=="US":
                     key="United States"
-                ckey = str.title(key)
+                ckey = strtitle(key)
                 countrygrp = ncd.createGroup(ckey)
                 countrycases = ncd[ckey].createVariable("cases","i4",("time",),zlib=True)
                 countrydeaths = ncd[ckey].createVariable("deaths","i4",("time",),zlib=True)
@@ -5980,7 +5982,7 @@ def netcdf():
                 and "Virgin Islands" not in state and "Military" not in state\
                 and "Recovered" not in state and "Prisons" not in state\
                 and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
-                    ckey = str.title(str(state))
+                    ckey = strtitle(str(state))
                     stategrp = ncd["United States"].createGroup(ckey)
                     statecases = ncd["United States"][ckey].createVariable("cases","i2",("time",),zlib=True)
                     statedeaths = ncd["United States"][ckey].createVariable("deaths","i2",("time",),zlib=True)
@@ -6025,7 +6027,7 @@ def netcdf():
         
         for province in sorted(canada):
             if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
-                ckey = str.title(str(province))
+                ckey = strtitle(str(province))
                 ckey = ckey.replace("And","and")
                 provincegrp = ncd["Canada"].createGroup(ckey)
                 provincecases = ncd["Canada"][ckey].createVariable("cases","i2",("time",),zlib=True)
@@ -6072,7 +6074,7 @@ def netcdf():
         
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
-                ckey = str.title(phu)
+                ckey = strtitle(phu)
                 phugrp = ncd["Canada"]["Ontario"].createGroup(ckey)
                 phucases = ncd["Canada/Ontario"][ckey].createVariable("cases","i2",("time",),zlib=True)
                 phudeaths = ncd["Canada/Ontario"][ckey].createVariable("deaths","i2",("time",),zlib=True)
@@ -6212,23 +6214,23 @@ def netcdf():
                 counties = get_counties(usacsv,state=state)
                 for county in counties:
                     ckey = county.replace("/","-")
-                    countygrp = ncd["United States/%s"%str.title(str(state))].createGroup(ckey)
-                    countycases = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("cases","i2",("time",),zlib=True)
-                    countyRt = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("Rt","f4",("time",),zlib=True)
-                    countyRpost = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("Rpost","f8",("time","Rt"),zlib=True)
-                    countyRlike = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("Rlike","f8",("time","Rt"),zlib=True)
-                    countypopulation = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("population","f4",("scalar",),zlib=True)
-                    ncd["United States/%s"%str.title(str(state))][ckey]["population"][:] = float(get_countypop(county,state))
+                    countygrp = ncd["United States/%s"%strtitle(str(state))].createGroup(ckey)
+                    countycases = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("cases","i2",("time",),zlib=True)
+                    countyRt = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                    countyRpost = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("Rpost","f8",("time","Rt"),zlib=True)
+                    countyRlike = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("Rlike","f8",("time","Rt"),zlib=True)
+                    countypopulation = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["population"][:] = float(get_countypop(county,state))
                     ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                     p = np.exp(lp)
                     l = np.exp(ll)
                     del lp
                     del ll
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rt"][:] = r
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rpost"][:] = p
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rlike"][:] = l
-                    ncd["United States/%s"%str.title(str(state))][ckey]["cases"][:] = ctotal
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["Rt"][:] = r
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["Rpost"][:] = p
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["Rlike"][:] = l
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["cases"][:] = ctotal
                     countycases.set_auto_mask(False)
                     countypopulation.set_auto_mask(False)
                     countycases.units = "cases day-1"
@@ -6252,7 +6254,7 @@ def netcdf():
         raise
     ncd.close()
         
-@profile        
+#@profile        
 def hdf5():
     import h5py as h5
         
@@ -6733,7 +6735,7 @@ def hdf5():
                     skipnext=True
                     for k in sorted(ontario):
                         if len(ontario[k][:])>10:
-                           phu = "%s"%str.title(str(k))
+                           phu = "%s"%strtitle(str(k))
                            html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
                 elif "<!-- PLACEHOLDER -->" in line:
                     skipnext=True
@@ -6751,7 +6753,7 @@ def hdf5():
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
-                ckey = str.title(phu)
+                ckey = strtitle(phu)
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
                 atotal = ontario_a[phu].astype(int)
@@ -6868,7 +6870,7 @@ def hdf5():
             for row in creader:
                 #usacsv.append(row)
                 if not first:
-                    state = str.title(str(row[6])).replace("Of","of").replace("And","and")
+                    state = strtitle(str(row[6])).replace("Of","of").replace("And","and")
                     county = row[5].replace("/","-")
                     if state!="Total" and "Princess" not in state\
                     and "Virgin Islands" not in state and "Military" not in state\
@@ -7035,7 +7037,7 @@ def hdf5():
             for row in creader:
                 #usacsv.append(row)
                 if not first:
-                    state = str.title(str(row[6])).replace("Of","of").replace("And","and")
+                    state = strtitle(str(row[6])).replace("Of","of").replace("And","and")
                     county = row[5].replace("/","-")
                     if state!="Total" and "Princess" not in state\
                     and "Virgin Islands" not in state and "Military" not in state\
@@ -7196,7 +7198,7 @@ def hdf5():
                 key = country
                 if key=="US":
                     key="United States"
-                ckey = str.title(key)
+                ckey = strtitle(key)
                 ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
                 dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
                 r,lp,ll = Rt(day5avg(ctotal))
@@ -7293,7 +7295,7 @@ def hdf5():
         
         for province in sorted(canada):
             if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
-                ckey = str.title(str(province))
+                ckey = strtitle(str(province))
                 ckey = ckey.replace("And","and").replace("Of","of")
                 ctotal = np.diff(np.append([0,],canada[province])).astype(int)
                 dtotal = np.diff(np.append([0,],canada[province])).astype(int)
@@ -7678,7 +7680,7 @@ def netcdf_slim():
                 key = country
                 if key=="US":
                     key="United States"
-                ckey = str.title(key)
+                ckey = strtitle(key)
                 countrygrp = ncd.createGroup(ckey)
                 countrycases = ncd[ckey].createVariable("cases","i4",("time",),zlib=True)
                 countrydeaths = ncd[ckey].createVariable("deaths","i4",("time",),zlib=True)
@@ -7716,7 +7718,7 @@ def netcdf_slim():
                 and "Virgin Islands" not in state and "Military" not in state\
                 and "Recovered" not in state and "Prisons" not in state\
                 and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
-                    ckey = str.title(str(state))
+                    ckey = strtitle(str(state))
                     stategrp = ncd["United States"].createGroup(ckey)
                     statecases = ncd["United States"][ckey].createVariable("cases","i2",("time",),zlib=True)
                     statedeaths = ncd["United States"][ckey].createVariable("deaths","i2",("time",),zlib=True)
@@ -7745,7 +7747,7 @@ def netcdf_slim():
         
         for province in sorted(canada):
             if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
-                ckey = str.title(str(province))
+                ckey = strtitle(str(province))
                 ckey = ckey.replace("And","and")
                 provincegrp = ncd["Canada"].createGroup(ckey)
                 provincecases = ncd["Canada"][ckey].createVariable("cases","i2",("time",),zlib=True)
@@ -7776,7 +7778,7 @@ def netcdf_slim():
         
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
-                ckey = str.title(phu)
+                ckey = strtitle(phu)
                 phugrp = ncd["Canada"]["Ontario"].createGroup(ckey)
                 phucases = ncd["Canada/Ontario"][ckey].createVariable("cases","i2",("time",),zlib=True)
                 phudeaths = ncd["Canada/Ontario"][ckey].createVariable("deaths","i2",("time",),zlib=True)
@@ -7884,15 +7886,15 @@ def netcdf_slim():
                 counties = get_counties(usacsv,state=state)
                 for county in counties:
                     ckey = county.replace("/","-")
-                    countygrp = ncd["United States/%s"%str.title(str(state))].createGroup(ckey)
-                    countycases = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("cases","i2",("time",),zlib=True)
-                    countyRt = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("Rt","f4",("time",),zlib=True)
-                    countypopulation = ncd["United States/%s"%str.title(str(state))][ckey].createVariable("population","f4",("scalar",),zlib=True)
-                    ncd["United States/%s"%str.title(str(state))][ckey]["population"][:] = float(get_countypop(county,state))
+                    countygrp = ncd["United States/%s"%strtitle(str(state))].createGroup(ckey)
+                    countycases = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("cases","i2",("time",),zlib=True)
+                    countyRt = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("Rt","f4",("time",),zlib=True)
+                    countypopulation = ncd["United States/%s"%strtitle(str(state))][ckey].createVariable("population","f4",("scalar",),zlib=True)
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["population"][:] = float(get_countypop(county,state))
                     ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                    ncd["United States/%s"%str.title(str(state))][ckey]["Rt"][:] = r
-                    ncd["United States/%s"%str.title(str(state))][ckey]["cases"][:] = ctotal
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["Rt"][:] = r
+                    ncd["United States/%s"%strtitle(str(state))][ckey]["cases"][:] = ctotal
                     countycases.set_auto_mask(False)
                     countypopulation.set_auto_mask(False)
                     countycases.units = "cases day-1"
@@ -7908,7 +7910,7 @@ def netcdf_slim():
         raise
     ncd.close()
 
-@profile       
+#@profile       
 def hdf5_slim():
     import h5py as h5
     
@@ -8222,7 +8224,7 @@ def hdf5_slim():
                 key = country
                 if key=="US":
                     key="United States"
-                ckey = str.title(str(key))
+                ckey = strtitle(str(key))
                 ctotal = np.diff(np.append([0,],extract_country(dataset,country)["Total"])).astype(int)
                 dtotal = np.diff(np.append([0,],extract_country(ddataset,country)["Total"])).astype(int)
                 r,lp,ll = Rt(day5avg(ctotal))
@@ -8255,7 +8257,7 @@ def hdf5_slim():
                 and "Virgin Islands" not in state and "Military" not in state\
                 and "Recovered" not in state and "Prisons" not in state\
                 and "Hospitals" not in state and state != "Total" and usa[state][-1]>150:
-                    ckey = str.title(str(state))
+                    ckey = strtitle(str(state))
                     ctotal = np.diff(np.append([0,],usa[state])).astype(int)
                     dtotal = np.diff(np.append([0,],usa[state])).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
@@ -8285,7 +8287,7 @@ def hdf5_slim():
            
         for province in sorted(canada):
             if "Princess" not in province and province!="Recovered" and province!="Repatriated Travellers" and province != "Total":
-                ckey = str.title(str(province))
+                ckey = strtitle(str(province))
                 ckey = ckey.replace("And","and")
                 ctotal = np.diff(np.append([0,],canada[province])).astype(int)
                 dtotal = np.diff(np.append([0,],canada[province])).astype(int)
@@ -8317,7 +8319,7 @@ def hdf5_slim():
         
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
-                ckey = str.title(str(phu))
+                ckey = strtitle(str(phu))
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
                 atotal = ontario_a[phu].astype(int)
@@ -8447,15 +8449,15 @@ def hdf5_slim():
                     ctotal = np.diff(np.append([0,],extract_county(usacsv,county,state=state))).astype(int)
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
                         
-                    countycases = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/cases",
+                    countycases = hdf.create_dataset("/United States/%s"%strtitle(str(state))+"/"+ckey+"/cases",
                                                      compression='gzip',compression_opts=9,shuffle=True,
                                                      fletcher32=True,data=ctotal.astype(np.short))
-                    countyRt = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/Rt",
+                    countyRt = hdf.create_dataset("/United States/%s"%strtitle(str(state))+"/"+ckey+"/Rt",
                                                      compression='gzip',compression_opts=9,shuffle=True,
                                                      fletcher32=True,data=r.astype('float'))
-                    countypopulation = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/population",
+                    countypopulation = hdf.create_dataset("/United States/%s"%strtitle(str(state))+"/"+ckey+"/population",
                                                      data=float(get_countypop(county,state)))
-                    latest = hdf.create_dataset("/United States/%s"%str.title(str(state))+"/"+ckey+"/latestdate",
+                    latest = hdf.create_dataset("/United States/%s"%strtitle(str(state))+"/"+ckey+"/latestdate",
                                                 data = latestusa)
 
                     countycases.attrs["units"] = "cases day-1"
