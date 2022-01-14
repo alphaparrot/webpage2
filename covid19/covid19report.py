@@ -1110,7 +1110,7 @@ def plotStateOrProvinceH5(name,country,dataset):
     
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
-    plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[country][name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
+    plt.annotate("%1.1f%% of the population in %s has tested positive."%(np.sum(dataset[country][name]["cases"][:])/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
     plt.title("%s Daily New Cases"+timestamp)
@@ -1428,7 +1428,7 @@ def plotOntarioH5(phu,dataset):
     plt.ylabel("New Cases per Day")
     plt.title("%s, ON Raw Cases per Day"%phuname+timestamp)
     if population is not None:
-        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname))
+        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname),(-len(cases),cases.max()*0.95))
     plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
