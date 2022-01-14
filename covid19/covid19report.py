@@ -2754,7 +2754,7 @@ def reportH5():
         plt.annotate(province,coords,xytext=coords)
     #plt.xscale('log')
     #plt.yscale('log')
-    plt.xlim(30,len(canada["Total"]))
+    plt.xlim(30,len(canada["Ontario/cases"][:]))
     #plt.ylim(0.1,30.0)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Time [days]")
