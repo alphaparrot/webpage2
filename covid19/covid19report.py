@@ -311,6 +311,8 @@ def plot_stateRt(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.axhline(1.0,linestyle='--',color='r')
     data = dataset["United States"][state]
     y = day5avg(np.diff(data))
@@ -326,13 +328,15 @@ def plot_stateRt(state,dataset,timestamp):
     plt.title("%s Effective Reproductive Number"+timestamp)
     plt.savefig("%s/%s_rt.png"%(state,state),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf()
+    plt.clf(); plt.close('all'); gc.collect()
 
 #@profile    
 def plot_stateRtH5(state,dataset,timestamp):
     if not os.path.isdir(state):
         os.system('mkdir "%s"'%state)
     
+    fig,ax = plt.subplots(num=13,clear=True)
     plt.axhline(1.0,linestyle='--',color='r')
     r = dataset["United States"][state]["Rt"][:]
     week2r = week2avg(r)
@@ -346,12 +350,13 @@ def plot_stateRtH5(state,dataset,timestamp):
     plt.title("%s Effective Reproductive Number"+timestamp)
     plt.savefig("%s/%s_rt.png"%(state,state),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rt.pdf"%(state,state),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf()
+    plt.clf(); plt.close('all'); gc.collect()
 
 #@profile
 def country_summary(country,dataset,deathdata,countrypops,timestamp):
     
-    fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
+    fig,axes = plt.subplots(4,1,num=13,clear=True,sharex=True,figsize=(8,14))
     
     cdata = extract_country(dataset,country)
     y = cdata["Total"]
@@ -396,12 +401,13 @@ def country_summary(country,dataset,deathdata,countrypops,timestamp):
     plt.tight_layout()
     plt.savefig("%s_summary.png"%country,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
 def country_summaryH5(country,dataset):
     
-    fig,axes = plt.subplots(4,1,sharex=True,figsize=(8,14))
+    fig,axes = plt.subplots(4,1,num=13,clear=True,sharex=True,figsize=(8,14))
     
     cdata = dataset[country]
     cases = cdata["cases"][:]
@@ -450,7 +456,8 @@ def country_summaryH5(country,dataset):
     plt.tight_layout()
     plt.savefig("%s_summary.png"%country,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_summary.pdf"%country,bbox_inches='tight')
-    plt.close('all'); gc.collect()    
+    plt.clf()
+    plt.clf(); plt.close('all'); gc.collect()    
 
 #@profile
 def plot_TOneighborhoodH5(neighborhood,dataset):
@@ -470,6 +477,8 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     if not os.path.isdir("%s"%fnamestub):
         os.system('mkdir "%s"'%fnamestub)
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases))-len(cases),cases,marker='.')
     plt.annotate("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
                  (-len(cases)+2,cases.max()*1.1))
@@ -482,8 +491,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylim(0,cases.max()*1.3)
     plt.savefig("%s/%s_rawcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -492,8 +503,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylabel("7-day Average Cases per Day")
     plt.savefig("%s/%s_avgcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(hospt))-len(hospt),hospt,marker='.')
     #plt.yscale('log')
     plt.title("Daily Hospitalizations in %s"%neighborhood+timestamp)
@@ -501,8 +514,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylabel("Hospitalizations per Day")
     plt.savefig("%s/%s_rawhosp.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawhosp.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(fatal))-len(fatal),fatal,marker='.')
     #plt.yscale('log')
     plt.title("Daily Deaths in %s"%neighborhood+timestamp)
@@ -510,8 +525,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylabel("Deaths per Day")
     plt.savefig("%s/%s_rawdeaths.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdeaths.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -520,8 +537,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylabel("3-Wk Running Sum")
     plt.savefig("%s/%s_3wk.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve1 = active3wk(np.cumsum(fatal))
     curve2 = active3wk(np.cumsum(recov))
     plt.fill_between(np.arange(len(curve2))-len(curve2),curve1+curve2,curve1,
@@ -542,9 +561,9 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/population * 1e5,marker='.',
              label=neighborhood)
@@ -562,9 +581,9 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = week2avg(rt)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.',color='C0',label=neighborhood)
     plt.plot(np.arange(len(rt))-len(rt),rt,alpha=0.4,
@@ -584,8 +603,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.title("%s Effective Reproductive Number"%neighborhood+timestamp)
     plt.savefig("%s/%s_Rt.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -596,8 +617,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_avgcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -608,8 +631,10 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_3wk_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve1 = active3wk(np.cumsum(fatal))
     curve2 = active3wk(np.cumsum(recov))
     plt.fill_between(np.arange(len(curve2))-len(curve2),curve1+curve2,curve1,
@@ -631,9 +656,9 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/population * 1e5,marker='.',
              label=neighborhood)
@@ -648,7 +673,7 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile    
 def plot_TOneighborhood(neighborhood,dataset,timestamp):
@@ -665,6 +690,8 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     if not os.path.isdir("%s"%fnamestub):
         os.system('mkdir "%s"'%fnamestub)
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases))-len(cases),cases,marker='.')
     plt.annotate("Daily counts for the last 3 weeks:\n"+(", ".join(["%d",]*21))%tuple(cases[-21:]),
                  (-len(cases)+2,cases.max()*1.1))
@@ -677,8 +704,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylim(0,cases.max()*1.3)
     plt.savefig("%s/%s_rawcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -687,8 +716,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylabel("7-day Average Cases per Day")
     plt.savefig("%s/%s_avgcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(hospt))-len(hospt),hospt,marker='.')
     #plt.yscale('log')
     plt.title("Daily Hospitalizations in %s"%neighborhood+timestamp)
@@ -696,8 +727,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylabel("Hospitalizations per Day")
     plt.savefig("%s/%s_rawhosp.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawhosp.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(fatal))-len(fatal),fatal,marker='.')
     #plt.yscale('log')
     plt.title("Daily Deaths in %s"%neighborhood+timestamp)
@@ -705,8 +738,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylabel("Deaths per Day")
     plt.savefig("%s/%s_rawdeaths.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdeaths.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -715,8 +750,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylabel("3-Wk Running Sum")
     plt.savefig("%s/%s_3wk.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve1 = active3wk(np.cumsum(fatal))
     curve2 = active3wk(np.cumsum(recov))
     plt.fill_between(np.arange(len(curve2))-len(curve2),curve1+curve2,curve1,
@@ -737,9 +774,9 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/dataset["units"][neighborhood]["POP"] * 1e5,marker='.',
              label=neighborhood)
@@ -754,9 +791,9 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     rt14,post14,like14 = Rt(day5avg(cases),interval=7,override=True)
     curve = week2avg(rt14)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.',color='C0',label=neighborhood)
@@ -777,8 +814,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.title("%s Effective Reproductive Number"%neighborhood+timestamp)
     plt.savefig("%s/%s_Rt.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -789,8 +828,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_avgcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve = active3wk(np.cumsum(cases))
     plt.plot(np.arange(len(curve))-len(curve),curve,marker='.')
     #plt.yscale('log')
@@ -801,8 +842,10 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_3wk_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     curve1 = active3wk(np.cumsum(fatal))
     curve2 = active3wk(np.cumsum(recov))
     plt.fill_between(np.arange(len(curve2))-len(curve2),curve1+curve2,curve1,
@@ -824,9 +867,9 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.title("%s Cases"%neighborhood+timestamp)
     plt.savefig("%s/%s_breakdown_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_breakdown_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve/dataset["units"][neighborhood]["POP"] * 1e5,marker='.',
              label=neighborhood)
@@ -841,7 +884,7 @@ def plot_TOneighborhood(neighborhood,dataset,timestamp):
     plt.title("Average Daily Cases per Capita in %s"%neighborhood+timestamp)
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
 #@profile    
 def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,national_deaths,population,timestamp):
@@ -858,6 +901,8 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     national_dcases = np.diff(np.append([0,],national_cases))
     national_ddeaths = np.diff(np.append([0,],national_deaths))
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
     plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
@@ -866,7 +911,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)
     curve2 = day5avg(national_dcases)
@@ -877,8 +924,10 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Average Daily New Cases"%name+timestamp)
     plt.savefig("%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
@@ -890,7 +939,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)/float(population)*1e5
     curve2 = day5avg(national_dcases)*1e5
@@ -903,7 +954,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
@@ -916,7 +969,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)/float(population)*1e5
     curve2 = day5avg(national_dcases)*1e5
@@ -930,7 +985,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)
     r,p,l = Rt(curve)
@@ -945,9 +1002,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax = plt.subplots(figsize=(14,9))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = np.diff(deaths_dataset[name][1:])
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
@@ -956,10 +1013,10 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Daily Deaths"%name+timestamp)
     plt.savefig("%s/%s_rawdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,ax = plt.subplots(figsize=(14,9))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(np.diff(deaths_dataset[name][1:])/float(population)*1e6)
     ntldeaths = day5avg(national_ddeaths)*1e6
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
@@ -974,8 +1031,10 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("%s Average Daily Deaths per 1M"%name+timestamp)
     plt.savefig("%s/%s_relavgdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = active3wk(cumcases)
     curve2 = active3wk(national_cases)*1000
@@ -985,7 +1044,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
@@ -995,7 +1056,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = curve/float(population)*1000
     
@@ -1007,7 +1070,9 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_rel3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=country)
@@ -1018,7 +1083,7 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.yscale('log')
     plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
 def plotStateOrProvinceH5(name,country,dataset):
@@ -1041,6 +1106,8 @@ def plotStateOrProvinceH5(name,country,dataset):
     national_deaths = np.cumsum(national_ddeaths)
     population = dataset[country][name]["population"][()]
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases))-len(cases),cases,label=name)
     plt.annotate("%d Raw\nCases per Day"%cases[-1],(-len(cases)*0.2,0.7*cases.max()))
     plt.annotate("%1.1f%% of the population in %s has tested positive."%(dataset[country][name][-1]/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
@@ -1049,7 +1116,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)
     curve2 = day5avg(national_dcases)
@@ -1060,8 +1129,10 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Average Daily New Cases"%name+timestamp)
     plt.savefig("%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
@@ -1073,7 +1144,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)/float(population)*1e5
     curve2 = day5avg(national_dcases)*1e5
@@ -1086,7 +1159,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),cases/float(population)*1e5,
              label=name)
@@ -1099,7 +1174,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relrawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relrawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)/float(population)*1e5
     curve2 = day5avg(national_dcases)*1e5
@@ -1113,7 +1190,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Average Daily New Cases per 100k"%name+timestamp)
     plt.savefig("%s/%s_relavgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)
     r = dataset[country][name]["Rt"][:]
@@ -1128,11 +1207,11 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     ddeaths = dataset[country][name]["deaths"][1:]
     
-    fig,ax = plt.subplots(figsize=(14,9))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = ddeaths
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
@@ -1141,10 +1220,10 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Daily Deaths"%name+timestamp)
     plt.savefig("%s/%s_rawdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,ax = plt.subplots(figsize=(14,9))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
     curve = day5avg(ddeaths)/float(population)*1e6
     ntldeaths = day5avg(national_ddeaths)*1e6
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
@@ -1159,8 +1238,10 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("%s Average Daily Deaths per 1M"%name+timestamp)
     plt.savefig("%s/%s_relavgdeaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relavgdeaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = active3wk(cumcases)
     curve2 = active3wk(national_cases)*1000
@@ -1170,7 +1251,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.xlabel("Days before Present")
@@ -1180,7 +1263,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.ylim(0,curve.max())
     plt.savefig("%s/%s_3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = curve/float(population)*1000
     
@@ -1192,7 +1277,9 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.title("Recent COVID-19 Cases in %s"%name+timestamp)
     plt.savefig("%s/%s_rel3wk.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=country)
@@ -1203,7 +1290,7 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.yscale('log')
     plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
         
     
 #@profile    
@@ -1214,6 +1301,8 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
         os.system("mkdir ontario_%s"%fstub)
     phuname = strtitle(phu)
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
@@ -1222,7 +1311,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),cases[phu])
     plt.xlabel("Days before Present")
@@ -1234,7 +1325,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.ylim(0,cases[phu].max())
     plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases[phu])
     plt.plot(np.arange(len(curve))-len(curve),curve)
@@ -1245,7 +1338,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.cumsum(cases[phu])[-1]/population,phuname))
     plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve)
     plt.xlabel("Days before Present")
@@ -1257,7 +1352,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.ylim(0,curve.max())
     plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
     plt.xlabel("Days before Present")
@@ -1265,8 +1362,10 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_active.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases[phu]))-len(cases[phu]),active[phu])
     plt.xlabel("Days before Present")
@@ -1276,7 +1375,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.ylim(0,active[phu].max())
     plt.savefig("ontario_%s/%s_active_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve=day5avg(np.diff(deaths[phu]))
     plt.plot(np.arange(len(curve))-len(curve),curve)
@@ -1285,9 +1386,9 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.title("Average daily deaths from COVID-19 in %s, ON"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_deaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_deaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     rt,post14,like14 = Rt(day5avg(cases[phu]),interval=7,override=True)
     rt14 = week2avg(rt)
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,color='k',label="2-Week Average")
@@ -1299,7 +1400,7 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     
     plt.savefig("ontario_%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
 def plotOntarioH5(phu,dataset):
@@ -1320,6 +1421,8 @@ def plotOntarioH5(phu,dataset):
     Rt = dataset["Canada/Ontario/%s/Rt"%phu][:]
     timestamp = "\nAs of "+dataset["Canada/Ontario/%s/latestdate"%phu][()]
     
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(cases))-len(cases),cases)
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
@@ -1328,7 +1431,9 @@ def plotOntarioH5(phu,dataset):
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname))
     plt.savefig("ontario_%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),cases)
     plt.xlabel("Days before Present")
@@ -1340,7 +1445,9 @@ def plotOntarioH5(phu,dataset):
     plt.ylim(0,cases.max())
     plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_rawdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(cases)
     plt.plot(np.arange(len(curve))-len(curve),curve)
@@ -1351,7 +1458,9 @@ def plotOntarioH5(phu,dataset):
         plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname))
     plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve)
     plt.xlabel("Days before Present")
@@ -1363,7 +1472,9 @@ def plotOntarioH5(phu,dataset):
     plt.ylim(0,curve.max())
     plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),active)
     plt.xlabel("Days before Present")
@@ -1371,7 +1482,9 @@ def plotOntarioH5(phu,dataset):
     plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_active.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(cases))-len(cases),active)
     plt.xlabel("Days before Present")
@@ -1381,7 +1494,9 @@ def plotOntarioH5(phu,dataset):
     plt.ylim(0,active.max())
     plt.savefig("ontario_%s/%s_active_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_active_log.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve=day5avg(np.diff(deaths))
     plt.plot(np.arange(len(curve))-len(curve),curve)
@@ -1390,9 +1505,9 @@ def plotOntarioH5(phu,dataset):
     plt.title("Average daily deaths from COVID-19 in %s, ON"%phuname+timestamp)
     plt.savefig("ontario_%s/%s_deaths.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_deaths.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,9))
     rt14 = week2avg(Rt)
     plt.plot(np.arange(len(rt14))-len(rt14),rt14,color='k',label="2-Week Average")
     plt.plot(np.arange(len(Rt))-len(Rt),Rt,color='k',linestyle='--',alpha=0.4,label="Instantaneous")
@@ -1403,7 +1518,7 @@ def plotOntarioH5(phu,dataset):
     
     plt.savefig("ontario_%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile    
 def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
@@ -1426,6 +1541,8 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     dcases = np.diff(cases)
     dstatecases = np.diff(statecases)
     curve = dcases[:]
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(curve))-len(curve),curve,label=county)
     plt.annotate("%d Raw\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
@@ -1434,7 +1551,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(np.diff(cases))
     curve2 = day5avg(np.diff(statecases))
@@ -1445,8 +1564,10 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s County Average Daily New Cases"%county+timestamp)
     plt.savefig("%s_avgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_avgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
              label="%s County"%county)
@@ -1458,7 +1579,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(dcases)/float(population)*1e5
     curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
@@ -1471,7 +1594,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
              label="%s County"%county)
@@ -1484,7 +1609,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(dcases)/float(population)*1e5
     curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
@@ -1498,7 +1625,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     curve = day5avg(dcases)
     r,p,l = Rt(curve)
@@ -1506,7 +1633,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     curve2 = day5avg(dstatecases)
     r2,p,l = Rt(curve2)
     r2wk2 = week2avg(r2)
-    fig,ax = plt.subplots(figsize=(14,7))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,7))
     plt.plot(np.arange(len(r))-len(r),r,label="%s County R$_t$"%county,color='k',alpha=0.4)
     plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="%s County 2-week Average R$_t$"%county,color='k')
     plt.plot(np.arange(len(r2))-len(r2),r2,label="%s R$_t$"%state,color='C0',alpha=0.4)
@@ -1518,7 +1645,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s_Rt.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_Rt.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = active3wk((cases))
     curve2 = active3wk((statecases))/float(statepopulation)*1000
@@ -1528,7 +1657,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.xlabel("Days before Present")
@@ -1538,9 +1669,11 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.ylim(0,curve.max())
     plt.savefig("%s_3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     curve = curve/float(population)*1000
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
@@ -1550,7 +1683,9 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_rel3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
@@ -1561,7 +1696,7 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.yscale('log')
     plt.savefig("%s_rel3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
 #@profile   
 def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulation,timestamp):
@@ -1586,6 +1721,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     dcases = np.diff(cases)
     dstatecases = np.diff(statecases)
     curve = dcases[:]
+    
+    fig,ax = plt.subplots(num=13,clear=True)
+    
     plt.plot(np.arange(len(curve))-len(curve),curve,label=county)
     plt.annotate("%d Raw\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
     plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
@@ -1594,7 +1732,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s Daily New Cases"+timestamp)
     plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(np.diff(cases))
     curve2 = day5avg(np.diff(statecases))
@@ -1605,8 +1745,10 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s County Average Daily New Cases"%county+timestamp)
     plt.savefig("%s_avgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_avgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
              label="%s County"%county)
@@ -1618,7 +1760,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(dcases)/float(population)*1e5
     curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
@@ -1631,7 +1775,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
              label="%s County"%county)
@@ -1644,7 +1790,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s County Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relrawdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relrawdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = day5avg(dcases)/float(population)*1e5
     curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
@@ -1658,13 +1806,13 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
     plt.savefig("%s_relavgdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     r = dataset["United States"][state][county]["Rt"][:]
     r2wk = week2avg(r)
     r2 = dataset["United States"][state]["Rt"][:]
     r2wk2 = week2avg(r2)
-    fig,ax = plt.subplots(figsize=(14,7))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,7))
     plt.plot(np.arange(len(r))-len(r),r,label="%s County R$_t$"%county,color='k',alpha=0.4)
     plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="%s County 2-week Average R$_t$"%county,color='k')
     plt.plot(np.arange(len(r2))-len(r2),r2,label="%s R$_t$"%state,color='C0',alpha=0.4)
@@ -1676,7 +1824,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.axhline(1.0,linestyle=':',color='r')
     plt.savefig("%s_Rt.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_Rt.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     curve = active3wk((cases))
     curve2 = active3wk((statecases))/float(statepopulation)*1000
@@ -1686,7 +1836,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.xlabel("Days before Present")
@@ -1696,9 +1848,11 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.ylim(0,curve.max())
     plt.savefig("%s_3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     curve = curve/float(population)*1000
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
@@ -1708,7 +1862,9 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
     plt.savefig("%s_rel3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
+    
+    fig,ax = plt.subplots(num=13,clear=True)
     
     plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
     plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
@@ -1719,7 +1875,7 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     plt.yscale('log')
     plt.savefig("%s_rel3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
     plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
       
           
@@ -1771,7 +1927,7 @@ def plotgroup(group,directory='mygroup'):
     plt.title("COVID-19 in Family's Counties")
     plt.savefig("%s/fam_totalc_linpop.png"%directory,bbox_inches='tight',facecolor='white')
     plt.savefig("%s/fam_totalc_linpop.pdf"%directory,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,10))
     for place in curves:
@@ -1787,7 +1943,7 @@ def plotgroup(group,directory='mygroup'):
     plt.title("Family's Locations: New Cases per Day per 100k (7-day Average)")
     plt.savefig("%s/fam_newc_logpop.png"%directory,bbox_inches='tight',facecolor='white')
     plt.savefig("%s/fam_newc_logpop.pdf"%directory,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     
@@ -1803,7 +1959,7 @@ def plotgroup(group,directory='mygroup'):
     plt.title("Family's Locations: 3-week Running Sum of Cases per 100k")
     plt.savefig("%s/fam_newc_linpop_3wk.png"%directory,bbox_inches='tight',facecolor='white')
     plt.savefig("%s/fam_newc_linpop_3wk.pdf"%directory,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,10))
     for place in curves:
@@ -1818,7 +1974,7 @@ def plotgroup(group,directory='mygroup'):
     plt.title("Family's Locations: 3-week Running Sum of Cases per 100k")
     plt.savefig("%s/fam_newc_logpop_3wk.png"%directory,bbox_inches='tight',facecolor='white')
     plt.savefig("%s/fam_newc_logpop_3wk.pdf"%directory,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,8))
     for place in curves:
@@ -1835,7 +1991,7 @@ def plotgroup(group,directory='mygroup'):
     plt.title("Family's Locations: Effective Reproductive Number R$_t$")
     plt.savefig("%s/fam_rt.png"%directory,bbox_inches='tight',facecolor='white')
     plt.savefig("%s/fam_rt.pdf"%directory,bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
  
 def _log(destination,string):
@@ -2069,7 +2225,7 @@ def reportH5():
     latestTO = "\nAs of "+torontogroup["Alderwood/latestdate"][()]
     latestON = "\nAs of "+torontogroup["latestdate"][()]
          
-    fig,ax=plt.subplots(figsize=(16,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(16,12))
     for neighborhood in TOneighborhoods:
         curve = active3wk(np.cumsum(torontogroup[neighborhood]["cases"][:]))/torontogroup[neighborhood]["population"][()]*1e5
         plt.plot(range(len(curve)),curve,color='k',alpha=0.2)
@@ -2082,9 +2238,9 @@ def reportH5():
     plt.title("Toronto Neighborhoods"+latestTO)
     plt.savefig("allneighborhoods.png",bbox_inches='tight',facecolor='white')
     plt.savefig("allneighborhoods.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(16,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(16,9))
     xmin=0
     for neighborhood in TOneighborhoods:
         rt14 = torontogroup[neighborhood]["Rt"][:]
@@ -2103,9 +2259,9 @@ def reportH5():
     plt.title("All Neighbourhood Reproductive Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(16,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(16,9))
     maxn = 0
     for neighborhood in TOneighborhoods:
         maxn = max(maxn,day5avg(torontogroup[neighborhood]["cases"][:])[-1])
@@ -2129,9 +2285,9 @@ def reportH5():
     plt.title("All Neighbourhood Reproductive Numbers, Weighted by Current Daily Case Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(16,9))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(16,9))
     maxn = 0
     for neighborhood in TOneighborhoods:
         maxn = max(maxn,active3wk(np.cumsum(torontogroup[neighborhood]["cases"][:]))[-1])
@@ -2156,10 +2312,10 @@ def reportH5():
     plt.title("All Neighbourhood Reproductive Numbers, Weighted by Active Cases"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     ptotals = {}
     for k in TOneighborhoods:
         rt14 = torontogroup[k]["Rt"][:]
@@ -2206,7 +2362,7 @@ def reportH5():
     plt.title("Toronto Neighborhood Reproductive Numbers, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhoodRt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhoodRt_comparisonweighted.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     ptotals = {}
@@ -2214,7 +2370,7 @@ def reportH5():
         rt14 = torontogroup[k]["Rt"][:]
         ptotals[k] = week2avg(np.gradient(week2avg(rt14)))[-1]
     
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     n=0
     labels = []
     previous=1.0
@@ -2267,14 +2423,14 @@ def reportH5():
     plt.title("Toronto Neighborhood Transmission, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhood_DRtdt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhood_DRtdt_comparisonweighted.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     torontor = torontogroup["TPHrecovered"][:]
     torontof = torontogroup["TPHdeaths"][:]
     torontoh = torontogroup["hospitalized"][:]
     toronto  = torontogroup["TPHcases"][:]
     times = np.arange(len(toronto))
-    
+    fig,ax = plt.subplots(num=13,clear=True)
     plt.fill_between(times-times.max(),torontor+torontof,torontof,color='g',alpha=0.3,label='Recovered')
     plt.fill_between(times-times.max(),toronto,torontor+torontof,color='C1',alpha=0.6,label="Active")
     plt.fill_between(times-times.max(),torontoh,edgecolor='r',hatch='////',label="Hospitalized")
@@ -2288,8 +2444,9 @@ def reportH5():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    fig,ax = plt.subplots(num=13,clear=True)
     plt.fill_between(times-times.max(),torontor+torontof,torontof,color='g',alpha=0.3,label='Recovered')
     plt.fill_between(times-times.max(),toronto,torontor+torontof,color='C1',alpha=0.6,label="Active")
     plt.fill_between(times-times.max(),torontoh,edgecolor='r',hatch='////',label="Hospitalized")
@@ -2303,8 +2460,9 @@ def reportH5():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
+    fig,ax = plt.subplots(num=13,clear=True)
     curve1 = active3wk(np.cumsum(torontof))
     curve2 = active3wk(np.cumsum(torontor))
     plt.fill_between(np.arange(len(curve2))-len(curve2),curve1+curve2,curve1,
@@ -2324,14 +2482,14 @@ def reportH5():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_3wk_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_3wk_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     toronto = torontogroup["cases"][:]
     torontott = np.cumsum(toronto)
     torontopop = torontogroup["population"][()]
 
 
-    fig,axes=plt.subplots(figsize=(14,7))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,7))
     
     plt.axhline(1.0,linestyle='--',color='k')
     y = day5avg(toronto[:])
@@ -2346,9 +2504,9 @@ def reportH5():
     plt.title("Toronto Effective Reproductive Number R$_t$"+latestON)
     plt.savefig("toronto_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,10))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,10))
     curve = y
     plt.plot(np.arange(len(curve))+1-len(curve),curve,marker='.')
     #plt.yscale('symlog',linthreshy=10.0)
@@ -2359,9 +2517,9 @@ def reportH5():
     plt.annotate("%1.1f Average \nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update.pdf",bbox_inches='tight')
     plt.savefig("toronto_update.png",bbox_inches='tight',facecolor='white')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,10))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,10))
     curve = toronto[:]
     plt.plot(np.arange(len(curve))+1-len(curve),curve,marker='.')
     #plt.yscale('symlog',linthreshy=10.0)
@@ -2372,14 +2530,14 @@ def reportH5():
     plt.annotate("%1.1f Raw\nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update_raw.pdf",bbox_inches='tight')
     plt.savefig("toronto_update_raw.png",bbox_inches='tight',facecolor='white')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     _log(logfile,"Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
          
     ongroup = dataset["Canada/Ontario"]
          
-    fig,ax=plt.subplots(figsize=(12,10))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,10))
     for k in sorted(ontario_phus):
         active = ongroup[k]["active"][:]
         otimes = np.arange(len(active))-len(active)
@@ -2390,9 +2548,9 @@ def reportH5():
     plt.title("Ontario Active Cases"+latestON)
     plt.savefig("ontario_active.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_active.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(12,10))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,10))
     for k in sorted(ontario_phus):
         try:
             y = day5avg(ongroup[k]["cases"][:])
@@ -2406,9 +2564,9 @@ def reportH5():
     plt.title("Ontario New Cases [7-day average]"+latestON)
     plt.savefig("ontario_newcases.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newcases.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(12,10))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,10))
     for k in sorted(ontario_phus):
         try:
             y = day5avg(ongroup[k]["deaths"][:])
@@ -2424,11 +2582,11 @@ def reportH5():
     plt.title("Ontario Daily Deaths [7-day average]"+latestON)
     plt.savefig("ontario_newdeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     ptotals = {}
     maxn = 0
-    fig,ax = plt.subplots(figsize=(14,9))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
     for k in sorted(ontario_phus):
         try:
             maxn = max(maxn,ongroup[k]["active"][:][-1])
@@ -2446,10 +2604,10 @@ def reportH5():
     plt.xlim(-len(r2wk),0.2*len(r2wk))
     plt.savefig("ontario_allRt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_allRt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,ax = plt.subplots(figsize=(15,4))
+    fig,ax = plt.subplots(num=13,clear=True,figsize=(15,4))
     n=0
     growing=0
     declining=0
@@ -2476,7 +2634,7 @@ def reportH5():
     plt.title("Ontario PHU Reproductive Numbers, Opacity Weighted by Active Cases"+latestON)
     plt.savefig("ontario_phuRtcomparison.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_phuRtcomparison.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
         
     
     ontariokeys = sorted(ontario_phus)
@@ -2566,7 +2724,7 @@ def reportH5():
          
     latestglobal = "\nAs of "+dataset["Canada/latestdate"][()]
          
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         y = day5avg(dataset["Canada"][province]["cases"][:])/float(dataset["Canada"][province]["population"][()])*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=province,linestyle=':')
@@ -2580,11 +2738,11 @@ def reportH5():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("ca_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     canada = dataset["Canada"]
     
-    fig,ax=plt.subplots(figsize=(14,14))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,14))
     for province in cankeys:
         cumcases = np.cumsum(canada[province]["cases"][:])
         provpop = float(canada[province]["population"][()])
@@ -2601,9 +2759,9 @@ def reportH5():
     plt.title("Canada Confirmed Cases"+latestglobal)
     plt.savefig("caconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caconfirmed.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         y = day5avg(canada[province]["cases"][:])/canada[province]["population"][()]*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=province,linestyle=':')
@@ -2617,10 +2775,10 @@ def reportH5():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         place=province
         y = day5avg(canada[province]["cases"][:])/canada[province]["population"][()]*1e5
@@ -2635,9 +2793,9 @@ def reportH5():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         y = active3wk(np.cumsum(canada[province]["cases"][:]))/canada[province]["population"][()]*1e2
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=province,linestyle=':')
@@ -2651,9 +2809,9 @@ def reportH5():
     plt.title("Canada Active Cases"+latestglobal)
     plt.savefig("canada_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_3wkcasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         if np.sum(canada[province]["deaths"][:])>10:
             y = day5avg(canada[province]["deaths"])/canada[province]["population"][()]*1e6
@@ -2668,10 +2826,10 @@ def reportH5():
     plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
         if np.sum(canada[province]["deaths"][:])>10:
             y = day5avg(canada[province]["deaths"])/canada[province]["population"][()]*1e6
@@ -2686,14 +2844,14 @@ def reportH5():
     plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
     ptotals = {}
     for k in cankeys:
         ptotals[k] = np.sum(canada[k]["deaths"][:])/canada[k]["population"][()]*1e3
-    fig,ax=plt.subplots(figsize=(12,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         plt.bar(n,ptotals[k])
@@ -2716,9 +2874,9 @@ def reportH5():
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("canada_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_deathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,12))
     for province in cankeys:
         if np.sum(canada[province]["deaths"][:])>3: #Only plot places with >20 deaths
             y = day5avg(canada[province]["deaths"][:])
@@ -2740,9 +2898,9 @@ def reportH5():
     plt.title("Canadian Provinces Mortality Rate"+latestusa)
     plt.savefig("ca_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailymortality.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,12))
     for province in cankeys:
         r = week2avg(canada[province]["Rt"][:])
         x=np.array(range(len(r)))-len(r)
@@ -2758,7 +2916,7 @@ def reportH5():
     plt.title("Canada Transmission"+latestglobal)
     plt.savefig("canada_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -2774,7 +2932,7 @@ def reportH5():
         r = week2avg(r)
         ptotals[province] = r[-1]
     
-    fig,ax=plt.subplots(figsize=(14,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         if ptotals[k]>1.0:
@@ -2796,7 +2954,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_rt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -2812,7 +2970,7 @@ def reportH5():
         r = week2avg(r)
         ptotals[province] = week2avg(np.gradient(r))[-1]
     
-    fig,ax=plt.subplots(figsize=(14,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         if ptotals[k]>0.0:
@@ -2834,7 +2992,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_drt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     _log(logfile,"Canadian provinces plotted. \t%s"%systime.asctime(systime.localtime()))
     
@@ -2843,7 +3001,7 @@ def reportH5():
     usa = dataset["United States"]
     latestusa = "\nAs of "+dataset["United States/Minnesota/latestdate"][()]
     
-    fig,ax=plt.subplots(figsize=(14,14))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,14))
     for place in uskeys:
         cases = np.cumsum(usa[place]["cases"][:])
         population = usa[place]["population"][()]
@@ -2860,9 +3018,9 @@ def reportH5():
     plt.title("United States Confirmed Cases"+latestusa)
     plt.savefig("usconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usconfirmed.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for place in uskeys:
         y = day5avg(usa[place]["cases"][:])/usa[place]["population"][()]*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
@@ -2876,10 +3034,10 @@ def reportH5():
     plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for place in uskeys:
         y = day5avg(usa[place]["cases"][:])/usa[place]["population"][()]*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
@@ -2893,9 +3051,9 @@ def reportH5():
     plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for place in uskeys:
         y = active3wk(np.cumsum(usa[place]["cases"][:]))/usa[place]["population"][()]*1e2
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
@@ -2909,9 +3067,9 @@ def reportH5():
     plt.title("USA Active Cases"+latestusa)
     plt.savefig("usa_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_3wkcasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for place in uskeys:
         y = day5avg(usa[place]["deaths"][:])/usa[place]["population"][()]*1e6
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
@@ -2925,10 +3083,10 @@ def reportH5():
     plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
-    fig,axes=plt.subplots(figsize=(14,10))
+    fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for place in uskeys:
         y = day5avg(usa[place]["deaths"][:])/usa[place]["population"][()]*1e6
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
@@ -2942,14 +3100,14 @@ def reportH5():
     plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
     ptotals = {}
     for k in uskeys:
         ptotals[k] = np.sum(usa[k]["deaths"][:])/usa[k]["population"][()]*1e3
-    fig,ax=plt.subplots(figsize=(12,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         plt.bar(n,ptotals[k])
@@ -2972,9 +3130,9 @@ def reportH5():
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("usa_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_deathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,12))
     for place in uskeys:
         y = day5avg(usa[place]["deaths"][:])
         active = active3wk(np.cumsum(usa[place]["cases"][:]))
@@ -2994,9 +3152,9 @@ def reportH5():
     plt.title("US States Mortality Rate"+latestusa)
     plt.savefig("us_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("us_dailymortality.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(14,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,12))
     for place in uskeys:
         r = week2avg(usa[place]["Rt"][:])#)/float(statepops[place])*1e5
         x=np.array(range(len(r)))-len(r)
@@ -3014,7 +3172,7 @@ def reportH5():
     plt.title("US Transmission"+latestusa)
     plt.savefig("usa_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     _log(logfile,"US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
@@ -3034,7 +3192,7 @@ def reportH5():
         r = week2avg(usa[place]["Rt"][:])
         ptotals[place] = r[-1]
     
-    fig,ax=plt.subplots(figsize=(14,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         if ptotals[k]>1.0:
@@ -3056,7 +3214,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_rt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -3068,7 +3226,7 @@ def reportH5():
         r = usa[place]["Rt"][:]
         ptotals[place] = week2avg(np.gradient(r))[-1]
     
-    fig,ax=plt.subplots(figsize=(14,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(14,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         if ptotals[k]>0.0:
@@ -3090,7 +3248,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_drt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     for state in uskeys:
         plotStateOrProvinceH5(state,"United States",dataset)
@@ -3099,7 +3257,7 @@ def reportH5():
     
     _log(logfile,"Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
-    fig,ax=plt.subplots(figsize=(12,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,12))
     tmax = 0
     tmin = 0
     nmax = 0
@@ -3125,9 +3283,9 @@ def reportH5():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
-    fig,ax=plt.subplots(figsize=(12,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,12))
     tmax = 0
     tmin = 0
     nmax = 0
@@ -3153,7 +3311,7 @@ def reportH5():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     ptotals = {}
     for country in countries:
@@ -3164,7 +3322,7 @@ def reportH5():
             traceback.print_exc()
     n=0
     labels = []
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     for k in (sorted(ptotals, key=ptotals.get,reverse=True))[::-1]:
         labels.append(k)
         plt.bar(n,1.0/(ptotals[k]*1.0e-3))
@@ -3191,7 +3349,7 @@ def reportH5():
                  (30,int(round(1.0/(ptotals[labels[0]]*1.0e-3*0.1)))),clip_on=True)
     plt.savefig("globaldeathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldeathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -3202,7 +3360,7 @@ def reportH5():
             ptotals[country] = y[-1]
         except Exception as e:
             traceback.print_exc()
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         plt.bar(n,ptotals[k])
@@ -3219,9 +3377,9 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globaldailydeaths_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldailydeaths_recent.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
-    fig,ax=plt.subplots(figsize=(12,12))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(12,12))
     maxy=0
     xmin = 0
     for country in countries:
@@ -3249,7 +3407,7 @@ def reportH5():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("casetransmission.png",bbox_inches='tight',facecolor='white')
     plt.savefig("casetransmission.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -3260,7 +3418,7 @@ def reportH5():
             ptotals[country] = y[-1]
         except Exception as e:
             traceback.print_exc()
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         plt.bar(n,ptotals[k])
@@ -3277,7 +3435,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globalcases_pop_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globalcases_pop_recent.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -3292,7 +3450,7 @@ def reportH5():
             nmax = max(nmax,active[country])
         except Exception as e:
             traceback.print_exc()
-    fig,ax=plt.subplots(figsize=(24,4))
+    fig,ax=plt.subplots(num=13,clear=True,figsize=(24,4))
     for k in sorted(ptotals, key=ptotals.get,reverse=True):
         labels.append(k)
         if ptotals[k]>1.0:
@@ -3316,7 +3474,7 @@ def reportH5():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("global_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("global_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     _log(logfile,"Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
@@ -3878,7 +4036,7 @@ def report():
     plt.title("Toronto Neighborhoods"+latestTO)
     plt.savefig("allneighborhoods.png",bbox_inches='tight',facecolor='white')
     plt.savefig("allneighborhoods.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     torontopot = {}
     torontort = {}
@@ -3908,7 +4066,7 @@ def report():
     plt.title("All Neighbourhood Reproductive Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(16,9))
     maxn = 0
@@ -3933,7 +4091,7 @@ def report():
     plt.title("All Neighbourhood Reproductive Numbers, Weighted by Current Daily Case Numbers"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightdaily.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(16,9))
     maxn = 0
@@ -3959,7 +4117,7 @@ def report():
     plt.title("All Neighbourhood Reproductive Numbers, Weighted by Active Cases"+latestTO)
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighbourhood_all_rt_zoom_weightactive.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,ax=plt.subplots(figsize=(24,4))
@@ -4009,7 +4167,7 @@ def report():
     plt.title("Toronto Neighborhood Reproductive Numbers, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhoodRt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhoodRt_comparisonweighted.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     ptotals = {}
@@ -4070,7 +4228,7 @@ def report():
     plt.title("Toronto Neighborhood Transmission, Opacity Weighted by Active Cases"+latestTO)
     plt.savefig("neighborhood_DRtdt_comparisonweighted.png",bbox_inches='tight',facecolor='white')
     plt.savefig("neighborhood_DRtdt_comparisonweighted.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     plt.fill_between(times-times.max(),torontor+torontof,torontof,color='g',alpha=0.3,label='Recovered')
     plt.fill_between(times-times.max(),toronto,torontor+torontof,color='C1',alpha=0.6,label="Active")
@@ -4085,7 +4243,7 @@ def report():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     plt.fill_between(times-times.max(),torontor+torontof,torontof,color='g',alpha=0.3,label='Recovered')
     plt.fill_between(times-times.max(),toronto,torontor+torontof,color='C1',alpha=0.6,label="Active")
@@ -4100,7 +4258,7 @@ def report():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     curve1 = active3wk(np.cumsum(torontof))
     curve2 = active3wk(np.cumsum(torontor))
@@ -4121,7 +4279,7 @@ def report():
     plt.title("Toronto Cases"+latestTO)
     plt.savefig("toronto_breakdown_3wk_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_breakdown_3wk_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     torontott = np.cumsum(ontario["TORONTO"][:])
     toronto = ontario["TORONTO"][:]
@@ -4143,7 +4301,7 @@ def report():
     plt.title("Toronto Effective Reproductive Number R$_t$"+latestON)
     plt.savefig("toronto_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("toronto_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,10))
     curve = day5avg(toronto[:])
@@ -4156,7 +4314,7 @@ def report():
     plt.annotate("%1.1f Average \nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update.pdf",bbox_inches='tight')
     plt.savefig("toronto_update.png",bbox_inches='tight',facecolor='white')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,10))
     curve = toronto[:]
@@ -4169,7 +4327,7 @@ def report():
     plt.annotate("%1.1f Raw\nCases per Day"%curve[-1],(-150,800),size=24)
     plt.savefig("toronto_update_raw.pdf",bbox_inches='tight')
     plt.savefig("toronto_update_raw.png",bbox_inches='tight',facecolor='white')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     _log(logfile,"Toronto plots completed. \t%s"%systime.asctime(systime.localtime()))
@@ -4183,7 +4341,7 @@ def report():
     plt.title("Ontario Active Cases"+latestON)
     plt.savefig("ontario_active.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_active.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario.keys()):
@@ -4199,7 +4357,7 @@ def report():
     plt.title("Ontario New Cases [7-day average]"+latestON)
     plt.savefig("ontario_newcases.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newcases.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(12,10))
     for k in sorted(ontario_a.keys()):
@@ -4217,7 +4375,7 @@ def report():
     plt.title("Ontario Daily Deaths [7-day average]"+latestON)
     plt.savefig("ontario_newdeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_newdeaths.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     ptotals = {}
     maxn = 0
@@ -4239,7 +4397,7 @@ def report():
     plt.xlim(-len(r2wk),0.2*len(r2wk))
     plt.savefig("ontario_allRt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_allRt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,ax = plt.subplots(figsize=(15,4))
@@ -4269,7 +4427,7 @@ def report():
     plt.title("Ontario PHU Reproductive Numbers, Opacity Weighted by Active Cases"+latestON)
     plt.savefig("ontario_phuRtcomparison.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_phuRtcomparison.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
         
     
     ontariokeys = sorted(ontario_a.keys())
@@ -4371,7 +4529,7 @@ def report():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("ca_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,14))
     for province in canada:
@@ -4390,7 +4548,7 @@ def report():
     plt.title("Canada Confirmed Cases"+latestglobal)
     plt.savefig("caconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caconfirmed.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
@@ -4413,7 +4571,7 @@ def report():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,axes=plt.subplots(figsize=(14,10))
@@ -4437,7 +4595,7 @@ def report():
     plt.title("Canada Daily Cases"+latestglobal)
     plt.savefig("canada_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailycasespop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in canada:
@@ -4460,7 +4618,7 @@ def report():
     plt.title("Canada Active Cases"+latestglobal)
     plt.savefig("canada_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_3wkcasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in ca_deaths:
@@ -4483,7 +4641,7 @@ def report():
     plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,axes=plt.subplots(figsize=(14,10))
@@ -4507,7 +4665,7 @@ def report():
     plt.title("Canada Daily Deaths"+latestglobal)
     plt.savefig("canada_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_dailydeathspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -4540,7 +4698,7 @@ def report():
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("canada_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_deathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in ca_deaths:
@@ -4573,7 +4731,7 @@ def report():
     plt.title("US States Mortality Rate"+latestusa)
     plt.savefig("ca_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailymortality.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in canada:
@@ -4608,7 +4766,7 @@ def report():
     plt.title("Canada Transmission"+latestglobal)
     plt.savefig("canada_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     _log(logfile,"US states plotted. \t%s"%systime.asctime(systime.localtime()))
     n=0
@@ -4649,7 +4807,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_rt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -4689,7 +4847,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("caprov_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("caprov_drt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     #Begin doing US
@@ -4712,7 +4870,7 @@ def report():
     plt.title("United States Confirmed Cases"+latestusa)
     plt.savefig("usconfirmed.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usconfirmed.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in usa:
@@ -4736,7 +4894,7 @@ def report():
     plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,axes=plt.subplots(figsize=(14,10))
@@ -4761,7 +4919,7 @@ def report():
     plt.title("USA Daily Cases"+latestusa)
     plt.savefig("usa_dailycasespop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailycasespop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in usa:
@@ -4785,7 +4943,7 @@ def report():
     plt.title("USA Active Cases"+latestusa)
     plt.savefig("usa_3wkcasespop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_3wkcasespop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,axes=plt.subplots(figsize=(14,10))
     for province in usa:
@@ -4809,7 +4967,7 @@ def report():
     plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     fig,axes=plt.subplots(figsize=(14,10))
@@ -4834,7 +4992,7 @@ def report():
     plt.title("USA Daily Deaths"+latestusa)
     plt.savefig("usa_dailydeathspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_dailydeathspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -4868,7 +5026,7 @@ def report():
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("usa_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_deathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in us_deaths:
@@ -4901,7 +5059,7 @@ def report():
     plt.title("US States Mortality Rate"+latestusa)
     plt.savefig("us_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("us_dailymortality.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(14,12))
     for place in usa:
@@ -4936,7 +5094,7 @@ def report():
     plt.title("US Transmission"+latestusa)
     plt.savefig("usa_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     
     _log(logfile,"US nation-wide data plotted. \t%s"%systime.asctime(systime.localtime()))
@@ -4985,7 +5143,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_rt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_rt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     n=0
     labels=[]
@@ -5025,7 +5183,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("usstates_drt_snapshot.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usstates_drt_snapshot.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     for state in uskeys:
         plotStateOrProvince(state,"United States",usa,us_deaths,
@@ -5076,7 +5234,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
     
     fig,ax=plt.subplots(figsize=(12,12))
     tmax = 0
@@ -5117,7 +5275,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("deathnumberspop_log.png",bbox_inches='tight',facecolor='white')
     plt.savefig("deathnumberspop_log.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     ptotals = {}
     for country in countries:
@@ -5162,7 +5320,7 @@ def report():
                  (30,int(round(1.0/(ptotals[labels[0]]*1.0e-3*0.1)))),clip_on=True)
     plt.savefig("globaldeathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldeathtoll.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     interestcountries = ["Sweden","Finland","United Kingdom","France","Spain","Portugal","Belgium",
                          "Norway","Iceland","Germany","Italy","Greece","New Zealand","China","Denmark",
@@ -5223,7 +5381,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("selectcountriesdailydeaths.png",bbox_inches='tight',facecolor='white')
     plt.savefig("selectcountriesdailydeaths.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -5258,7 +5416,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globaldailydeaths_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldailydeaths_recent.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     fig,ax=plt.subplots(figsize=(12,12))
     maxy=0
@@ -5295,7 +5453,7 @@ def report():
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.savefig("casetransmission.png",bbox_inches='tight',facecolor='white')
     plt.savefig("casetransmission.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -5333,7 +5491,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("globalcases_pop_recent.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globalcases_pop_recent.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     n=0
     labels=[]
@@ -5385,7 +5543,7 @@ def report():
     plt.xlim(-1.0,n+1.0)
     plt.savefig("global_rt.png",bbox_inches='tight',facecolor='white')
     plt.savefig("global_rt.pdf",bbox_inches='tight')
-    plt.close('all'); gc.collect()
+    plt.clf(); plt.close('all'); gc.collect()
 
     _log(logfile,"Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
