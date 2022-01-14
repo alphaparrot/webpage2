@@ -1440,7 +1440,8 @@ def plotOntarioH5(phu,dataset):
     plt.ylabel("New Cases per Day")
     plt.title("%s, ON Raw Cases per Day"%phuname+timestamp)
     if population is not None:
-        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.sum(cases)/population,phu))
+        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.sum(cases)/population,phu),
+                     (-len(cases)+10,0.9*cases.max()))
     plt.yscale('symlog',linthreshy=1.0)
     plt.ylim(0,cases.max())
     plt.savefig("ontario_%s/%s_rawdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
@@ -1455,7 +1456,8 @@ def plotOntarioH5(phu,dataset):
     plt.ylabel("Average New Cases per Day")
     plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
     if population is not None:
-        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname))
+        plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population,phuname),
+                     (-len(cases)+10,0.9*cases.max()))
     plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
@@ -1467,7 +1469,8 @@ def plotOntarioH5(phu,dataset):
     plt.ylabel("Average New Cases per Day")
     plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
     if population is not None:
-        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.sum(cases)/population,phu))
+        plt.annotate("%1.2f%% of the population of %s has been infected."%(np.sum(cases)/population,phu),
+                     (-len(cases)+10,0.9*cases.max()))
     plt.yscale('symlog',linthreshy=1.0)
     plt.ylim(0,curve.max())
     plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
@@ -2746,7 +2749,7 @@ def reportH5():
     for province in cankeys:
         cumcases = np.cumsum(canada[province]["cases"][:])
         provpop = float(canada[province]["population"][()])
-        plt.plot(cumcases/provpop*1e2,marker='.',label=place)
+        plt.plot(cumcases/provpop*1e2,marker='.',label=province)
         coords = (len(cumcases),cumcases[-1]/provpop*1e2)
         plt.annotate(province,coords,xytext=coords)
     #plt.xscale('log')
@@ -2888,7 +2891,7 @@ def reportH5():
             alpha=0.5
             plt.annotate(place,(len(y),y[-1]),xytext=(len(y),y[-1]),clip_on=True)
                     
-            plt.plot(np.array(range(len(y))),y,marker='.',label=place,linestyle=lst,alpha=alpha,color='k')
+            plt.plot(np.array(range(len(y))),y,marker='.',label=province,linestyle=lst,alpha=alpha,color='k')
             
     #plt.xscale('log')
     plt.yscale('log')
