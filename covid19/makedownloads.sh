@@ -26,5 +26,5 @@ ionice -c 2 -n 7 wget -O /home/adivp416/public_html/covid19/ontario_cases.csv ht
 cd $cdir
 
 cd /home/adivp416/public_html/covid19/
-python /home/adivp416/public_html/covid19/covid19report.py datasets
+ionice -c 3 python /home/adivp416/public_html/covid19/covid19report.py datasets
 cat /home/adivp416/public_html/covid19/reportlog.txt
