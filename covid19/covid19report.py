@@ -6452,6 +6452,7 @@ def hdf5():
         popx = float(linedata[3])
         statepops[name] = popx
 
+    os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">%s'%logfile)
             
     #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
