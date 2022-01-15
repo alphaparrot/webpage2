@@ -37,15 +37,16 @@ def x2time(timeseries,plot=True,baseline=7):
 
 def day5avg(data):
     #now actually 7-day
-    smooth = np.zeros(len(data)-6)
+    #smooth = np.zeros(len(data)-6)
     #smooth[0] = np.nanmean(data[:4])
     #smooth[1] = np.nanmean(data[:5])
     #smooth[2] = np.nanmean(data[:6])
-    for n in range(len(data)-6):
-        smooth[n] = np.nanmean(data[n:n+7])
+    #for n in range(len(data)-6):
+        #smooth[n] = np.nanmean(data[n:n+7])
     #smooth[-3] = np.nanmean(data[-6:])
     #smooth[-2] = np.nanmean(data[-5:])
     #smooth[-1] = np.nanmean(data[-4:])
+    smooth = np.convolve(data,np.ones(7),'valid')
     return smooth
 
 def week2avg(data,iscum=False):
@@ -91,13 +92,21 @@ def Rt(dailycases,interval=7,averaged=True,override=False): #Effective reproduct
         k = dailycases[t]
         km1 = dailycases[t-1]
         #Use a rotating buffer
-        loglikelihood7[(t-1)%interval,:] = k*(np.log(km1)+gamma*(reff-1)) - km1*np.exp(gamma*(reff-1)) - loggamma(k+1)
-        loglikelihood[t-1,:] = np.interp(rrange,reff,loglikelihood7[(t-1)%interval,:])
+        l7 = k*(np.log(km1)+gamma*(reff-1)) - km1*np.exp(gamma*(reff-1)) - loggamma(k+1)
+        loglikelihood7[(t-1)%interval,:] = l7[:]
+        loglikelihood[t-1,:] = np.interp(rrange,reff,l7)
         if t>=interval+1:
             logposteriorHR = np.sum(loglikelihood7,axis=0)
+            del l7
+            gc.collect()
             idx = np.argmax(logposteriorHR)
             estimate[t-interval-1] = reff[idx]*(dailycases[t-interval-1]>=0.0)
-            logposterior[t-interval-1,:] = np.interp(rrange,reff,logposteriorHR)                      
+            logposterior[t-interval-1,:] = np.interp(rrange,reff,logposteriorHR)
+        gc.collect()
+    del loglikelihood7
+    del reff
+    del rrange
+    gc.collect()
     return estimate,logposterior,loglikelihood
 
 def matchtimes(tnew,tdata,data):
@@ -7628,8 +7637,8 @@ def hdf5():
                            countrydeathss.attrs["standard_name"] = "daily_deaths"
                            countrydeathss.attrs["long_name"] = "New Deaths per Day"
                        else:
-                           hdf["%s/deaths"][:] += timeseries
-                           hdfs["%s/deaths"][:] += timeseries
+                           hdf["%s/deaths"%country][:] += timeseries
+                           hdfs["%s/deaths"%country][:] += timeseries
                            
                        del timeseries
                        gc.collect()
@@ -7647,8 +7656,8 @@ def hdf5():
                             countrydeathss.attrs["standard_name"] = "daily_deaths"
                             countrydeathss.attrs["long_name"] = "New Deaths per Day"
                        else:
-                           hdf["%s/deaths"][:] += timeseries
-                           hdfs["%s/deaths"][:] += timeseries
+                           hdf["%s/deaths"%country][:] += timeseries
+                           hdfs["%s/deaths"%country][:] += timeseries
                            
                        if "%s/%s/deaths"%(country,localname) not in hdfs:
                            localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
