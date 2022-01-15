@@ -7544,7 +7544,7 @@ def hdf5():
         gc.collect()
             
         for country in hdfs:
-            if not isinstance(hdfs[country],h5.Dataset):
+            if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs:
                 r,lp,ll = Rt(day5avg(hdfs[country]["cases"][:]))
                 p = np.exp(lp)
                 l = np.exp(ll)
@@ -7612,61 +7612,62 @@ def hdf5():
                gc.collect()
                
                
+               if "Princess" not in localname and localname!="Recovered" and localname!="Repatriated Travellers" and "Zaandam" not in country and "Virgin Islands" not in localname and "Prisons" not in localname and "Hospitals" not in localname and "Military" not in localname and "Olympics" not in country and "Princess" not in country:
                
-               if country=="US":
-                   country="United States"
-                   if "%s/deaths"%country not in hdfs:
-                       countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
-                                                         shuffle=True,fletcher32=True,data=timeseries)
-                       countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
-                                                         shuffle=True,fletcher32=True,data=timeseries)
-                       countrydeaths.attrs["units"] = "deaths day-1"
-                       countrydeaths.attrs["standard_name"] = "daily_deaths"
-                       countrydeaths.attrs["long_name"] = "New Deaths per Day"
-                       countrydeathss.attrs["units"] = "deaths day-1"
-                       countrydeathss.attrs["standard_name"] = "daily_deaths"
-                       countrydeathss.attrs["long_name"] = "New Deaths per Day"
-                   else:
-                       hdf["%s/deaths"][:] += timeseries
-                       hdfs["%s/deaths"][:] += timeseries
-                       
-                   del timeseries
-                   gc.collect()
-               
-               else:
-                   if "%s/deaths"%country not in hdfs:
-                        countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
-                                                          shuffle=True,fletcher32=True,data=timeseries)
-                        countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
-                                                         shuffle=True,fletcher32=True,data=timeseries)
-                        countrydeaths.attrs["units"] = "deaths day-1"
-                        countrydeaths.attrs["standard_name"] = "daily_deaths"
-                        countrydeaths.attrs["long_name"] = "New Deaths per Day"
-                        countrydeathss.attrs["units"] = "deaths day-1"
-                        countrydeathss.attrs["standard_name"] = "daily_deaths"
-                        countrydeathss.attrs["long_name"] = "New Deaths per Day"
-                   else:
-                       hdf["%s/deaths"][:] += timeseries
-                       hdfs["%s/deaths"][:] += timeseries
-                       
-                   localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
-                                                   compression_opts=9,shuffle=True,fletcher32=True,
-                                                   data=timeseries)
-                   localdeathss = hdfs.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
-                                                   compression_opts=9,shuffle=True,fletcher32=True,
-                                                   data=timeseries)
-                   del timeseries
-                   gc.collect()
+                   if country=="US":
+                       country="United States"
+                       if "%s/deaths"%country not in hdfs:
+                           countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
+                                                             shuffle=True,fletcher32=True,data=timeseries)
+                           countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
+                                                             shuffle=True,fletcher32=True,data=timeseries)
+                           countrydeaths.attrs["units"] = "deaths day-1"
+                           countrydeaths.attrs["standard_name"] = "daily_deaths"
+                           countrydeaths.attrs["long_name"] = "New Deaths per Day"
+                           countrydeathss.attrs["units"] = "deaths day-1"
+                           countrydeathss.attrs["standard_name"] = "daily_deaths"
+                           countrydeathss.attrs["long_name"] = "New Deaths per Day"
+                       else:
+                           hdf["%s/deaths"][:] += timeseries
+                           hdfs["%s/deaths"][:] += timeseries
+                           
+                       del timeseries
+                       gc.collect()
                    
-                   localdeaths.attrs["units"] = "deaths day-1"
-                   localdeaths.attrs["standard_name"] = "daily_deaths"
-                   localdeaths.attrs["long_name"] = "New Deaths per Day"
-                   localdeathss.attrs["units"] = "deaths day-1"
-                   localdeathss.attrs["standard_name"] = "daily_deaths"
-                   localdeathss.attrs["long_name"] = "New Deaths per Day"
-               hdf.flush()
-               hdfs.flush()
-               gc.collect()
+                   else:
+                       if "%s/deaths"%country not in hdfs:
+                            countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
+                                                              shuffle=True,fletcher32=True,data=timeseries)
+                            countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
+                                                             shuffle=True,fletcher32=True,data=timeseries)
+                            countrydeaths.attrs["units"] = "deaths day-1"
+                            countrydeaths.attrs["standard_name"] = "daily_deaths"
+                            countrydeaths.attrs["long_name"] = "New Deaths per Day"
+                            countrydeathss.attrs["units"] = "deaths day-1"
+                            countrydeathss.attrs["standard_name"] = "daily_deaths"
+                            countrydeathss.attrs["long_name"] = "New Deaths per Day"
+                       else:
+                           hdf["%s/deaths"][:] += timeseries
+                           hdfs["%s/deaths"][:] += timeseries
+                           
+                       localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=timeseries)
+                       localdeathss = hdfs.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=timeseries)
+                       del timeseries
+                       gc.collect()
+                       
+                       localdeaths.attrs["units"] = "deaths day-1"
+                       localdeaths.attrs["standard_name"] = "daily_deaths"
+                       localdeaths.attrs["long_name"] = "New Deaths per Day"
+                       localdeathss.attrs["units"] = "deaths day-1"
+                       localdeathss.attrs["standard_name"] = "daily_deaths"
+                       localdeathss.attrs["long_name"] = "New Deaths per Day"
+                   hdf.flush()
+                   hdfs.flush()
+                   gc.collect()
         gc.collect()
           
                 
