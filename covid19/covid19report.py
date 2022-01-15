@@ -7366,6 +7366,9 @@ def hdf5():
                        countrypopulations.attrs["units"] = "people"
                        countrypopulations.attrs["standard_name"] = "population"
                        countrypopulations.attrs["long_name"] = "Population"
+                           
+                       latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
+                       latest = hdfs.create_dataset("%s/latestdate"%country,data=latestglobal)
                    else:
                        hdf["%s/cases"%country][:] += timeseries
                        hdfs["%s/cases"%country][:] += timeseries
@@ -7395,6 +7398,9 @@ def hdf5():
                        countrypopulations.attrs["units"] = "people"
                        countrypopulations.attrs["standard_name"] = "population"
                        countrypopulations.attrs["long_name"] = "Population"
+                           
+                       latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
+                       latest = hdfs.create_dataset("%s/latestdate"%country,data=latestglobal)
                    else:
                        hdf["%s/cases"%country][:] += timeseries
                        hdfs["%s/cases"%country][:] += timeseries
@@ -7470,9 +7476,7 @@ def hdf5():
                        localRpost.attrs["long_name"] = "Rt Posterior Probability"
                        localRpost.attrs["long_name"] = "Rt Likelihood Function"
                     
-                    
-               latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
-               latest = hdfs.create_dataset("%s/latestdate"%country,data=latestglobal)
+                
                
                hdf.flush()
                hdfs.flush()
