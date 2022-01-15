@@ -7398,75 +7398,77 @@ def hdf5():
                    else:
                        hdf["%s/cases"][:] += timeseries
                        hdfs["%s/cases"][:] += timeseries
-                        
-                   localcases = hdf.create_dataset("/%s/%s/cases"%(country,localname),compression='gzip',
-                                                   compression_opts=9,shuffle=True,fletcher32=True,
-                                                   data=timeseries)
-                   localcasess = hdfs.create_dataset("/%s/%s/cases"%(country,localname),compression='gzip',
-                                                   compression_opts=9,shuffle=True,fletcher32=True,
-                                                   data=timeseries)
-                   r,lp,ll = Rt(day5avg(timeseries))
-                   del timeseries
-                   gc.collect()
-                   
-                   p = np.exp(lp)
-                   l = np.exp(ll)
-                   del lp
-                   del ll
-                   gc.collect()
-                   localRpost = hdf.create_dataset("/%s/%s/Rpost"%(country,localname),compression='gzip',
-                                                compression_opts=9,shuffle=True,fletcher32=True,
-                                                data=p)
-                   localRlike = hdf.create_dataset("/%s/%s/Rlike"%(country,localname),compression='gzip',
-                                                compression_opts=9,shuffle=True,fletcher32=True,
-                                                data=l)
-                   del l
-                   del p
-                   gc.collect()
-                   
-                   localRt = hdf.create_dataset("/%s/%s/Rt"%(country,localname),compression='gzip',
-                                                compression_opts=9,shuffle=True,fletcher32=True,
-                                                data=r)
-                   localRts = hdfs.create_dataset("/%s/%s/Rt"%(country,localname),compression='gzip',
-                                                compression_opts=9,shuffle=True,fletcher32=True,
-                                                data=r)
-                   del r
-                   gc.collect()
-                   
-                   if country=="Canada":
-                       provincepopulation = hdf.create_dataset("/Canada/%s/population"%localname,
-                                                               data=float(provincepops[localname]))
-                       provincepopulations = hdfs.create_dataset("/Canada/%s/population"%localname,
-                                                                 data=float(provincepops[localname]))
-                       provincepopulation.attrs["units"] = "people"
-                       provincepopulation.attrs["standard_name"] = "population"
-                       provincepopulation.attrs["long_name"] = "Population"
-                       provincepopulations.attrs["units"] = "people"
-                       provincepopulations.attrs["standard_name"] = "population"
-                       provincepopulations.attrs["long_name"] = "Population"
-                       canada.append(localname)
                        
-                   latest = hdf.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
-                   latest = hdfs.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
-                   
-                   localcases.attrs["units"] = "cases day-1"
-                   localcases.attrs["standard_name"] = "daily_cases"
-                   localcases.attrs["long_name"] = "New Cases per Day"
-                   localRt.attrs["units"] = "secondary infections case-1"
-                   localRt.attrs["standard_name"] = "R_t"
-                   localRt.attrs["long_name"] = "Effective Reproductive Number"
-                   localcasess.attrs["units"] = "cases day-1"
-                   localcasess.attrs["standard_name"] = "daily_cases"
-                   localcasess.attrs["long_name"] = "New Cases per Day"
-                   localRts.attrs["units"] = "secondary infections case-1"
-                   localRts.attrs["standard_name"] = "R_t"
-                   localRts.attrs["long_name"] = "Effective Reproductive Number"
-                   localRpost.attrs["units"] = "n/a"
-                   localRlike.attrs["units"] = "n/a"
-                   localRpost.attrs["standard_name"] = "R_t_posterior"
-                   localRlike.attrs["standard_name"] = "R_t_likelihood"
-                   localRpost.attrs["long_name"] = "Rt Posterior Probability"
-                   localRpost.attrs["long_name"] = "Rt Likelihood Function"
+                   if "%s/%s/cases"%(country,localname) not in hdfs: 
+                       
+                       localcases = hdf.create_dataset("/%s/%s/cases"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=timeseries)
+                       localcasess = hdfs.create_dataset("/%s/%s/cases"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=timeseries)
+                       r,lp,ll = Rt(day5avg(timeseries))
+                       del timeseries
+                       gc.collect()
+                       
+                       p = np.exp(lp)
+                       l = np.exp(ll)
+                       del lp
+                       del ll
+                       gc.collect()
+                       localRpost = hdf.create_dataset("/%s/%s/Rpost"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=p)
+                       localRlike = hdf.create_dataset("/%s/%s/Rlike"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=l)
+                       del l
+                       del p
+                       gc.collect()
+                       
+                       localRt = hdf.create_dataset("/%s/%s/Rt"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=r)
+                       localRts = hdfs.create_dataset("/%s/%s/Rt"%(country,localname),compression='gzip',
+                                                       compression_opts=9,shuffle=True,fletcher32=True,
+                                                       data=r)
+                       del r
+                       gc.collect()
+                       
+                       if country=="Canada":
+                           provincepopulation = hdf.create_dataset("/Canada/%s/population"%localname,
+                                                                   data=float(provincepops[localname]))
+                           provincepopulations = hdfs.create_dataset("/Canada/%s/population"%localname,
+                                                                       data=float(provincepops[localname]))
+                           provincepopulation.attrs["units"] = "people"
+                           provincepopulation.attrs["standard_name"] = "population"
+                           provincepopulation.attrs["long_name"] = "Population"
+                           provincepopulations.attrs["units"] = "people"
+                           provincepopulations.attrs["standard_name"] = "population"
+                           provincepopulations.attrs["long_name"] = "Population"
+                           canada.append(localname)
+                           
+                       latest = hdf.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
+                       latest = hdfs.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
+                       
+                       localcases.attrs["units"] = "cases day-1"
+                       localcases.attrs["standard_name"] = "daily_cases"
+                       localcases.attrs["long_name"] = "New Cases per Day"
+                       localRt.attrs["units"] = "secondary infections case-1"
+                       localRt.attrs["standard_name"] = "R_t"
+                       localRt.attrs["long_name"] = "Effective Reproductive Number"
+                       localcasess.attrs["units"] = "cases day-1"
+                       localcasess.attrs["standard_name"] = "daily_cases"
+                       localcasess.attrs["long_name"] = "New Cases per Day"
+                       localRts.attrs["units"] = "secondary infections case-1"
+                       localRts.attrs["standard_name"] = "R_t"
+                       localRts.attrs["long_name"] = "Effective Reproductive Number"
+                       localRpost.attrs["units"] = "n/a"
+                       localRlike.attrs["units"] = "n/a"
+                       localRpost.attrs["standard_name"] = "R_t_posterior"
+                       localRlike.attrs["standard_name"] = "R_t_likelihood"
+                       localRpost.attrs["long_name"] = "Rt Posterior Probability"
+                       localRpost.attrs["long_name"] = "Rt Likelihood Function"
                     
                     
                latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
