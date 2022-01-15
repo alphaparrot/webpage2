@@ -6436,7 +6436,7 @@ def hdf5():
     countrypops = {}
     for line in countryset:
         linedata = line.split(',')
-        name = strtitle(linedata[0]).replace(" And "," and").replace(" Of "," of ")
+        name = strtitle(linedata[0]).replace(" And "," and ").replace(" Of "," of ")
         popx = float(linedata[4])
         countrypops[name] = popx
     
