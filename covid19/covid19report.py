@@ -7650,21 +7650,22 @@ def hdf5():
                            hdf["%s/deaths"][:] += timeseries
                            hdfs["%s/deaths"][:] += timeseries
                            
-                       localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
-                                                       compression_opts=9,shuffle=True,fletcher32=True,
-                                                       data=timeseries)
-                       localdeathss = hdfs.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
-                                                       compression_opts=9,shuffle=True,fletcher32=True,
-                                                       data=timeseries)
-                       del timeseries
-                       gc.collect()
-                       
-                       localdeaths.attrs["units"] = "deaths day-1"
-                       localdeaths.attrs["standard_name"] = "daily_deaths"
-                       localdeaths.attrs["long_name"] = "New Deaths per Day"
-                       localdeathss.attrs["units"] = "deaths day-1"
-                       localdeathss.attrs["standard_name"] = "daily_deaths"
-                       localdeathss.attrs["long_name"] = "New Deaths per Day"
+                       if "%s/%s/deaths"%(country,localname) not in hdfs:
+                           localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
+                                                           compression_opts=9,shuffle=True,fletcher32=True,
+                                                           data=timeseries)
+                           localdeathss = hdfs.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
+                                                           compression_opts=9,shuffle=True,fletcher32=True,
+                                                           data=timeseries)
+                           del timeseries
+                           gc.collect()
+                           
+                           localdeaths.attrs["units"] = "deaths day-1"
+                           localdeaths.attrs["standard_name"] = "daily_deaths"
+                           localdeaths.attrs["long_name"] = "New Deaths per Day"
+                           localdeathss.attrs["units"] = "deaths day-1"
+                           localdeathss.attrs["standard_name"] = "daily_deaths"
+                           localdeathss.attrs["long_name"] = "New Deaths per Day"
                    hdf.flush()
                    hdfs.flush()
                    gc.collect()
