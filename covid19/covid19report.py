@@ -7367,8 +7367,8 @@ def hdf5():
                        countrypopulations.attrs["standard_name"] = "population"
                        countrypopulations.attrs["long_name"] = "Population"
                    else:
-                       hdf["%s/cases"][:] += timeseries
-                       hdfs["%s/cases"][:] += timeseries
+                       hdf["%s/cases"%country][:] += timeseries
+                       hdfs["%s/cases"%country][:] += timeseries
                        
                    del timeseries
                    gc.collect()
@@ -7396,8 +7396,8 @@ def hdf5():
                        countrypopulations.attrs["standard_name"] = "population"
                        countrypopulations.attrs["long_name"] = "Population"
                    else:
-                       hdf["%s/cases"][:] += timeseries
-                       hdfs["%s/cases"][:] += timeseries
+                       hdf["%s/cases"%country][:] += timeseries
+                       hdfs["%s/cases"%country][:] += timeseries
                        
                    if "%s/%s/cases"%(country,localname) not in hdfs: 
                        
