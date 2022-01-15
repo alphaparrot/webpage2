@@ -7301,11 +7301,6 @@ def hdf5():
             indexf.write("\n".join(html))
         
         
-        globaltime = latestglobal.split("/")
-        latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
-        latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
-            
-        
         canadasetf = "provincepopulations.csv"
         with open(canadasetf,"r") as df:
             canadaset = df.read().split('\n')[2:]
