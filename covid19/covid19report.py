@@ -6714,6 +6714,7 @@ def hdf5():
             indexf.write("\n".join(html))
         
         for neighborhood in sorted(TOneighborhoods["units"]):
+            print(neighborhood,"Toronto")
             ckey = neighborhood.replace("/","-")
             ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
             dtotal = TOneighborhoods["units"][neighborhood]["FATAL"].astype(int)
@@ -6912,6 +6913,7 @@ def hdf5():
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
+                print(phu,"Ontario")
                 ckey = strtitle(phu)
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
@@ -7040,6 +7042,7 @@ def hdf5():
                             states[state] = [county,]
                         else:
                             states[state].append(county)
+                        print(state,county,"cases")
                         cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
                         countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
@@ -7109,6 +7112,7 @@ def hdf5():
                         countyRt.attrs["long_name"] = "Effective Reproductive Number"
                         
                         if "/United States/%s/cases"%state not in hdf:
+                            print(state,"cases")
                             statecases = hdf.create_dataset("/United States/%s/cases"%state,
                                                             compression='gzip',compression_opts=9,shuffle=True,
                                                             fletcher32=True,data=cases)
@@ -7154,6 +7158,7 @@ def hdf5():
             
         for state in hdfs["United States"]:
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
+                print(state,"Rt")
                 r,lp,ll = Rt(day5avg(hdfs["United States/%s/cases"%state][:].astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
@@ -7207,6 +7212,7 @@ def hdf5():
                     and "Virgin Islands" not in state and "Military" not in state\
                     and "Recovered" not in state and "Prisons" not in state\
                     and "Hospitals" not in state:
+                        print(state,county,"deaths")
                         deaths = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
                         
                         countydeaths = hdf.create_dataset("/United States/%s/%s/deaths"%(state,county),
@@ -7226,7 +7232,8 @@ def hdf5():
                         countydeaths.attrs["long_name"] = "New Deaths per Day"
                         
                         if "/United States/%s/deaths"%state not in hdf:
-                            
+                            print(state,"deaths")
+                             
                             statedeaths = hdf.create_dataset("/United States/%s/deaths"%state,
                                                             compression='gzip',compression_opts=9,shuffle=True,
                                                             fletcher32=True,data=deaths)
@@ -7355,6 +7362,7 @@ def hdf5():
                    if country=="US":
                        country="United States"
                        if "%s/cases"%country not in hdfs:
+                           print(country,"cases")
                            countrycases = hdf.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
                                                              shuffle=True,fletcher32=True,data=timeseries)
                            countrycasess = hdfs.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
@@ -7387,6 +7395,7 @@ def hdf5():
                    
                    else:
                        if "%s/cases"%country not in hdfs:
+                           print(country,"cases")
                            countrycases = hdf.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
                                                              shuffle=True,fletcher32=True,data=timeseries)
                            countrycasess = hdfs.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
@@ -7415,6 +7424,7 @@ def hdf5():
                            hdfs["%s/cases"%country][:] += timeseries
                            
                        if "%s/%s/cases"%(country,localname) not in hdfs: 
+                           print(localname,country,"cases")
                            
                            localcases = hdf.create_dataset("/%s/%s/cases"%(country,localname),compression='gzip',
                                                            compression_opts=9,shuffle=True,fletcher32=True,
@@ -7554,6 +7564,7 @@ def hdf5():
             
         for country in hdfs:
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs:
+                print(country,"Rt")
                 r,lp,ll = Rt(day5avg(hdfs[country]["cases"][:]))
                 p = np.exp(lp)
                 l = np.exp(ll)
@@ -7626,6 +7637,7 @@ def hdf5():
                    if country=="US":
                        country="United States"
                        if "%s/deaths"%country not in hdfs:
+                            print(country,"deaths")
                            countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
                                                              shuffle=True,fletcher32=True,data=timeseries)
                            countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
@@ -7645,6 +7657,7 @@ def hdf5():
                    
                    else:
                        if "%s/deaths"%country not in hdfs:
+                            print(country,"deaths")
                             countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
                                                               shuffle=True,fletcher32=True,data=timeseries)
                             countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
@@ -7660,6 +7673,7 @@ def hdf5():
                            hdfs["%s/deaths"%country][:] += timeseries
                            
                        if "%s/%s/deaths"%(country,localname) not in hdfs:
+                           print(localname,country,"deaths")
                            localdeaths = hdf.create_dataset("/%s/%s/deaths"%(country,localname),compression='gzip',
                                                            compression_opts=9,shuffle=True,fletcher32=True,
                                                            data=timeseries)
