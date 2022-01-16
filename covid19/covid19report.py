@@ -7637,7 +7637,7 @@ def hdf5():
                    if country=="US":
                        country="United States"
                        if "%s/deaths"%country not in hdfs:
-                            print(country,"deaths")
+                           print(country,"deaths")
                            countrydeaths = hdf.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
                                                              shuffle=True,fletcher32=True,data=timeseries)
                            countrydeathss = hdfs.create_dataset("/%s/deaths"%country,compression='gzip',compression_opts=9,
