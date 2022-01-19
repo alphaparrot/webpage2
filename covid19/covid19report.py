@@ -100,7 +100,7 @@ def Rt(dailycases,interval=7,averaged=True,override=False): #Effective reproduct
             idx = np.argmax(logposteriorHR)
             estimate[t-interval-1] = reff[idx]*(dailycases[t-interval-1]>=0.0)
             logposterior[t-interval-1,:] = np.interp(rrange,reff,logposteriorHR)
-        gc.collect()
+        #gc.collect()
     del loglikelihood7
     del reff
     del rrange
@@ -6717,7 +6717,7 @@ def hdf5():
         for neighborhood in sorted(TOneighborhoods["units"]):
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
-            print(neighborhood,"Toronto")
+            _log(logfile,neighborhood+", Toronto")
             ckey = neighborhood.replace("/","-")
             ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
             dtotal = TOneighborhoods["units"][neighborhood]["FATAL"].astype(int)
@@ -6916,7 +6916,7 @@ def hdf5():
             if len(ontario[phu][:])>10:
                 hdf = h5.File("adivparadise_covid19data.hdf5","a")
                 hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
-                print(phu,"Ontario")
+                _log(logfile,phu+", Ontario")
                 ckey = strtitle(phu)
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
