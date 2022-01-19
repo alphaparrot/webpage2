@@ -2278,7 +2278,7 @@ def reportH5():
 
     for neighborhood in TOneighborhoods:
         p = Pool(1)
-        p.map(plot_TOneighborhoodH5(neighborhood))
+        p.map(plot_TOneighborhoodH5,[[neighborhood,]])
         p.close()
     _log(logfile,"Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
     
