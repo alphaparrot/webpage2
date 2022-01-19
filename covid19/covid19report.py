@@ -1,4 +1,5 @@
 import gc
+from multiprocessing import Pool
 #from memory_profiler import profile
 
 logfile = "/home/adivp416/public_html/covid19/reportlog.txt"
@@ -61,6 +62,14 @@ def week2avg(data,iscum=False):
         smooth = np.append(smooth,np.nanmean(y[-n:]))
     del y
     return smooth
+
+def day14avg(data):
+    avg = np.convolve(data,np.ones(14),'valid')/14.0
+    return avg
+
+def recent3wk(data):
+    cumsum = np.convolve(data,np.ones(21),'valid')
+    return cumsum
 
 def active3wk(data):
     cumsum = np.zeros(len(data)-1-21)
@@ -413,8 +422,11 @@ def country_summary(country,dataset,deathdata,countrypops,timestamp):
     plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
-def country_summaryH5(country,dataset):
-    
+def country_summaryH5(country):
+    import h5py as h5
+    country = country[0]
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
+
     fig,axes = plt.subplots(4,1,num=13,clear=True,sharex=True,figsize=(8,14))
     
     cdata = dataset[country]
@@ -467,8 +479,14 @@ def country_summaryH5(country,dataset):
     plt.clf()
     plt.clf(); plt.close('all'); gc.collect()    
 
+    dataset.close()
+
 #@profile
-def plot_TOneighborhoodH5(neighborhood,dataset):
+def plot_TOneighborhoodH5(neighborhood):
+    import h5py as h5
+    neighborhood = neighborhood[0]
+    print(neighborhood)
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
 
     fnamestub = neighborhood
     if "/" in fnamestub:
@@ -682,6 +700,21 @@ def plot_TOneighborhoodH5(neighborhood,dataset):
     plt.savefig("%s/%s_relcases_log.png"%(fnamestub,fnamestub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_relcases_log.pdf"%(fnamestub,fnamestub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
+    
+    del cases
+    del hospt
+    del fatal
+    del recov
+    del rt
+    del population
+    del timestamp 
+    del curve
+    del curve1
+    del curve2 
+    del curve3
+    del curve4
+    
+    dataset.close()
     
 #@profile    
 def plot_TOneighborhood(neighborhood,dataset,timestamp):
@@ -1094,8 +1127,11 @@ def plotStateOrProvince(name,country,dataset,deaths_dataset,national_cases,natio
     plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
-def plotStateOrProvinceH5(name,country,dataset):
+def plotStateOrProvinceH5(args):
     '''national_cases and national_deaths should be population-adjusted.'''
+    import h5py as h5
+    name,country = args
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
     
     fstub = name.replace(" ","_").replace("&","and")
     
@@ -1299,7 +1335,8 @@ def plotStateOrProvinceH5(name,country,dataset):
     plt.savefig("%s/%s_rel3wk_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rel3wk_log.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
-        
+    
+    dataset.close()    
     
 #@profile    
 def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
@@ -1411,7 +1448,11 @@ def plotOntario(phu,cases,deaths,active,recovered,timestamp,population=None):
     plt.clf(); plt.close('all'); gc.collect()
     
 #@profile
-def plotOntarioH5(phu,dataset):
+def plotOntarioH5(phu):    
+    import h5py as h5
+    phu = phu[0]
+
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
     
     fstub = strtitle(phu).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     if not os.path.isdir("ontario_%s"%fstub):
@@ -1530,6 +1571,8 @@ def plotOntarioH5(phu,dataset):
     plt.savefig("ontario_%s/%s_Rt.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_%s/%s_Rt.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
+    
+    dataset.close()
     
 #@profile    
 def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
@@ -2230,10 +2273,18 @@ def reportH5():
         
         
     _log(logfile,"Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
+    
+    dataset.close()
 
     for neighborhood in TOneighborhoods:
-        plot_TOneighborhoodH5(neighborhood,dataset)
+        p = Pool(1)
+        p.map(plot_TOneighborhoodH5(neighborhood))
+        p.close()
     _log(logfile,"Toronto neighborhoods plotted. \t%s"%systime.asctime(systime.localtime()))
+    
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
+    torontogroup = dataset["Canada/Ontario/Toronto"]
+    ontariogroup = dataset["Canada/Ontario"]
     
     latestTO = "\nAs of "+torontogroup["Alderwood/latestdate"][()]
     latestON = "\nAs of "+torontogroup["latestdate"][()]
@@ -2648,12 +2699,15 @@ def reportH5():
     plt.savefig("ontario_phuRtcomparison.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ontario_phuRtcomparison.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
-        
+    
+    dataset.close()
     
     ontariokeys = sorted(ontario_phus)
     for k in sorted(ontario_phus):
         try:
-            plotOntarioH5(k,dataset)
+            p = Pool(1)
+            p.map(plotOntarioH5,[[k,]])
+            p.close()
         except:
             traceback.print_exc()
             os.system("rm -rf ontario_%s*"%(strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
@@ -2686,55 +2740,14 @@ def reportH5():
     _log(logfile,"Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
     
     for province in cankeys:
-        plotStateOrProvinceH5(province,"Canada",dataset)
+        p = Pool(1)
+        p.map(plotStateOrProvinceH5,[[province,"Canada"]])
+        p.close()
 
     _log(logfile,"Provincial plots completed. \t%s"%systime.asctime(systime.localtime()))
          
-    #adivgroup = ["United States/Minnesota/Hennepin",
-    #             "United States/Minnesota/Ramsey",
-    #             "United States/Minnesota/Dakota",
-    #             "United States/Minnesota/Blue Earth",
-    #             "United States/Minnesota",
-    #             "United States/Oregon/Polk",
-    #             "United States/Oregon/Benton",
-    #             "United States/Oregon/Marion",
-    #             "United States/Oregon",
-    #             "United States/Florida/Pinellas",
-    #             "United States/Florida",
-    #             "Canada/Ontario",
-    #             "Canada/Ontario/Toronto",
-    #             "Canada/Ontario/Toronto/The Beaches",
-    #             "Canada/Newfoundland and Labrador"]
-         
-    #adivgroup = [{"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  #"abbrev":"MN","place":"Hennepin","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  #"abbrev":"MN","place":"Ramsey","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  #"abbrev":"MN","place":"Dakota","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  #"abbrev":"OR","place":"Polk","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  #"abbrev":"OR","place":"Benton","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Oregon",
-                  #"abbrev":"OR","place":"Marion","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Florida",
-                  #"abbrev":"FL","place":"Pinellas","timestamp":latestusa},
-                 #{"type":"county","dataset":usacsv,"state/province":"Minnesota",
-                  #"abbrev":"MN","place":"Blue Earth","timestamp":latestusa},
-                 #{"type":"state/province","dataset":usa,"place":"Minnesota",
-                  #"population":statepops["Minnesota"],"timestamp":latestusa},
-                 #{"type":"city","place":"Toronto","abbrev":"ON","dataset":torontott,"population":torontopop,
-                  #"timestamp":latestON},
-                 #{"type":"state/province","dataset":canada,"place":"Newfoundland and Labrador",
-                  #"population":provincepops["Newfoundland and Labrador"],"timestamp":latestglobal},
-                 #{"type":"neighborhood","dataset":TOneighborhoods,"place":"The Beaches","abbrev":"Toronto",
-                  #"timestamp":latestTO}]
-                 
-    #plotgroup(adivgroup,directory="adiv")
-
-    #_log(logfile,"Adiv's personal report plotted. \t%s"%systime.asctime(systime.localtime()))
-         
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
+        
     latestglobal = "\nAs of "+dataset["Canada/latestdate"][()]
          
     fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
@@ -2908,7 +2921,7 @@ def reportH5():
     #plt.legend(loc='best')
     plt.xlabel("Time [days]")
     plt.ylabel("Mortality Rate")
-    plt.title("Canadian Provinces Mortality Rate"+latestusa)
+    plt.title("Canadian Provinces Mortality Rate"+latestglobal)
     plt.savefig("ca_dailymortality.png",bbox_inches='tight',facecolor='white')
     plt.savefig("ca_dailymortality.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
@@ -3263,12 +3276,18 @@ def reportH5():
     plt.savefig("usstates_drt_snapshot.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
 
+    dataset.close()
+
     for state in uskeys:
-        plotStateOrProvinceH5(state,"United States",dataset)
+        p = Pool(1)
+        p.map(plotStateOrProvinceH5,[[state,"United States"]])
+        p.close()
 
     _log(logfile,"Finished state-level data. Starting counties. \t%s"%systime.asctime(systime.localtime()))
     
     _log(logfile,"Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
+
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
 
     fig,ax=plt.subplots(num=13,clear=True,figsize=(12,12))
     tmax = 0
@@ -3489,11 +3508,15 @@ def reportH5():
     plt.savefig("global_rt.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
 
+    dataset.close()
+
     _log(logfile,"Global data plotted. \t%s"%systime.asctime(systime.localtime()))
 
     for country in countries:
         try:
-            country_summaryH5(country,dataset)
+            p = Pool(1)
+            p.map(country_summaryH5,[[country,]])
+            p.close()
             _log(logfile,"%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
             makehtml.makeCountry(country)
             
