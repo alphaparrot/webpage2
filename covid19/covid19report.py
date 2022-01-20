@@ -3067,7 +3067,7 @@ def reportH5():
     for place in uskeys:
         y = day5avg(usa[place]["cases"][:])/usa[place]["population"][()]*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
-        plt.annotate(place,(0,y[-1]))
+        plt.annotate(place,(0,y[-1]),clip_on=True)
     #plt.xscale('log')
     plt.yscale('log')
     #plt.ylim(1.0e-2,100)
@@ -3083,7 +3083,7 @@ def reportH5():
     for place in uskeys:
         y = active3wk(np.cumsum(usa[place]["cases"][:]))/usa[place]["population"][()]*1e2
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
-        plt.annotate(place,(0,y[-1]))
+        plt.annotate(place,(0,y[-1]),clip_on=True)
     #plt.xscale('log')
     #plt.yscale('log')
     #plt.ylim(1.0,2.0e3)
@@ -3116,7 +3116,7 @@ def reportH5():
     for place in uskeys:
         y = day5avg(usa[place]["deaths"][:])/usa[place]["population"][()]*1e6
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
-        plt.annotate(place,(0,y[-1]))
+        plt.annotate(place,(0,y[-1]),clip_on=True)
     #plt.xscale('log')
     plt.yscale('log')
     #plt.ylim(0.0,50)
