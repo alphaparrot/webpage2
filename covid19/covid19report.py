@@ -2182,7 +2182,8 @@ def reportH5():
             #makehtml.makeCounty(county,state,pathdir)
             
     ckeys = sorted(uskeys)
-    ckeys.remove('Guam') #No counties in Guam
+    if "Guam" in ckeys:
+        ckeys.remove('Guam') #No counties in Guam
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
