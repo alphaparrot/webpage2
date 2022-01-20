@@ -2894,9 +2894,10 @@ def reportH5():
     #labels=[]
     ptotals = {}
     for k in cankeys:
-        ptotals[k] = canada[k]["population"][()]/np.sum(canada[k]["deaths"][:])
+        if np.sum(canada[k]["deaths"][:])>10:
+            ptotals[k] = canada[k]["population"][()]/np.sum(canada[k]["deaths"][:])
     
-    worst = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]])
+    worst = int(round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]]))
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("canada_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("canada_deathtoll.pdf",bbox_inches='tight')
@@ -3150,7 +3151,8 @@ def reportH5():
     #labels=[]
     ptotals = {}
     for k in uskeys:
-        ptotals[k] = usa[k]["population"][()]/np.sum(usa[k]["deaths"][:])
+        if np.sum(usa[k]["deaths"][:])>10:
+            ptotals[k] = usa[k]["population"][()]/np.sum(usa[k]["deaths"][:])
     
     worst = int(round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]]))
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
@@ -3349,7 +3351,8 @@ def reportH5():
     for country in countries:
         try:
             y = np.sum(dataset[country]["deaths"][:])
-            ptotals[country] = y/float(dataset[country]["population"][()])*1.0e3
+            if y>10:
+                ptotals[country] = y/float(dataset[country]["population"][()])*1.0e3
         except Exception as e:
             traceback.print_exc()
     n=0
@@ -5055,10 +5058,10 @@ def report():
     ptotals = {}
     for k in usa:
         if "Princess" not in k and "Virgin Islands" not in k and "Recovered" not in k and "Virgin Islands" not in k and "Guam" not in k\
-        and "Military" not in k and "Prisons" not in k and "Hospitals" not in k:
+        and "Military" not in k and "Prisons" not in k and "Hospitals" not in k and us_deaths[k][-1]>10:
             ptotals[k] = statepops[k]/us_deaths[k][-1]
     
-    worst = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]])
+    worst = int(round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]]))
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("usa_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_deathtoll.pdf",bbox_inches='tight')
