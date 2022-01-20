@@ -47,7 +47,7 @@ def day5avg(data):
     #smooth[-3] = np.nanmean(data[-6:])
     #smooth[-2] = np.nanmean(data[-5:])
     #smooth[-1] = np.nanmean(data[-4:])
-    smooth = np.convolve(data,np.ones(7),'valid')
+    smooth = np.convolve(data,np.ones(7),'valid')/7.0
     return smooth
 
 def week2avg(data,iscum=False):
@@ -2556,7 +2556,7 @@ def reportH5():
     fig,axes=plt.subplots(num=13,clear=True,figsize=(14,7))
     
     plt.axhline(1.0,linestyle='--',color='k')
-    y = day5avg(toronto[:])
+    y = np.convolve(toronto[:],np.ones(7),'valid')/7.0
     r = torontogroup["Rt"][:]
     curve = week2avg(r)
     plt.plot(np.arange(len(curve))-len(curve),week2avg(r),marker='.',color='k',label="Toronto R$_t$ (2-wk Avg)")
@@ -2574,7 +2574,7 @@ def reportH5():
     curve = y
     plt.plot(np.arange(len(curve))+1-len(curve),curve,marker='.')
     #plt.yscale('symlog',linthreshy=10.0)
-    plt.ylim(0,toronto.max())
+    plt.ylim(0,curve.max())
     plt.xlabel("Days Relative to Present",size=20)
     plt.ylabel("7-Day Average Cases per Day",size=20)
     plt.title("Toronto"+latestON,size=24)
@@ -3033,11 +3033,11 @@ def reportH5():
         population = usa[place]["population"][()]
         plt.plot(cases/population*1e2,marker='.',label=place)
         coords = (len(cases),cases[-1]/population*1e2)
-        plt.annotate(place,coords,xytext=coords)
+        plt.annotate(place,coords,xytext=coords,clip_on=True)
     #plt.xscale('log')
     #plt.yscale('log')
     plt.xlim(30,len(usa["cases"][:]))
-    plt.ylim(0.1,30.0)
+   # plt.ylim(0.1,30.0)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Time [days]")
     plt.ylabel("Confirmed Cases (percentage of population)")
@@ -3050,7 +3050,7 @@ def reportH5():
     for place in uskeys:
         y = day5avg(usa[place]["cases"][:])/usa[place]["population"][()]*1e5
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
-        plt.annotate(place,(0,y[-1]))
+        plt.annotate(place,(0,y[-1]),clip_on=True)
     #plt.xscale('log')
     #plt.yscale('log')
     #plt.ylim(1.0e-2,100)
@@ -3099,7 +3099,7 @@ def reportH5():
     for place in uskeys:
         y = day5avg(usa[place]["deaths"][:])/usa[place]["population"][()]*1e6
         plt.plot(np.arange(len(y))-len(y),y,marker='.',label=place,linestyle=':')
-        plt.annotate(place,(0,y[-1]))
+        plt.annotate(place,(0,y[-1]),clip_on=True)
     #plt.xscale('log')
     #plt.yscale('log')
     plt.ylim(0.0,50)
