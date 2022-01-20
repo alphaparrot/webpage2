@@ -331,7 +331,7 @@ def plot_stateRt(state,dataset,timestamp):
     fig,ax = plt.subplots(num=13,clear=True)
     
     plt.axhline(1.0,linestyle='--',color='r')
-    data = dataset["United States"][state]
+    data = dataset[state]
     y = day5avg(np.diff(data))
     r,p,l = Rt(y,interval=7)
     week2r = week2avg(r)
@@ -355,7 +355,7 @@ def plot_stateRtH5(state,dataset,timestamp):
     
     fig,ax = plt.subplots(num=13,clear=True)
     plt.axhline(1.0,linestyle='--',color='r')
-    r = dataset["United States"][state]["Rt"][:]
+    r = dataset[state]["Rt"][:]
     week2r = week2avg(r)
     time1 = np.arange(len(r))-len(r)
     time2 = np.arange(len(week2r))-len(week2r)
