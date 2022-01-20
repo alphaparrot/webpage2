@@ -432,7 +432,7 @@ def country_summaryH5(country):
     cdata = dataset[country]
     cases = cdata["cases"][:]
     population = cdata["population"][()]
-    timestamp = "\nAs of "+cdata["latestdate"][()]
+    timestamp = "\nAs of "+cdata["latestdate"].asstr()[()]
     
     y = cases
     y = day5avg(cases)
@@ -498,7 +498,7 @@ def plot_TOneighborhoodH5(neighborhood):
     recov = dataset["Canada/Ontario/Toronto"][neighborhood]["recovered"][:]
     rt = dataset["Canada/Ontario/Toronto"][neighborhood]["Rt"][:]
     population = dataset["Canada/Ontario/Toronto"][neighborhood]["population"][()]
-    timestamp = "\nAs of "+dataset["Canada/Ontario/Toronto"][neighborhood]["latestdate"][()]
+    timestamp = "\nAs of "+dataset["Canada/Ontario/Toronto"][neighborhood]["latestdate"].asstr()[()]
     
     if not os.path.isdir("%s"%fnamestub):
         os.system('mkdir "%s"'%fnamestub)
@@ -1138,7 +1138,7 @@ def plotStateOrProvinceH5(args):
     if not os.path.isdir(fstub):
         os.system("mkdir %s"%fstub)
     
-    timestamp = "\nAs of "+dataset[country]["latestdate"][()]
+    timestamp = "\nAs of "+dataset[country]["latestdate"].asstr()[()]
     
     
     cases = dataset[country][name]["cases"][:]
@@ -1157,7 +1157,7 @@ def plotStateOrProvinceH5(args):
     plt.annotate("%1.1f%% of the population in %s has tested positive."%(np.sum(dataset[country][name]["cases"][:])/float(population)*1e2,name),(-len(cases),0.9*cases.max()))
     plt.xlabel("Days before Present")
     plt.ylabel("New Cases per Day")
-    plt.title("%s Daily New Cases"+timestamp)
+    plt.title("%s Daily New Cases"%name+timestamp)
     plt.savefig("%s/%s_rawdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
     plt.savefig("%s/%s_rawdaily.pdf"%(fstub,fstub),bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
@@ -1468,7 +1468,7 @@ def plotOntarioH5(phu):
     active = dataset["Canada/Ontario/%s/active"%phu][:]
     deaths = dataset["Canada/Ontario/%s/deaths"%phu][:]
     Rt = dataset["Canada/Ontario/%s/Rt"%phu][:]
-    timestamp = "\nAs of "+dataset["Canada/Ontario/%s/latestdate"%phu][()]
+    timestamp = "\nAs of "+dataset["Canada/Ontario/%s/latestdate"%phu].asstr()[()]
     
     fig,ax = plt.subplots(num=13,clear=True)
     
@@ -1770,7 +1770,7 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     pathdir = "%s/%s"%(fstub1,fstub2)
     statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
     statepopulation = float(dataset["United States"][state]["population"][()])
-    timestamp = "\nAs of "+dataset["United States"][state][county]["latestdate"][()]
+    timestamp = "\nAs of "+dataset["United States"][state][county]["latestdate"].asstr()[()]
     
     dcases = np.diff(cases)
     dstatecases = np.diff(statecases)
@@ -2168,7 +2168,7 @@ def reportH5():
         
     uskeys = []
     for state in dataset["United States"]:
-        if not isinstance(dataset["United States"][state],h5.Dataset):
+        if not isinstance(dataset["United States"][state],h5.Dataset) and dataset["United States/%s/population"%state][()]>0:
             uskeys.append(state)
             fstub = state.replace(" ","_").replace("&","and")
             makehtml.makeStateorProvince(state,"%s/%s"%(fstub,fstub))
@@ -2286,8 +2286,8 @@ def reportH5():
     torontogroup = dataset["Canada/Ontario/Toronto"]
     ontariogroup = dataset["Canada/Ontario"]
     
-    latestTO = "\nAs of "+torontogroup["Alderwood/latestdate"][()]
-    latestON = "\nAs of "+torontogroup["latestdate"][()]
+    latestTO = "\nAs of "+torontogroup["Alderwood/latestdate"].asstr()[()]
+    latestON = "\nAs of "+torontogroup["latestdate"].asstr()[()]
          
     fig,ax=plt.subplots(num=13,clear=True,figsize=(16,12))
     for neighborhood in TOneighborhoods:
@@ -2748,7 +2748,7 @@ def reportH5():
          
     dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
         
-    latestglobal = "\nAs of "+dataset["Canada/latestdate"][()]
+    latestglobal = "\nAs of "+dataset["Canada/latestdate"].asstr()[()]
          
     fig,axes=plt.subplots(num=13,clear=True,figsize=(14,10))
     for province in cankeys:
@@ -3026,7 +3026,7 @@ def reportH5():
     #Begin doing US
     
     usa = dataset["United States"]
-    latestusa = "\nAs of "+dataset["United States/Minnesota/latestdate"][()]
+    latestusa = "\nAs of "+dataset["United States/Minnesota/latestdate"].asstr()[()]
     
     fig,ax=plt.subplots(num=13,clear=True,figsize=(14,14))
     for place in uskeys:
