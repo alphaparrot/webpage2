@@ -3152,7 +3152,7 @@ def reportH5():
     for k in uskeys:
         ptotals[k] = usa[k]["population"][()]/np.sum(usa[k]["deaths"][:])
     
-    worst = round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]])
+    worst = int(round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]]))
     plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
     plt.savefig("usa_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_deathtoll.pdf",bbox_inches='tight')
