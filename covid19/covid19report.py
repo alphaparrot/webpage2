@@ -3251,7 +3251,6 @@ def reportH5():
     nmax = 0
     for place in uskeys:
         nmax = max(nmax,active[place])
-        y = day5avg(np.diff(y[y>10]))
         r = usa[place]["Rt"][:]
         ptotals[place] = week2avg(np.gradient(r))[-1]
     
