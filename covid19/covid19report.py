@@ -6570,6 +6570,7 @@ def hdf5_ON(throttle=False):
  
     os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">%s'%logfile)
             
+    _log(logfile,"Starting HDF5_ON at %s"%systime.asctime(systime.localtime()))
     #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
 
@@ -6824,7 +6825,6 @@ def hdf5_ON(throttle=False):
             indexf.write("\n".join(html))
         
         for neighborhood in sorted(TOneighborhoods["units"]):
-            _log(logfile,"%s, Toronto written to file at "%neighborhood+systime.asctime(systime.localtime()))
             if throttle:
                 systime.sleep(0.1)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
@@ -7030,7 +7030,6 @@ def hdf5_ON(throttle=False):
                     systime.sleep(0.1)
                 hdf = h5.File("adivparadise_covid19data.hdf5","a")
                 hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
-                _log(logfile,phu+", Ontario")
                 ckey = strtitle(phu)
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
@@ -7141,9 +7140,11 @@ def hdf5_ON(throttle=False):
         hdfs.close()
         raise
     
+    _log(logfile,"Ending HDF5_ON at %s"%systime.asctime(systime.localtime()))
+    
 def hdf5_USA(throttle=False):    
     import h5py as h5
-    
+    _log(logfile,"Starting HDF5_USA at %s"%systime.asctime(systime.localtime()))
     statesetf = "statepopulations.csv"
     with open(statesetf,"r") as df:
         stateset = df.read().split('\n')[2:]
@@ -7185,7 +7186,6 @@ def hdf5_USA(throttle=False):
                             states[state] = [county,]
                         else:
                             states[state].append(county)
-                        _log(logfile,state+", "+county+", cases")
                         cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
                         countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
@@ -7312,7 +7312,6 @@ def hdf5_USA(throttle=False):
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
-                _log(logfile,state+", Rt")
                 r,lp,ll = Rt(day5avg(hdfs["United States/%s/cases"%state][:].astype(float)))
                 p = np.exp(lp)
                 l = np.exp(ll)
@@ -7477,11 +7476,14 @@ def hdf5_USA(throttle=False):
         hdf.close()
         hdfs.close()
         raise
+    
+    _log(logfile,"Ending HDF5_USA at %s"%systime.asctime(systime.localtime()))
         
       
 def hdf5_world(throttle=False):
     import h5py as h5
       
+    _log(logfile,"Starting HDF5_WORLD at %s"%systime.asctime(systime.localtime()))
     globalconf = "github/time_series_covid19_confirmed_global.csv"
     
     ddatasetf = "github/time_series_covid19_deaths_global.csv"
@@ -7912,6 +7914,7 @@ def hdf5_world(throttle=False):
     gc.collect()
     print("Files completed and closed")
     
+    _log(logfile,"Ending HDF5_WORLD at %s"%systime.asctime(systime.localtime()))
     
  
 def netcdf_slim():
