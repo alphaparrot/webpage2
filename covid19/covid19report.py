@@ -1781,7 +1781,10 @@ def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp
     plt.clf(); plt.close('all'); gc.collect()
     
 #@profile   
-def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulation,timestamp):
+def plotCountyH5(args):#countydataset,statedataset,statepopulation,timestamp):
+    import h5py as h5
+    county, state = args
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
     fstub1 = state.replace(" ","_").replace("&","and")
     fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
     
@@ -1791,175 +1794,184 @@ def plotCountyH5(county,state,dataset):#countydataset,statedataset,statepopulati
     
     if not os.path.isdir(fstub1):
         os.system("mkdir %s"%fstub)
-        
-    #These are all cumulative
-    cases = np.append([0,],np.cumsum(dataset["United States"][state][county]["cases"][:]))
-    population = float(dataset["United States"][state][county]["population"][()])
-    pathdir = "%s/%s"%(fstub1,fstub2)
-    statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
-    statepopulation = float(dataset["United States"][state]["population"][()])
-    timestamp = "\nAs of "+dataset["United States"][state][county]["latestdate"][()]
-    
-    dcases = np.diff(cases)
-    dstatecases = np.diff(statecases)
-    curve = dcases[:]
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(curve))-len(curve),curve,label=county)
-    plt.annotate("%d Raw\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
-    plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Cases per Day")
-    plt.title("%s Daily New Cases"+timestamp)
-    plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    curve = day5avg(np.diff(cases))
-    curve2 = day5avg(np.diff(statecases))
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
-    plt.xlabel("Days before Present")
-    plt.ylabel("7-Day Average New Cases per Day")
-    plt.title("%s County Average Daily New Cases"%county+timestamp)
-    plt.savefig("%s_avgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_avgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
-             label="%s County"%county)
-    plt.plot(np.arange(len(dstatecases))-len(dstatecases),dstatecases/float(statepopulation)*1e5,
-             label=state,color='k',alpha=0.6)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Cases per 100k per Day")
-    plt.title("%s County Daily New Cases per 100k"%county+timestamp)
-    plt.savefig("%s_relrawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_relrawdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    curve = day5avg(dcases)/float(population)*1e5
-    curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
-             alpha=0.6,label=state)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("7-Day Average New Cases per 100k per Day")
-    plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
-    plt.savefig("%s_relavgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_relavgdaily.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
-             label="%s County"%county)
-    plt.plot(np.arange(len(dstatecases))-len(dstatecases),dstatecases/float(statepopulation)*1e5,
-             label=state,color='k',alpha=0.6)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("New Cases per 100k per Day")
-    plt.yscale('log')
-    plt.title("%s County Daily New Cases per 100k"%county+timestamp)
-    plt.savefig("%s_relrawdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_relrawdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    curve = day5avg(dcases)/float(population)*1e5
-    curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
-             alpha=0.6,label=state)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("7-Day Average New Cases per 100k per Day")
-    plt.yscale('log')
-    plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
-    plt.savefig("%s_relavgdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    r = dataset["United States"][state][county]["Rt"][:]
-    r2wk = week2avg(r)
-    r2 = dataset["United States"][state]["Rt"][:]
-    r2wk2 = week2avg(r2)
-    fig,ax = plt.subplots(num=13,clear=True,figsize=(14,7))
-    plt.plot(np.arange(len(r))-len(r),r,label="%s County R$_t$"%county,color='C0',alpha=0.4)
-    plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="%s County 2-week Average R$_t$"%county,color='C0')
-    plt.plot(np.arange(len(r2))-len(r2),r2,label="%s R$_t$"%state,color='k',alpha=0.4)
-    plt.plot(np.arange(len(r2wk2))-len(r2wk2),r2wk2,label="%s 2-week Average R$_t$"%state,color='k')
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("Effective Reproductive Number R$_t$")
-    plt.title("%s County Effective Reproductive Number"%county+timestamp)
-    plt.axhline(1.0,linestyle=':',color='r')
-    plt.savefig("%s_Rt.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_Rt.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    curve = active3wk((cases))
-    curve2 = active3wk((statecases))/float(statepopulation)*1000
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.xlabel("Days before Present")
-    plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
-    plt.savefig("%s_3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.xlabel("Days before Present")
-    plt.ylabel("3-week Running Sum of Cases per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
-    plt.yscale('symlog',linthreshy=1.0)
-    plt.ylim(0,curve.max())
-    plt.savefig("%s_3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    curve = curve/float(population)*1000
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
-    plt.savefig("%s_rel3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_rel3wk.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
-    fig,ax = plt.subplots(num=13,clear=True)
-    
-    plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
-    plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
-    plt.legend()
-    plt.xlabel("Days before Present")
-    plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
-    plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
-    plt.yscale('log')
-    plt.savefig("%s_rel3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
-    plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
-    plt.clf(); plt.close('all'); gc.collect()
-    
       
+    try:
+      
+        #These are all cumulative
+        cases = np.append([0,],np.cumsum(dataset["United States"][state][county]["cases"][:]))
+        population = float(dataset["United States"][state][county]["population"][()])
+        pathdir = "%s/%s"%(fstub1,fstub2)
+        statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
+        statepopulation = float(dataset["United States"][state]["population"][()])
+        timestamp = "\nAs of "+dataset["United States"][state][county]["latestdate"][()]
+        
+        dcases = np.diff(cases)
+        dstatecases = np.diff(statecases)
+        curve = dcases[:]
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(curve))-len(curve),curve,label=county)
+        plt.annotate("%d Raw\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+        plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
+        plt.xlabel("Days before Present")
+        plt.ylabel("New Cases per Day")
+        plt.title("%s Daily New Cases"+timestamp)
+        plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        curve = day5avg(np.diff(cases))
+        curve2 = day5avg(np.diff(statecases))
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.annotate("%d Average\nCases per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
+        plt.xlabel("Days before Present")
+        plt.ylabel("7-Day Average New Cases per Day")
+        plt.title("%s County Average Daily New Cases"%county+timestamp)
+        plt.savefig("%s_avgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_avgdaily.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
+                label="%s County"%county)
+        plt.plot(np.arange(len(dstatecases))-len(dstatecases),dstatecases/float(statepopulation)*1e5,
+                label=state,color='k',alpha=0.6)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("New Cases per 100k per Day")
+        plt.title("%s County Daily New Cases per 100k"%county+timestamp)
+        plt.savefig("%s_relrawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_relrawdaily.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        curve = day5avg(dcases)/float(population)*1e5
+        curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
+                alpha=0.6,label=state)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("7-Day Average New Cases per 100k per Day")
+        plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
+        plt.savefig("%s_relavgdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_relavgdaily.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(dcases))-len(dcases),dcases/float(population)*1e5,
+                label="%s County"%county)
+        plt.plot(np.arange(len(dstatecases))-len(dstatecases),dstatecases/float(statepopulation)*1e5,
+                label=state,color='k',alpha=0.6)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("New Cases per 100k per Day")
+        plt.yscale('log')
+        plt.title("%s County Daily New Cases per 100k"%county+timestamp)
+        plt.savefig("%s_relrawdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_relrawdaily_log.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        curve = day5avg(dcases)/float(population)*1e5
+        curve2 = day5avg(dstatecases)/float(statepopulation)*1e5
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',
+                alpha=0.6,label=state)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("7-Day Average New Cases per 100k per Day")
+        plt.yscale('log')
+        plt.title("%s County Average Daily New Cases per 100k"%county+timestamp)
+        plt.savefig("%s_relavgdaily_log.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_relavgdaily_log.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        r = dataset["United States"][state][county]["Rt"][:]
+        r2wk = week2avg(r)
+        r2 = dataset["United States"][state]["Rt"][:]
+        r2wk2 = week2avg(r2)
+        fig,ax = plt.subplots(num=13,clear=True,figsize=(14,7))
+        plt.plot(np.arange(len(r))-len(r),r,label="%s County R$_t$"%county,color='C0',alpha=0.4)
+        plt.plot(np.arange(len(r2wk))-len(r2wk),r2wk,label="%s County 2-week Average R$_t$"%county,color='C0')
+        plt.plot(np.arange(len(r2))-len(r2),r2,label="%s R$_t$"%state,color='k',alpha=0.4)
+        plt.plot(np.arange(len(r2wk2))-len(r2wk2),r2wk2,label="%s 2-week Average R$_t$"%state,color='k')
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("Effective Reproductive Number R$_t$")
+        plt.title("%s County Effective Reproductive Number"%county+timestamp)
+        plt.axhline(1.0,linestyle=':',color='r')
+        plt.savefig("%s_Rt.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_Rt.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        curve = active3wk((cases))
+        curve2 = active3wk((statecases))/float(statepopulation)*1000
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.xlabel("Days before Present")
+        plt.ylabel("3-week Running Sum of Cases per Day")
+        plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
+        plt.savefig("%s_3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_3wk.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.xlabel("Days before Present")
+        plt.ylabel("3-week Running Sum of Cases per Day")
+        plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
+        plt.yscale('symlog',linthreshy=1.0)
+        plt.ylim(0,curve.max())
+        plt.savefig("%s_3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_3wk_log.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        curve = curve/float(population)*1000
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
+        plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
+        plt.savefig("%s_rel3wk.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_rel3wk.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+        fig,ax = plt.subplots(num=13,clear=True)
+        
+        plt.plot(np.arange(len(curve))-len(curve),curve,label="%s County"%county)
+        plt.plot(np.arange(len(curve2))-len(curve2),curve2,color='k',alpha=0.4,label=state)
+        plt.legend()
+        plt.xlabel("Days before Present")
+        plt.ylabel("3-week Running Sum of Cases per 1000 per Day")
+        plt.title("Recent COVID-19 Cases in %s County"%county+timestamp)
+        plt.yscale('log')
+        plt.savefig("%s_rel3wk_log.png"%pathdir,bbox_inches='tight',facecolor='white')
+        plt.savefig("%s_rel3wk_log.pdf"%pathdir,bbox_inches='tight')
+        plt.clf(); plt.close('all'); gc.collect()
+        
+    except BaseException as err:
+        try:
+            dataset.close()
+        except:
+            pass
+        print(err)
+        raise err
+    dataset.close()  
           
     
 #@profile
@@ -5714,9 +5726,13 @@ def processcountiesH5(state):
         if not isinstance(dataset["United States/%s/%s"%(state,cty)],h5.Dataset):
             counties.append(cty)
             
+    dataset.close()
+            
     for county in counties:
         try:
-            plotCountyH5(county,state,dataset)
+            p = Pool(1)
+            p.map(plotCountyH5,[[county,state]])
+            p.close()
             _log(logfile,"Finished %s County, %s. \t%s"%(county,state,systime.asctime(systime.localtime())))
             
             fstub1 = state.replace(" ","_").replace("&","and")
@@ -9015,7 +9031,7 @@ if __name__=="__main__":
         report_ONH5()
     if "report_US" in sys.argv[:]:   #10 min
         report_USH5()
-    if "report_world" in sys.argv[:]:
+    if "report_world" in sys.argv[:]: #8 min
         report_worldH5()
     if "counties" in sys.argv[:]:
         if not os.path.exists("adivparadise_covid19data_slim.hdf5"):
