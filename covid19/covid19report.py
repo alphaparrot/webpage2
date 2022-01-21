@@ -3099,7 +3099,7 @@ def report_USH5():
         plt.annotate(place,coords,xytext=coords,clip_on=True)
     #plt.xscale('log')
     #plt.yscale('log')
-    plt.xlim(30,len(usa["cases"][:]))
+    plt.xlim(30,len(usa["cases"][:])*1.1)
    # plt.ylim(0.1,30.0)
     #plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
     plt.xlabel("Time [days]")
@@ -3350,6 +3350,7 @@ def report_USH5():
     
 def report_worldH5():
     import h5py as h5
+    import makehtml
     
     _log(logfile,"Moving on to global data. \t%s"%systime.asctime(systime.localtime()))
 
@@ -3597,7 +3598,7 @@ def report_worldH5():
         except Exception as e:
             traceback.print_exc()
             _log(logfile,"No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
-    
+            raise
     
     
     #with open("index.html","r") as indexf:
@@ -9008,11 +9009,11 @@ if __name__=="__main__":
             report()
         else:
             reportH5()
-    if "report_TO" in sys.argv[:]:
+    if "report_TO" in sys.argv[:]:   #23 min
         report_TOH5()
-    if "report_ON" in sys.argv[:]:
+    if "report_ON" in sys.argv[:]:   #6 min
         report_ONH5()
-    if "report_US" in sys.argv[:]:
+    if "report_US" in sys.argv[:]:   #10 min
         report_USH5()
     if "report_world" in sys.argv[:]:
         report_worldH5()
