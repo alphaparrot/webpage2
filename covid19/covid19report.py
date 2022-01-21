@@ -1,5 +1,6 @@
 import gc
 from multiprocessing import Pool
+import time as server
 #from memory_profiler import profile
 
 logfile = "/home/adivp416/public_html/covid19/reportlog.txt"
@@ -6824,7 +6825,7 @@ def hdf5_ON():
         
         for neighborhood in sorted(TOneighborhoods["units"]):
             _log(logfile,"%s, Toronto written to file at "%neighborhood+systime.asctime(systime.localtime()))
-            time.sleep(0.5)
+            server.sleep(0.5)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             _log(logfile,neighborhood+", Toronto")
