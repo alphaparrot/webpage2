@@ -5726,6 +5726,13 @@ def processcountiesH5(state):
         if not isinstance(dataset["United States/%s/%s"%(state,cty)],h5.Dataset):
             counties.append(cty)
             
+    ncounties = len(counties)
+    if state=="Texas":
+        if "1" in sys.argv[:]:
+            counties = counties[:int(ncounties/2)]
+        else:
+            counties = counties[int(ncounties/2):]
+            
     dataset.close()
             
     for county in counties:
@@ -5892,13 +5899,28 @@ def makeshellH5():
     cdir = os.getcwd()
     
     for state in uskeys:
-        place = state.replace(" ","_")
-        text = ("#!/bin/bash \n"+
-                "cd /home/adivp416/public_html/covid19/ \n"+
-                "ionice -c 3 python %s/covid19report.py counties %s \n"%(cdir,place))
-        with open("countyreport_%s.sh"%place,"w") as shellf:
-            shellf.write(text)
-        os.system("chmod a+x %s/countyreport_%s.sh"%(cdir,place))
+        if state=="Texas":    
+            place = state.replace(" ","_")
+            text = ("#!/bin/bash \n"+
+                    "cd /home/adivp416/public_html/covid19/ \n"+
+                    "ionice -c 3 python %s/covid19report.py counties %s 1\n"%(cdir,place))
+            with open("countyreport_%s_1.sh"%place,"w") as shellf:
+                shellf.write(text)
+            os.system("chmod a+x %s/countyreport_%s_1.sh"%(cdir,place))
+            text = ("#!/bin/bash \n"+
+                    "cd /home/adivp416/public_html/covid19/ \n"+
+                    "ionice -c 3 python %s/covid19report.py counties %s 2\n"%(cdir,place))
+            with open("countyreport_%s_2.sh"%place,"w") as shellf:
+                shellf.write(text)
+            os.system("chmod a+x %s/countyreport_%s_2.sh"%(cdir,place))
+        else:
+            place = state.replace(" ","_")
+            text = ("#!/bin/bash \n"+
+                    "cd /home/adivp416/public_html/covid19/ \n"+
+                    "ionice -c 3 python %s/covid19report.py counties %s \n"%(cdir,place))
+            with open("countyreport_%s.sh"%place,"w") as shellf:
+                shellf.write(text)
+            os.system("chmod a+x %s/countyreport_%s.sh"%(cdir,place))
 
 def netcdf():
     import netCDF4 as nc
