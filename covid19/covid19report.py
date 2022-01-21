@@ -6563,7 +6563,7 @@ def netcdf():
     ncd.close()
         
 #@profile 
-def hdf5_ON():
+def hdf5_ON(throttle=False):
     import h5py as h5
         
     #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
@@ -6825,7 +6825,8 @@ def hdf5_ON():
         
         for neighborhood in sorted(TOneighborhoods["units"]):
             _log(logfile,"%s, Toronto written to file at "%neighborhood+systime.asctime(systime.localtime()))
-            systime.sleep(0.25)
+            if throttle:
+                systime.sleep(0.1)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             _log(logfile,neighborhood+", Toronto")
@@ -7025,7 +7026,8 @@ def hdf5_ON():
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
-                systime.sleep(0.25)
+                if throttle:
+                    systime.sleep(0.1)
                 hdf = h5.File("adivparadise_covid19data.hdf5","a")
                 hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
                 _log(logfile,phu+", Ontario")
@@ -7139,7 +7141,7 @@ def hdf5_ON():
         hdfs.close()
         raise
     
-def hdf5_USA():    
+def hdf5_USA(throttle=False):    
     import h5py as h5
     
     statesetf = "statepopulations.csv"
@@ -7166,7 +7168,8 @@ def hdf5_USA():
             first = True
             for row in creader:
                 gc.collect()
-                systime.sleep(0.25)
+                if throttle:
+                    systime.sleep(0.1)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7304,7 +7307,8 @@ def hdf5_USA():
             states.append(str(state))
         hdfs.close()
         for state in states:
-            systime.sleep(0.25)
+            if throttle:
+                systime.sleep(0.1)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
@@ -7353,7 +7357,8 @@ def hdf5_USA():
             creader = csv.reader(csvfile,delimiter=',',quotechar='"')
             first = True
             for row in creader:
-                systime.sleep(0.25)
+                if throttle:
+                    systime.sleep(0.1)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7474,7 +7479,7 @@ def hdf5_USA():
         raise
         
       
-def hdf5_world():
+def hdf5_world(throttle=False):
     import h5py as h5
       
     globalconf = "github/time_series_covid19_confirmed_global.csv"
@@ -7517,7 +7522,8 @@ def hdf5_world():
             latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
             latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
             while True:
-               systime.sleep(0.25)
+               if throttle:
+                   systime.sleep(0.1)
                line = df.readline()
                if not line: #EOF
                    break
@@ -7737,7 +7743,8 @@ def hdf5_world():
             indexf.write("\n".join(html))
             
         for country in countries:
-            systime.sleep(0.25)
+            if throttle:
+                systime.sleep(0.1)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs and "%s/Rt"%country not in hdfs:
@@ -7789,7 +7796,8 @@ def hdf5_world():
         with open(ddatasetf,"r") as df:
             header = df.readline()
             while True:
-               systime.sleep(0.25)
+               if throttle:
+                   systime.sleep(0.1)
                line = df.readline()
                if not line: #EOF
                    break
@@ -9083,9 +9091,15 @@ if __name__=="__main__":
     if "datasets" in sys.argv[:]:
         #netcdf_slim()
         #netcdf()
-        #hdf5_ON()
-        hdfreset()
-        hdf5_USA()
-        #hdf5_world()
+        hdf5_ON(throttle=True)
+        hdf5_USA(throttle=True)
+        hdf5_world(throttle=True)
         #hdf5_slim()
+        
+    if "dataset_ON" in sys.argv[:]:
+        hdf_ON(throttle=True)
+    if "dataset_US" in sys.argv[:]:
+        hdf_USA(throttle=True)
+    if "dataset_world" in sys.argv[:]:
+        hdf_world(throttle=True)
         
