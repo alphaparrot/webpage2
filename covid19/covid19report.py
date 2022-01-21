@@ -9100,11 +9100,9 @@ if __name__=="__main__":
         #hdf5_slim()
         
     if "dataset_ON" in sys.argv[:]:
-        _log(logfile,"Starting Ontario HDF5 routine")
-        print("Start Ontario!")
-        hdf_ON(throttle=True)
+        hdf5_ON(throttle=True)
     if "dataset_US" in sys.argv[:]:
-        hdf_USA(throttle=True)
+        hdf5_USA(throttle=True)
     if "dataset_world" in sys.argv[:]:
-        hdf_world(throttle=True)
+        hdf5_world(throttle=True)
         
