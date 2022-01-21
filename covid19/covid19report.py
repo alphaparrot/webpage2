@@ -1,6 +1,6 @@
 import gc
 from multiprocessing import Pool
-import time as server
+import time as systime
 #from memory_profiler import profile
 
 logfile = "/home/adivp416/public_html/covid19/reportlog.txt"
@@ -6825,7 +6825,7 @@ def hdf5_ON():
         
         for neighborhood in sorted(TOneighborhoods["units"]):
             _log(logfile,"%s, Toronto written to file at "%neighborhood+systime.asctime(systime.localtime()))
-            server.sleep(0.5)
+            systime.sleep(0.5)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             _log(logfile,neighborhood+", Toronto")
@@ -7025,6 +7025,7 @@ def hdf5_ON():
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
+                systime.sleep(0.5)
                 hdf = h5.File("adivparadise_covid19data.hdf5","a")
                 hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
                 _log(logfile,phu+", Ontario")
@@ -7164,6 +7165,7 @@ def hdf5_USA():
             creader = csv.reader(csvfile,delimiter=',',quotechar='"')
             first = True
             for row in creader:
+                systime.sleep(0.5)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7301,6 +7303,7 @@ def hdf5_USA():
             states.append(str(state))
         hdfs.close()
         for state in states:
+            systime.sleep(0.5)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
@@ -7349,6 +7352,7 @@ def hdf5_USA():
             creader = csv.reader(csvfile,delimiter=',',quotechar='"')
             first = True
             for row in creader:
+                systime.sleep(0.5)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7512,6 +7516,7 @@ def hdf5_world():
             latestglobal = date(2000+int(globaltime[2]),int(globaltime[0]),int(globaltime[1]))
             latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
             while True:
+               systime.sleep(0.5)
                line = df.readline()
                if not line: #EOF
                    break
@@ -7731,6 +7736,7 @@ def hdf5_world():
             indexf.write("\n".join(html))
             
         for country in countries:
+            systime.sleep(0.5)
             hdf = h5.File("adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs and "%s/Rt"%country not in hdfs:
@@ -7782,6 +7788,7 @@ def hdf5_world():
         with open(ddatasetf,"r") as df:
             header = df.readline()
             while True:
+               systime.sleep(0.5)
                line = df.readline()
                if not line: #EOF
                    break
@@ -9022,7 +9029,12 @@ def reportH5():
     report_USH5()
     report_worldH5()
         
-    
+def hdfreset():
+    import h5py as h5
+    hdf = h5.File("adivparadise_covid19data.hdf5","w")
+    hdfs = h5.File("adivparadise_covid19data_slim.hdf5","w")
+    hdf.close()
+    hdfs.close()
     
     
 
@@ -9039,7 +9051,6 @@ if __name__=="__main__":
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import csv
-    import time as systime
     from datetime import date, timedelta
     import warnings,traceback
     import sys
@@ -9071,8 +9082,9 @@ if __name__=="__main__":
     if "datasets" in sys.argv[:]:
         #netcdf_slim()
         #netcdf()
-        hdf5_ON()
+        #hdf5_ON()
+        hdfreset()
         hdf5_USA()
-        hdf5_world()
+        #hdf5_world()
         #hdf5_slim()
         
