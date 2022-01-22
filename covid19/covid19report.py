@@ -6711,8 +6711,8 @@ def hdf5_ON(throttle=False):
     latestTO = timestamps.max()        #datetime.date
     latestTO = ' '.join([x for i,x in enumerate(latestTO.ctime().split()) if i!=3])
             
-    hdf = h5.File("adivparadise_covid19data.hdf5","w")
-    hdfs = h5.File("adivparadise_covid19data_slim.hdf5","w")
+    hdf = h5.File("tmp_adivparadise_covid19data.hdf5","w")
+    hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","w")
     
     nr = 100
     
@@ -6827,8 +6827,8 @@ def hdf5_ON(throttle=False):
         for neighborhood in sorted(TOneighborhoods["units"]):
             if throttle:
                 systime.sleep(0.1)
-            hdf = h5.File("adivparadise_covid19data.hdf5","a")
-            hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+            hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+            hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             _log(logfile,neighborhood+", Toronto")
             ckey = neighborhood.replace("/","-")
             ctotal = TOneighborhoods["units"][neighborhood]["CASES"].astype(int)
@@ -7028,8 +7028,8 @@ def hdf5_ON(throttle=False):
             if len(ontario[phu][:])>10:
                 if throttle:
                     systime.sleep(0.1)
-                hdf = h5.File("adivparadise_covid19data.hdf5","a")
-                hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+                hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                 ckey = strtitle(phu)
                 ctotal = ontario[phu].astype(int)
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
@@ -7180,8 +7180,8 @@ def hdf5_USA(throttle=False):
                     and "Recovered" not in state and "Prisons" not in state\
                     and "Hospitals" not in state:
                         
-                        hdf = h5.File("adivparadise_covid19data.hdf5","a")
-                        hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+                        hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                        hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                         if state not in states:
                             states[state] = [county,]
                         else:
@@ -7302,15 +7302,15 @@ def hdf5_USA(throttle=False):
                     latestusa = ' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
             
         states = []
-        hdfs = h5.File("adivparadise_covid19data_slim.hdf5","r")
+        hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","r")
         for state in hdfs["United States"]:
             states.append(str(state))
         hdfs.close()
         for state in states:
             if throttle:
                 systime.sleep(0.1)
-            hdf = h5.File("adivparadise_covid19data.hdf5","a")
-            hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+            hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+            hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
                 r,lp,ll = Rt(day5avg(hdfs["United States/%s/cases"%state][:].astype(float)))
                 p = np.exp(lp)
@@ -7366,8 +7366,8 @@ def hdf5_USA(throttle=False):
                     and "Virgin Islands" not in state and "Military" not in state\
                     and "Recovered" not in state and "Prisons" not in state\
                     and "Hospitals" not in state:
-                        hdf = h5.File("adivparadise_covid19data.hdf5","a")
-                        hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+                        hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                        hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                         print(state,county,"deaths")
                         deaths = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
                         
@@ -7451,7 +7451,7 @@ def hdf5_USA(throttle=False):
         with open("index.html","w") as indexf:
             indexf.write("\n".join(html))
             
-        hdfs = h5.File("adivparadise_covid19data_slim.hdf5","r")
+        hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","r")
         #Create linked state/county menus for the USA section
         with open("index.html","r") as indexf:
             index = indexf.read().split('\n')
@@ -7545,8 +7545,8 @@ def hdf5_world(throttle=False):
                gc.collect()
                
                if "Princess" not in localname and localname!="Recovered" and localname!="Repatriated Travellers" and "Zaandam" not in country and "Virgin Islands" not in localname and "Prisons" not in localname and "Hospitals" not in localname and "Military" not in localname and "Olympics" not in country and "Princess" not in country:
-                   hdf = h5.File("adivparadise_covid19data.hdf5","a")
-                   hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+                   hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                   hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                    
                    if country=="US" or country=="Us":
                        country="United States"
@@ -7747,8 +7747,8 @@ def hdf5_world(throttle=False):
         for country in countries:
             if throttle:
                 systime.sleep(0.1)
-            hdf = h5.File("adivparadise_covid19data.hdf5","a")
-            hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+            hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+            hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs and "%s/Rt"%country not in hdfs:
                 print(country,"Rt")
                 r,lp,ll = Rt(day5avg(hdfs[country]["cases"][:]))
@@ -7821,8 +7821,8 @@ def hdf5_world(throttle=False):
                
                
                if "Princess" not in localname and localname!="Recovered" and localname!="Repatriated Travellers" and "Zaandam" not in country and "Virgin Islands" not in localname and "Prisons" not in localname and "Hospitals" not in localname and "Military" not in localname and "Olympics" not in country and "Princess" not in country:
-                   hdf = h5.File("adivparadise_covid19data.hdf5","a")
-                   hdfs = h5.File("adivparadise_covid19data_slim.hdf5","a")
+                   hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                   hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                
                    if country=="US" or country=="Us" or country=="United States":
                        country="United States"
@@ -7889,7 +7889,7 @@ def hdf5_world(throttle=False):
         raise
     
     import matplotlib.pyplot as plt
-    hdfs = h5.File("adivparadise_covid19data_slim.hdf5","r")
+    hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","r")
     cases = hdfs["United Kingdom/cases"][:]
     population = hdfs["United Kingdom/population"][()]
     latest_date = hdfs["United Kingdom/latestdate"][()]
@@ -9099,10 +9099,10 @@ if __name__=="__main__":
         hdf5_world(throttle=True)
         #hdf5_slim()
         
-    if "dataset_ON" in sys.argv[:]:
+    if "dataset_ON" in sys.argv[:]: #2 minutes
         hdf5_ON(throttle=True)
-    if "dataset_US" in sys.argv[:]:
+    if "dataset_US" in sys.argv[:]: #25 minutes
         hdf5_USA(throttle=True)
-    if "dataset_world" in sys.argv[:]:
+    if "dataset_world" in sys.argv[:]: #3 minutes
         hdf5_world(throttle=True)
         
