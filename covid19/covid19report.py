@@ -2990,7 +2990,7 @@ def report_ONH5():
     for province in cankeys:
         r = week2avg(canada[province]["Rt"][:])
         x=np.array(range(len(r)))-len(r)
-        plt.annotate(place,(0.25,max(r[-1],1)),xytext=(0.25,max(1,r[-1])),clip_on=True)
+        plt.annotate(province,(0.25,max(r[-1],1)),xytext=(0.25,max(1,r[-1])),clip_on=True)
         plt.plot(x,r,marker='.',label=province,linestyle=':',alpha=0.5)
     #plt.xscale('log')
     #plt.yscale('log')
@@ -7186,7 +7186,7 @@ def hdf5_USA(throttle=False):
                             states[state] = [county,]
                         else:
                             states[state].append(county)
-                        cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
+                        cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.int)
                         countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
                                                         fletcher32=True,data=cases)
@@ -7369,7 +7369,7 @@ def hdf5_USA(throttle=False):
                         hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
                         hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                         print(state,county,"deaths")
-                        deaths = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.short)
+                        deaths = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.int)
                         
                         countydeaths = hdf.create_dataset("/United States/%s/%s/deaths"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
