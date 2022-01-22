@@ -7170,7 +7170,7 @@ def hdf5_USA(throttle=False):
             for row in creader:
                 gc.collect()
                 if throttle:
-                    systime.sleep(0.1)
+                    systime.sleep(0.15)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
