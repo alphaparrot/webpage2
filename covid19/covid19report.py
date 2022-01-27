@@ -7211,11 +7211,11 @@ def hdf5_USA(throttle=False):
                             del avgcases
                             gc.collect()
                         
-                            hdf["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float'))
+                            hdf["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float')
                             hdf["/United States/%s/%s/Rpost"%(state,county)][:] = p
                             hdf["/United States/%s/%s/Rlike"%(state,county)][:] = l
                             
-                            hdfs["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float'))
+                            hdfs["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float')
                         else:
                             countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
                                                             compression='gzip',compression_opts=9,shuffle=True,
