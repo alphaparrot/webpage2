@@ -262,6 +262,7 @@ function setIFrameSize() {
                                 <li>R<sub>t</sub> is computed using the Bayesian method described in <a target="_blank" href="https://doi.org/10.1101/2020.06.02.20120188">Yap & Yong (2020)</a><br/><br/></li>
                                 </ul>
                                 <p>I have repackaged the data from the various datasets into a hierarchical data format (HDF-5) that is available to download using the links on the right-hand side of the page. These datasets contain data all formatted the same way, with similar reference patterns, from national to local scales. The datasets also include my R<sub>t</sub> values, along with the posterior probability distributions and likelihood functions (this accounts for the bulk of the dataset's size). A slim version that omits the posteriors and likelihoods is also available.</p>
+                                <p>A shapefile is also now available, which has identical naming conventions as the locations in the HDF5 file. No COVID-19 data is stored in the shapefile, only location names, shape data, and coordinates, but the HDF5 and shapefiles can be used together to map the data. A Python script is also provided which contains a routine for performing the merge using a GeoPandas GeoDataFrame. The script requires Pandas, GeoPandas, numpy, and h5py.</p>
 <!-- BODY -->
                             
 
@@ -284,6 +285,8 @@ function setIFrameSize() {
 								<ul class="style1">
 								<li><a href="adivparadise_covid19data_slim.hdf5" download>HDF5 (Slim)</a></li>
 								<li><a href="adivparadise_covid19data.hdf5" download>HDF5</a></li>
+								<li><a href="unified.zip" download>Shapefile</a></li>
+								<li><a href="covid_utilities.py" download>GeoPandas Integration Script</a></li>
 								<li><a href="data.html">How to Use</li>
 								</ul>
                                                         </section>

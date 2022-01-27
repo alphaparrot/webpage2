@@ -281,6 +281,7 @@ function setIFrameSize() {
                                 <p>Most data is synced twice a day at 10:30 am ET and 4:30pm ET, and plots are updated over the next 30 minutes. US counties for individual states are updated once a day over 12 hours starting at 1:30pm ET. During this time, individual plots for specific health regions may not be available. Refer to the timestamp at the bottom of the page for an individual county to see when it is likely to update. Note that data sources are updated by their respective public health authorities and data caretakers, and may not update at the same time or on a daily basis. In particular, weekends and statutory holidays may delay reporting. Also note that testing backlogs can also cause the data to lag real-world caseloads by significant margins.</p>
                                 <p>I have repackaged the data from the various datasets into a hierarchical data format (HDF-5) that is available to download using the links on the right-hand side of the page. These datasets contain data all formatted the same way, with similar reference patterns, from national to local scales. The datasets also include my R<sub>t</sub> values, along with the posterior probability distributions and likelihood functions (this accounts for the bulk of the dataset's size). A slim version that omits the posteriors and likelihoods is also available.</p>
                                 <p>You can find a brief introduction to navigating the HDF5 datasets in Python <a href="data.html">here</a>, and more-general information on accessing HDF5 datasets can be found in the <a href="https://docs.h5py.org/en/stable/quick.html" target="_blank">h5py documentation</a> and <a href="https://portal.hdfgroup.org/display/support/Documentation" target="_blank">HDF specification</a>.</p>
+                                <p>A shapefile is also now available, which has identical naming conventions as the locations in the HDF5 file. No COVID-19 data is stored in the shapefile, only location names, shape data, and coordinates, but the HDF5 and shapefiles can be used together to map the data. A Python script is also provided which contains a routine for performing the merge using a GeoPandas GeoDataFrame. The script requires Pandas, GeoPandas, numpy, and h5py.</p>
                      
                      
                      <header>
@@ -786,6 +787,8 @@ function setIFrameSize() {
 								<ul class="style1">
 								<li><a href="adivparadise_covid19data_slim.hdf5" download>HDF5 (Slim)</a></li>
 								<li><a href="adivparadise_covid19data.hdf5" download>HDF5</a></li>
+								<li><a href="unified.zip" download>Shapefile</a></li>
+								<li><a href="covid_utilities.py" download>GeoPandas Integration Script</a></li>
 								<li><a href="data.html">How to Use</a></li>
 								</ul>
                                                         </section>
