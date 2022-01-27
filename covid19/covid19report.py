@@ -7175,6 +7175,8 @@ def hdf5_USA(throttle=False):
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
                     county = row[5].replace("/","-")
+                    if (county=="Chugach" or county=="Copper River") and state=="Alaska":
+                        county = "Valdez-Cordova" #We'll need to combine them
                     if state!="Total" and "Princess" not in state\
                     and "Virgin Islands" not in state and "Military" not in state\
                     and "Recovered" not in state and "Prisons" not in state\
@@ -7187,75 +7189,105 @@ def hdf5_USA(throttle=False):
                         else:
                             states[state].append(county)
                         cases = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.int)
-                        countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
-                                                        compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=cases)
+                        if "United States/%s/%s/cases"%(state,county) in hdf: #Should only trigger for Valdez-Cordova
+                            old = hdfs["United States/%s/%s/cases"%(state,county)]
+                            nold = old.size
+                            old = old[:]
+                            if nold>len(cases):
+                                cases = np.append(np.zeros(nold-len(cases)),cases)
+                            elif len(cases)>nold:
+                                old = np.append(np.zeros(len(cases)-nold),old)
+                            hdf["United States/%s/%s/cases"%(state,county)][:] = old+cases
+                            hdfs["United States/%s/%s/cases"%(state,county)][:] = old+cases
                         
-                        countypopulation = hdf.create_dataset("/United States/%s/%s/population"%(state,county),
-                                                            data=float(get_countypop(county,state)))
-                        latest = hdf.create_dataset("/United States/%s/%s/latestdate"%(state,county),
-                                                    data=latestusa)
-                        
-                        countycases.attrs["units"] = "cases day-1"
-                        countypopulation.attrs["units"] = "people"
-                        countycases.attrs["standard_name"] = "daily_cases"
-                        countypopulation.attrs["standard_name"] = "population"
-                        countycases.attrs["long_name"] = "New Cases per Day"
-                        countypopulation.attrs["long_name"] = "Population"
-                        
-                        avgcases = cases.astype(float)
-                        avgcases = day5avg(avgcases)
-                        r,lp,ll = Rt(avgcases)
-                        p = np.exp(lp)
-                        l = np.exp(ll)
+                            avgcases = (cases+old).astype(float)
+                            avgcases = day5avg(avgcases)
+                            r,lp,ll = Rt(avgcases)
+                            p = np.exp(lp)
+                            l = np.exp(ll)
                             
-                        del lp
-                        del ll
-                        del avgcases
-                        gc.collect()
+                            del lp
+                            del ll
+                            del avgcases
+                            gc.collect()
                         
-                        countyRt = hdf.create_dataset("/United States/%s/%s/Rt"%(state,county),
-                                                    compression='gzip',compression_opts=9,shuffle=True,
-                                                    fletcher32=True,data=r.astype('float'))
-                        countyRpost = hdf.create_dataset("/United States/%s/%s/Rpost"%(state,county),
+                            hdf["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float'))
+                            hdf["/United States/%s/%s/Rpost"%(state,county)][:] = p
+                            hdf["/United States/%s/%s/Rlike"%(state,county)][:] = l
+                            
+                            hdfs["/United States/%s/%s/Rt"%(state,county)][:] = r.astype('float'))
+                        else:
+                            countycases = hdf.create_dataset("/United States/%s/%s/cases"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=cases)
+                        
+                            countypopulation = hdf.create_dataset("/United States/%s/%s/population"%(state,county),
+                                                                data=float(get_countypop(county,state)))
+                            latest = hdf.create_dataset("/United States/%s/%s/latestdate"%(state,county),
+                                                        data=latestusa)
+                        
+                            countycases.attrs["units"] = "cases day-1"
+                            countypopulation.attrs["units"] = "people"
+                            countycases.attrs["standard_name"] = "daily_cases"
+                            countypopulation.attrs["standard_name"] = "population"
+                            countycases.attrs["long_name"] = "New Cases per Day"
+                            countypopulation.attrs["long_name"] = "Population"
+                        
+                        
+                            countycases = hdfs.create_dataset("/United States/%s/%s/cases"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=cases)
+                            
+                            countypopulation = hdfs.create_dataset("/United States/%s/%s/population"%(state,county),
+                                                                data=countypopulation[()])
+                        
+                            latest = hdfs.create_dataset("/United States/%s/%s/latestdate"%(state,county),
+                                                        data=latestusa)
+                        
+                            countycases.attrs["units"] = "cases day-1"
+                            countypopulation.attrs["units"] = "people"
+                            countycases.attrs["standard_name"] = "daily_cases"
+                            countypopulation.attrs["standard_name"] = "population"
+                            countycases.attrs["long_name"] = "New Cases per Day"
+                            countypopulation.attrs["long_name"] = "Population"
+                            
+                            avgcases = cases.astype(float)
+                            avgcases = day5avg(avgcases)
+                            r,lp,ll = Rt(avgcases)
+                            p = np.exp(lp)
+                            l = np.exp(ll)
+                            
+                            del lp
+                            del ll
+                            del avgcases
+                            gc.collect()
+                        
+                            countyRt = hdf.create_dataset("/United States/%s/%s/Rt"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=p)
-                        countyRlike = hdf.create_dataset("/United States/%s/%s/Rlike"%(state,county),
+                                                        fletcher32=True,data=r.astype('float'))
+                            countyRpost = hdf.create_dataset("/United States/%s/%s/Rpost"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=p)
+                            countyRlike = hdf.create_dataset("/United States/%s/%s/Rlike"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=l)
+                        
+                            countyRt.attrs["units"] = "secondary infections case-1"
+                            countyRt.attrs["standard_name"] = "R_t"
+                            countyRt.attrs["long_name"] = "Effective Reproductive Number"
+                            countyRpost.attrs["units"] = "n/a"
+                            countyRlike.attrs["units"] = "n/a"
+                            countyRpost.attrs["standard_name"] = "R_t_posterior"
+                            countyRlike.attrs["standard_name"] = "R_t_likelihood"
+                            countyRpost.attrs["long_name"] = "Rt Posterior Probability"
+                            countyRpost.attrs["long_name"] = "Rt Likelihood Function"
+                            
+                            countyRt = hdfs.create_dataset("/United States/%s/%s/Rt"%(state,county),
                                                         compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=l)
-                        
-                        countyRt.attrs["units"] = "secondary infections case-1"
-                        countyRt.attrs["standard_name"] = "R_t"
-                        countyRt.attrs["long_name"] = "Effective Reproductive Number"
-                        countyRpost.attrs["units"] = "n/a"
-                        countyRlike.attrs["units"] = "n/a"
-                        countyRpost.attrs["standard_name"] = "R_t_posterior"
-                        countyRlike.attrs["standard_name"] = "R_t_likelihood"
-                        countyRpost.attrs["long_name"] = "Rt Posterior Probability"
-                        countyRpost.attrs["long_name"] = "Rt Likelihood Function"
-                        
-                        countycases = hdfs.create_dataset("/United States/%s/%s/cases"%(state,county),
-                                                        compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=cases)
-                        
-                        countypopulation = hdfs.create_dataset("/United States/%s/%s/population"%(state,county),
-                                                            data=countypopulation[()])
-                        
-                        countyRt = hdfs.create_dataset("/United States/%s/%s/Rt"%(state,county),
-                                                    compression='gzip',compression_opts=9,shuffle=True,
-                                                    fletcher32=True,data=r.astype('float'))
-                        latest = hdfs.create_dataset("/United States/%s/%s/latestdate"%(state,county),
-                                                    data=latestusa)
-                        
-                        countycases.attrs["units"] = "cases day-1"
-                        countypopulation.attrs["units"] = "people"
-                        countycases.attrs["standard_name"] = "daily_cases"
-                        countypopulation.attrs["standard_name"] = "population"
-                        countycases.attrs["long_name"] = "New Cases per Day"
-                        countypopulation.attrs["long_name"] = "Population"
-                        countyRt.attrs["units"] = "secondary infections case-1"
-                        countyRt.attrs["standard_name"] = "R_t"
-                        countyRt.attrs["long_name"] = "Effective Reproductive Number"
+                                                        fletcher32=True,data=r.astype('float'))
+                            countyRt.attrs["units"] = "secondary infections case-1"
+                            countyRt.attrs["standard_name"] = "R_t"
+                            countyRt.attrs["long_name"] = "Effective Reproductive Number"
                         
                         if "/United States/%s/cases"%state not in hdf:
                             _log(logfile,state+", cases")
@@ -7362,6 +7394,8 @@ def hdf5_USA(throttle=False):
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
                     county = row[5].replace("/","-")
+                    if (county=="Chugach" or county=="Copper River") and state=="Alaska":
+                        county = "Valdez-Cordova"
                     if state!="Total" and "Princess" not in state\
                     and "Virgin Islands" not in state and "Military" not in state\
                     and "Recovered" not in state and "Prisons" not in state\
@@ -7371,21 +7405,32 @@ def hdf5_USA(throttle=False):
                         print(state,county,"deaths")
                         deaths = np.diff(np.append([0,],np.array(row[11:]).astype(float))).astype(np.int)
                         
-                        countydeaths = hdf.create_dataset("/United States/%s/%s/deaths"%(state,county),
-                                                        compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=deaths)
-                        
-                        countydeaths.attrs["units"] = "deaths day-1"
-                        countydeaths.attrs["standard_name"] = "daily_deaths"
-                        countydeaths.attrs["long_name"] = "New Deaths per Day"
-                        
-                        countydeaths = hdfs.create_dataset("/United States/%s/%s/deaths"%(state,county),
-                                                        compression='gzip',compression_opts=9,shuffle=True,
-                                                        fletcher32=True,data=deaths)
-                        
-                        countydeaths.attrs["units"] = "deaths day-1"
-                        countydeaths.attrs["standard_name"] = "daily_deaths"
-                        countydeaths.attrs["long_name"] = "New Deaths per Day"
+                        if "United States/%s/%s/deaths"%(state,county) in hdf: #Should only trigger for Valdez-Cordova
+                            old = hdfs["United States/%s/%s/deaths"%(state,county)]
+                            nold = old.size
+                            old = old[:]
+                            if nold>len(deaths):
+                                deaths = np.append(np.zeros(nold-len(deaths)),deaths)
+                            elif len(deaths)>nold:
+                                old = np.append(np.zeros(len(deaths)-nold),old)
+                            hdf["United States/%s/%s/deaths"%(state,county)][:] = old+deaths
+                            hdfs["United States/%s/%s/deaths"%(state,county)][:] = old+deaths
+                        else:
+                            countydeaths = hdf.create_dataset("/United States/%s/%s/deaths"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=deaths)
+                            
+                            countydeaths.attrs["units"] = "deaths day-1"
+                            countydeaths.attrs["standard_name"] = "daily_deaths"
+                            countydeaths.attrs["long_name"] = "New Deaths per Day"
+                            
+                            countydeaths = hdfs.create_dataset("/United States/%s/%s/deaths"%(state,county),
+                                                            compression='gzip',compression_opts=9,shuffle=True,
+                                                            fletcher32=True,data=deaths)
+                            
+                            countydeaths.attrs["units"] = "deaths day-1"
+                            countydeaths.attrs["standard_name"] = "daily_deaths"
+                            countydeaths.attrs["long_name"] = "New Deaths per Day"
                         
                         if "/United States/%s/deaths"%state not in hdf:
                             print(state,"deaths")
