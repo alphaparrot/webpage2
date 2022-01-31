@@ -6826,7 +6826,7 @@ def hdf5_ON(throttle=False):
         
         for neighborhood in sorted(TOneighborhoods["units"]):
             if throttle:
-                systime.sleep(0.1)
+                systime.sleep(0.4)
             hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             _log(logfile,neighborhood+", Toronto")
@@ -7027,7 +7027,7 @@ def hdf5_ON(throttle=False):
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
                 if throttle:
-                    systime.sleep(0.1)
+                    systime.sleep(0.4)
                 hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
                 hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                 ckey = strtitle(phu)
@@ -7170,7 +7170,7 @@ def hdf5_USA(throttle=False):
             for row in creader:
                 gc.collect()
                 if throttle:
-                    systime.sleep(0.15)
+                    systime.sleep(0.6)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7340,7 +7340,7 @@ def hdf5_USA(throttle=False):
         hdfs.close()
         for state in states:
             if throttle:
-                systime.sleep(0.1)
+                systime.sleep(0.4)
             hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs["United States"][state],h5.Dataset) and "United States/%s/Rt"%state not in hdfs:
@@ -7389,7 +7389,7 @@ def hdf5_USA(throttle=False):
             first = True
             for row in creader:
                 if throttle:
-                    systime.sleep(0.1)
+                    systime.sleep(0.4)
                 #usacsv.append(row)
                 if not first:
                     state = strtitle(str(row[6])).replace(" Of "," of ").replace(" And "," and ")
@@ -7570,7 +7570,7 @@ def hdf5_world(throttle=False):
             latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
             while True:
                if throttle:
-                   systime.sleep(0.1)
+                   systime.sleep(0.4)
                line = df.readline()
                if not line: #EOF
                    break
@@ -7791,7 +7791,7 @@ def hdf5_world(throttle=False):
             
         for country in countries:
             if throttle:
-                systime.sleep(0.1)
+                systime.sleep(0.4)
             hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs and "%s/Rt"%country not in hdfs:
@@ -7844,7 +7844,7 @@ def hdf5_world(throttle=False):
             header = df.readline()
             while True:
                if throttle:
-                   systime.sleep(0.1)
+                   systime.sleep(0.4)
                line = df.readline()
                if not line: #EOF
                    break
