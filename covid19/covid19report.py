@@ -8249,7 +8249,7 @@ def hdf5_world(throttle=False):
             latestglobal = ' '.join([x for i,x in enumerate(latestglobal.ctime().split()) if i!=3])
             while True:
                if throttle:
-                   systime.sleep(0.5)
+                   systime.sleep(0.6)
                line = df.readline()
                if not line: #EOF
                    break
@@ -8470,7 +8470,7 @@ def hdf5_world(throttle=False):
             
         for country in countries:
             if throttle:
-                systime.sleep(0.5)
+                systime.sleep(0.6)
             hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
             hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
             if not isinstance(hdfs[country],h5.Dataset) and "%s/cases"%country in hdfs and "%s/Rt"%country not in hdfs:
@@ -8523,7 +8523,7 @@ def hdf5_world(throttle=False):
             header = df.readline()
             while True:
                if throttle:
-                   systime.sleep(0.5)
+                   systime.sleep(0.6)
                line = df.readline()
                if not line: #EOF
                    break
