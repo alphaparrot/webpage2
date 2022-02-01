@@ -7165,7 +7165,7 @@ def hdf5_USA1(throttle=False):
         states = {}
         with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
             df = csvfile.read().split('\n')
-        nrows = int((len(df)-1)/2)_
+        nrows = int((len(df)-1)/2)
         with open("nrows.txt","w") as nrowsf:
             nrowsf.write(str(nrows))
         with open("github/time_series_covid19_confirmed_US.csv") as csvfile:
