@@ -7296,7 +7296,7 @@ def hdf5_USA1(throttle=False):
                             countyRt.attrs["long_name"] = "Effective Reproductive Number"
                         
                         if "/United States/%s/cases"%state not in hdf:
-                            _log(logfile,state+", cases")
+                            _log(logfile,"(%d/%d)\t"%(k,nrows)+state+", cases")
                             statecases = hdf.create_dataset("/United States/%s/cases"%state,
                                                             compression='gzip',compression_opts=9,shuffle=True,
                                                             fletcher32=True,data=cases)
@@ -7631,7 +7631,7 @@ def hdf5_USA2(throttle=False):
                         countyRt.attrs["long_name"] = "Effective Reproductive Number"
                     
                     if "/United States/%s/cases"%state not in hdf:
-                        _log(logfile,state+", cases")
+                        _log(logfile,"(%d/%d)\t"%(k,nrows)+state+", cases")
                         statecases = hdf.create_dataset("/United States/%s/cases"%state,
                                                         compression='gzip',compression_opts=9,shuffle=True,
                                                         fletcher32=True,data=cases)
@@ -7845,8 +7845,9 @@ def hdf5_USA3(throttle=False):
             latestusa = ' '.join([x for i,x in enumerate(latestusa.ctime().split()) if i!=3])
             for n in range(nrows*2):
                 row = next(creader)
-            
+            k=0
             for row in creader:
+                k+=1
                 gc.collect()
                 if throttle:
                     systime.sleep(0.75)
@@ -7967,7 +7968,7 @@ def hdf5_USA3(throttle=False):
                         countyRt.attrs["long_name"] = "Effective Reproductive Number"
                     
                     if "/United States/%s/cases"%state not in hdf:
-                        _log(logfile,state+", cases")
+                        _log(logfile,"(%d/%d)\t"%(k,nrows)+state+", cases")
                         statecases = hdf.create_dataset("/United States/%s/cases"%state,
                                                         compression='gzip',compression_opts=9,shuffle=True,
                                                         fletcher32=True,data=cases)
