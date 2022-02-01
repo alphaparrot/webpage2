@@ -7,7 +7,7 @@ fi
 cd /home/adivp416/public_html/covid19/github
 
 ionice -c 3 git stash
-ionice -c 2 -n 7 trickle -s -u 800 -d 800 git pull
+ionice -c 3 git pull
 
 ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
 ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_US.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv
