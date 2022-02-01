@@ -7080,6 +7080,10 @@ def hdf5_ON(throttle=False):
                 phuactive.attrs["long_name"] = "active cases"
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
                 #phupopulation.long_name = "population"
+                
+                phuRt.attrs["units"] = "infections per sick person"
+                phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                phuRt.attrs["long_name"] = "Effective Reproductive Number"
                 phuRpost.attrs["units"] = "n/a"
                 phuRlike.attrs["units"] = "n/a"
                 phuRpost.attrs["standard_name"] = "R_t_posterior"
@@ -7123,6 +7127,9 @@ def hdf5_ON(throttle=False):
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
                 #phupopulation.long_name = "population"
                 
+                phuRt.attrs["units"] = "infections per sick person"
+                phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                phuRt.attrs["long_name"] = "Effective Reproductive Number"
                 
                 hdf.close()
                 hdfs.close()
@@ -7139,6 +7146,165 @@ def hdf5_ON(throttle=False):
         hdf.close()
         hdfs.close()
         raise
+    
+    _log(logfile,"Finished Toronto and Ontario PHUs at %s"%systime.asctime(systime.localtime()))
+    
+    province = []
+    region = []
+    date = []
+    cases = []
+    with open("canada_hr_cases.csv","r") as casef:
+        header = casef.readline()
+        while True:
+            line = casef.readline()
+            if not line:
+                break
+            line = line.replace('"','').split(',')
+            if line[0]!="Repatriated":
+              province.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
+              region.append(line[1])
+              time = np.array(line[2].split("-")).astype(int)
+              date.append(datetime.date(time[2],time[1],time[0]))
+              cases.append(int(line[3]))
+    
+    data = {}
+    for n,count in enumerate(cases):
+        if province[n] not in data:
+            data[province[n]] = {}
+        if region[n] not in data[province[n]]:
+            data[province[n]][region[n]] = {"Time":[],"Cases":[]}
+        data[province[n]][region[n]]["Time"].append(date[n])
+        data[province[n]][region[n]]["Cases"].append(count)
+        
+    dprovince = []
+    dregion = []
+    ddate = []
+    deaths = []
+    with open("canada_hr_deaths.csv","r") as casef:
+        header = casef.readline()
+        while True:
+            line = casef.readline()
+            if not line:
+                break
+            line = line.replace('"','').split(',')
+            if line[0]!="Repatriated":
+              dprovince.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
+              dregion.append(line[1])
+              dtime = np.array(line[2].split("-")).astype(int)
+              ddate.append(datetime.date(dtime[2],dtime[1],dtime[0]))
+              deaths.append(int(line[3]))
+    
+    ddata = {}
+    for n,count in enumerate(deaths):
+        if dprovince[n] not in ddata:
+            ddata[dprovince[n]] = {}
+        if dregion[n] not in ddata[dprovince[n]]:
+            ddata[dprovince[n]][dregion[n]] = {"Time":[],"Deaths":[]}
+        ddata[dprovince[n]][dregion[n]]["Time"].append(ddate[n])
+        ddata[dprovince[n]][dregion[n]]["Deaths"].append(count)
+    
+    
+    for province in data:
+        if province!="Ontario": #We already do Ontario, separately
+            _log(logfile,"Writing %s\t.....%s"%(province,systime.asctime(systime.localtime())))
+            for region in data[province]:
+                if throttle:
+                    systime.sleep(0.5)
+                try:
+                    hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
+                    hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
+                    ckey = strtitle(region)
+                    ctotal = data[province][region]["Cases"].astype(int)
+                    dtotal = ddata[province][region]["Deaths"].astype(int)
+                    latestdate = data[province][region]["Time"][-1]
+                    latestdate = ' '.join([x for i,x in enumerate(latestdate.ctime().split()) if i!=3])
+                    r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                    p = np.exp(lp)
+                    l = np.exp(ll)
+                    del lp
+                    del ll
+                    phucases = hdf.create_Dataset("/Canada/%s/%s/cases"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=ctotal.astype(np.short))
+                    phudeaths = hdf.create_Dataset("/Canada/%s/%s/deaths"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=dtotal.astype(np.short))
+                    phuRt = hdf.create_Dataset("/Canada/%s/%s/Rt"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=r.astype('float32'))
+                    phuRpost = hdf.create_Dataset("/Canada/%s/%s/Rpost"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=p)
+                    phuRliket = hdf.create_Dataset("/Canada/%s/%s/Rlike"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=l)
+                    latest = hdf.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
+                                                data=latestdate)
+                    
+                    phucases.attrs["units"] = "cases day-1"
+                    phudeaths.attrs["units"] = "deaths day-1"
+                    #phupopulation.units = "people"
+                    phucases.attrs["standard_name"] = "daily_cases"
+                    phudeaths.attrs["standard_name"] = "daily_deaths"
+                    #phupopulation.standard_name = "population"
+                    phucases.attrs["long_name"] = "new cases per day"
+                    phudeaths.attrs["long_name"] = "new deaths per day"
+                    #phupopulation.long_name = "population"
+                    phuRt.attrs["units"] = "infections per sick person"
+                    phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                    phuRt.attrs["long_name"] = "Effective Reproductive Number"
+                    phuRpost.attrs["units"] = "n/a"
+                    phuRlike.attrs["units"] = "n/a"
+                    phuRpost.attrs["standard_name"] = "R_t_posterior"
+                    phuRlike.attrs["standard_name"] = "R_t_likelihood"
+                    phuRpost.attrs["long_name"] = "Rt Posterior Probability"
+                    phuRpost.attrs["long_name"] = "Rt Likelihood Function"
+                    
+                    phucases = hdfs.create_Dataset("/Canada/%s/%s/cases"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=ctotal.astype(np.short))
+                    phudeaths = hdfs.create_Dataset("/Canada/%s/%s/deaths"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=dtotal.astype(np.short))
+                    phuRt = hdfs.create_Dataset("/Canada/%s/%s/Rt"%(province,ckey),
+                                                  compression='gzip',compression_opts=9,
+                                                  shuffle=True,fletcher32=True,
+                                                  data=r.astype('float32'))
+                    latest = hdfs.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
+                                                data=latestdate)
+                    
+                    phucases.attrs["units"] = "cases day-1"
+                    phudeaths.attrs["units"] = "deaths day-1"
+                    #phupopulation.units = "people"
+                    phucases.attrs["standard_name"] = "daily_cases"
+                    phudeaths.attrs["standard_name"] = "daily_deaths"
+                    #phupopulation.standard_name = "population"
+                    phucases.attrs["long_name"] = "new cases per day"
+                    phudeaths.attrs["long_name"] = "new deaths per day"
+                    #phupopulation.long_name = "population"
+                    phuRt.attrs["units"] = "infections per sick person"
+                    phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                    phuRt.attrs["long_name"] = "Effective Reproductive Number"
+                    
+                    hdf.close()
+                    hdfs.close()
+                    
+                except BaseException as err:
+                    try:
+                        hdf.close()
+                        hdfs.close()
+                    except:
+                        pass
+                    print(err)
+                    raise err
+        
     
     _log(logfile,"Ending HDF5_ON at %s"%systime.asctime(systime.localtime()))
     
