@@ -7298,6 +7298,7 @@ def hdf5_ON(throttle=False):
                     hdfs.close()
                     
                 except BaseException as err:
+                    traceback.print_exc()
                     try:
                         hdf.close()
                         hdfs.close()
