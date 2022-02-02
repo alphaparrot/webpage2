@@ -6565,6 +6565,7 @@ def netcdf():
 #@profile 
 def hdf5_ON(throttle=False):
     import h5py as h5
+    import datetime
         
     #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
  
@@ -6588,7 +6589,7 @@ def hdf5_ON(throttle=False):
         torontoraw = np.zeros(len(torontocsv))
         for line in range(len(torontoraw)):
             timestamp = torontocsv[line].split(',')[9].split('-')
-            timestamps.append(date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+            timestamps.append(datetime.date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
             entry = torontocsv[line].split(',')
             if entry[11]=="ACTIVE":
                 pass
@@ -7151,7 +7152,7 @@ def hdf5_ON(throttle=False):
     
     province = []
     region = []
-    date = []
+    tdate = []
     cases = []
     with open("canada_hr_cases.csv","r") as casef:
         header = casef.readline()
@@ -7164,7 +7165,7 @@ def hdf5_ON(throttle=False):
               province.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
               region.append(line[1])
               time = np.array(line[2].split("-")).astype(int)
-              date.append(datetime.date(time[2],time[1],time[0]))
+              tdate.append(datetime.date(time[2],time[1],time[0]))
               cases.append(int(line[3]))
     
     data = {}
@@ -7173,7 +7174,7 @@ def hdf5_ON(throttle=False):
             data[province[n]] = {}
         if region[n] not in data[province[n]]:
             data[province[n]][region[n]] = {"Time":[],"Cases":[]}
-        data[province[n]][region[n]]["Time"].append(date[n])
+        data[province[n]][region[n]]["Time"].append(tdate[n])
         data[province[n]][region[n]]["Cases"].append(count)
         
     dprovince = []
