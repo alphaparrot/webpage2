@@ -7215,8 +7215,8 @@ def hdf5_ON(throttle=False):
                     hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
                     hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                     ckey = strtitle(region)
-                    ctotal = data[province][region]["Cases"].astype(int)
-                    dtotal = ddata[province][region]["Deaths"].astype(int)
+                    ctotal = np.array(data[province][region]["Cases"]).astype(int)
+                    dtotal = np.array(ddata[province][region]["Deaths"]).astype(int)
                     latestdate = data[province][region]["Time"][-1]
                     latestdate = ' '.join([x for i,x in enumerate(latestdate.ctime().split()) if i!=3])
                     r,lp,ll = Rt(day5avg(ctotal.astype(float)))
