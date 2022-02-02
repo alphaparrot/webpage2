@@ -7240,7 +7240,7 @@ def hdf5_ON(throttle=False):
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=p)
-                    phuRliket = hdf.create_dataset("/Canada/%s/%s/Rlike"%(province,ckey),
+                    phuRlike = hdf.create_dataset("/Canada/%s/%s/Rlike"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=l)
