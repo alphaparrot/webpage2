@@ -7154,7 +7154,7 @@ def hdf5_ON(throttle=False):
     region = []
     tdate = []
     cases = []
-    with open("canada_hr_cases.csv","r") as casef:
+    with open("github/canada_hr_cases.csv","r") as casef:
         header = casef.readline()
         while True:
             line = casef.readline()
@@ -7181,7 +7181,7 @@ def hdf5_ON(throttle=False):
     dregion = []
     ddate = []
     deaths = []
-    with open("canada_hr_deaths.csv","r") as casef:
+    with open("github/canada_hr_deaths.csv","r") as casef:
         header = casef.readline()
         while True:
             line = casef.readline()
