@@ -7224,23 +7224,23 @@ def hdf5_ON(throttle=False):
                     l = np.exp(ll)
                     del lp
                     del ll
-                    phucases = hdf.create_Dataset("/Canada/%s/%s/cases"%(province,ckey),
+                    phucases = hdf.create_dataset("/Canada/%s/%s/cases"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=ctotal.astype(np.short))
-                    phudeaths = hdf.create_Dataset("/Canada/%s/%s/deaths"%(province,ckey),
+                    phudeaths = hdf.create_dataset("/Canada/%s/%s/deaths"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=dtotal.astype(np.short))
-                    phuRt = hdf.create_Dataset("/Canada/%s/%s/Rt"%(province,ckey),
+                    phuRt = hdf.create_dataset("/Canada/%s/%s/Rt"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=r.astype('float32'))
-                    phuRpost = hdf.create_Dataset("/Canada/%s/%s/Rpost"%(province,ckey),
+                    phuRpost = hdf.create_dataset("/Canada/%s/%s/Rpost"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=p)
-                    phuRliket = hdf.create_Dataset("/Canada/%s/%s/Rlike"%(province,ckey),
+                    phuRliket = hdf.create_dataset("/Canada/%s/%s/Rlike"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=l)
@@ -7266,15 +7266,15 @@ def hdf5_ON(throttle=False):
                     phuRpost.attrs["long_name"] = "Rt Posterior Probability"
                     phuRpost.attrs["long_name"] = "Rt Likelihood Function"
                     
-                    phucases = hdfs.create_Dataset("/Canada/%s/%s/cases"%(province,ckey),
+                    phucases = hdfs.create_dataset("/Canada/%s/%s/cases"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=ctotal.astype(np.short))
-                    phudeaths = hdfs.create_Dataset("/Canada/%s/%s/deaths"%(province,ckey),
+                    phudeaths = hdfs.create_dataset("/Canada/%s/%s/deaths"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=dtotal.astype(np.short))
-                    phuRt = hdfs.create_Dataset("/Canada/%s/%s/Rt"%(province,ckey),
+                    phuRt = hdfs.create_dataset("/Canada/%s/%s/Rt"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=r.astype('float32'))
