@@ -6801,7 +6801,7 @@ def hdf5_ON(throttle=False):
     
     phupops = {}
     poplines = []
-    with open("shapefiles/canada_phus/hr_map.csv") as popfile:
+    with open("hr_map.csv") as popfile:
         reader = csv.reader(popfile,delimiter=',',quotechar='"')
         header = next(reader)
         for row in reader:
