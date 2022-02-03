@@ -6799,6 +6799,24 @@ def hdf5_ON(throttle=False):
     hdf.close()
     hdfs.close()
     
+    phupops = {}
+    poplines = []
+    with open("shapefiles/canada_phus/hr_map.csv") as popfile:
+        reader = csv.reader(popfile,delimiter=',',quotechar='"')
+        header = next(reader)
+        for row in reader:
+            poplines.append(row)
+    for line in poplines:
+        parts = line
+        if parts[6]!='':
+            province = parts[2]
+            phu = parts[4]
+            pop = int(parts[6])
+            if province not in phupops:
+                phupops[province] = {phu:pop}
+            else:
+                phupops[province][phu] = pop
+    
     try:
         print("doing neighborhoods")
         
@@ -7063,7 +7081,6 @@ def hdf5_ON(throttle=False):
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=l)
                 latest = hdf.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
-                #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
                 phucases.attrs["units"] = "cases day-1"
@@ -7109,6 +7126,19 @@ def hdf5_ON(throttle=False):
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=r.astype('float32'))
                 latest = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
+                if phu in phupops["Ontario"]:
+                    phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                       data=phupops["Ontario"][phu])
+                    phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                         data=phupops["Ontario"][phu])
+                    phupopulation.attrs["units"] = "people"
+                    phupopulation.attrs["standard_name"] = "population"
+                    phupopulation.attrs["long_name"] = "population"
+                    phupopulations.attrs["units"] = "people"
+                    phupopulations.attrs["standard_name"] = "population"
+                    phupopulations.attrs["long_name"] = "population"
+                else:
+                    print("no population found for Ontario : ",phu)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
@@ -7116,17 +7146,14 @@ def hdf5_ON(throttle=False):
                 phudeaths.attrs["units"] = "deaths day-1"
                 phuactive.attrs["units"] = "cases"
                 phurecovered.attrs["units"] = "recoveries day-1"
-                #phupopulation.units = "people"
                 phucases.attrs["standard_name"] = "daily_cases"
                 phudeaths.attrs["standard_name"] = "daily_deaths"
                 phuactive.attrs["standard_name"] = "active_cases"
                 phurecovered.attrs["standard_name"] = "daily_recoveries"
-                #phupopulation.standard_name = "population"
                 phucases.attrs["long_name"] = "new cases per day"
                 phudeaths.attrs["long_name"] = "new deaths per day"
                 phuactive.attrs["long_name"] = "active cases"
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
-                #phupopulation.long_name = "population"
                 
                 phuRt.attrs["units"] = "infections per sick person"
                 phuRt.attrs["standard_name"] = "effective_reproductive_number"
@@ -7280,6 +7307,19 @@ def hdf5_ON(throttle=False):
                                                   data=r.astype('float32'))
                     latest = hdfs.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
                                                 data=latestdate)
+                    if region in phupops[province]:
+                        phupopulation = hdf.create_dataset("/Canada/%s/"%province+ckey+"/population",
+                                                           data=phupops[province][region])
+                        phupopulations = hdfs.create_dataset("/Canada/%s/"%province+ckey+"/population",
+                                                             data=phupops[province][region])
+                        phupopulation.attrs["units"] = "people"
+                        phupopulation.attrs["standard_name"] = "population"
+                        phupopulation.attrs["long_name"] = "population"
+                        phupopulations.attrs["units"] = "people"
+                        phupopulations.attrs["standard_name"] = "population"
+                        phupopulations.attrs["long_name"] = "population"
+                    else:
+                        print("no population found for Ontario : ",phu)
                     
                     phucases.attrs["units"] = "cases day-1"
                     phudeaths.attrs["units"] = "deaths day-1"
@@ -8372,6 +8412,50 @@ def hdf5_USA3(throttle=False):
     
     _log(logfile,"Ending HDF5_USA3 at %s"%systime.asctime(systime.localtime()))
    
+AUpops = {"Australian Capital Territory": 432266 ,
+          "New South Wales"             : 8189266,
+          "Northern Territory"          : 246338 ,
+          "Queensland"                  : 5221170,
+          "South Australia"             : 1773243,
+          "Tasmania"                    : 541479 ,
+          "Victoria"                    : 6649159,
+          "Western Australia"           : 2681633}
+
+CNpops = {"Anhui"         :  61027171 ,
+          "Beijing"       :  21893095 ,
+          "Chongqing"     :  32054159 ,
+          "Fujian"        :  41540086 ,
+          "Gansu"         :  25019831 ,
+          "Guangdong"     :  126012510,
+          "Guangxi"       :  50126804 ,
+          "Guizhou"       :  38562148 ,
+          "Hainan"        :  10081232 ,
+          "Hebei"         :  74610235 ,
+          "Heilongjiang"  :  31850088 ,
+          "Henan"         :  99365519 ,
+          "Hong Kong"     :  7474200  ,
+          "Hubei"         :  57752557 ,
+          "Hunan"         :  66444864 ,
+          "Inner Mongolia":  24049155 ,
+          "Jiangsu"       :  84748016 ,
+          "Jiangxi"       :  45188635 ,
+          "Jilin"         :  24073453 ,
+          "Liaoning"      :  42591407 ,
+          "Macau"         :  683218   ,
+          "Ningxia"       :  7202654  ,
+          "Qinghai"       :  5923957  ,
+          "Shaanxi"       :  39528999 ,
+          "Shandong"      :  101527453,
+          "Shanghai"      :  24870895 ,
+          "Shanxi"        :  34915616 ,
+          "Sichuan"       :  83674866 ,
+          "Tianjin"       :  13866009 ,
+          "Tibet"         :  3648100  ,
+          "Xinjiang"      :  25852345 ,
+          "Yunnan"        :  47209277 ,
+          "Zhejiang"      :  64567588}
+
+
 def hdf5_world(throttle=False):
     import h5py as h5
       
@@ -8408,6 +8492,8 @@ def hdf5_world(throttle=False):
 
         countries = []
         canada = []
+        australia = []
+        china = []
         
         it0 = 4
         with open(globalconf,"r") as df:
@@ -8553,6 +8639,33 @@ def hdf5_world(throttle=False):
                                provincepopulations.attrs["standard_name"] = "population"
                                provincepopulations.attrs["long_name"] = "Population"
                                canada.append(localname)
+                               
+                           elif country=="Australia" and localname in AUpops:
+                               provincepopulation = hdf.create_dataset("/Australia/%s/population"%localname,
+                                                                       data=float(AUpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/Australia/%s/population"%localname,
+                                                                           data=float(AUpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               australia.append(localname)
+                               
+                           elif country=="China" and localname in CNpops:
+                               provincepopulation = hdf.create_dataset("/China/%s/population"%localname,
+                                                                       data=float(CNpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/China/%s/population"%localname,
+                                                                           data=float(CNpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               china.append(localname)
+                                
                                
                            latest = hdf.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
                            latest = hdfs.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
