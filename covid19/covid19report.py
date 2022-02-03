@@ -7126,11 +7126,11 @@ def hdf5_ON(throttle=False):
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=r.astype('float32'))
                 latest = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
-                if phu in phupops["Ontario"]:
+                if ckey in phupops["Ontario"]:
                     phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
-                                                       data=phupops["Ontario"][phu])
+                                                       data=phupops["Ontario"][ckey])
                     phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
-                                                         data=phupops["Ontario"][phu])
+                                                         data=phupops["Ontario"][ckey])
                     phupopulation.attrs["units"] = "people"
                     phupopulation.attrs["standard_name"] = "population"
                     phupopulation.attrs["long_name"] = "population"
@@ -7138,7 +7138,7 @@ def hdf5_ON(throttle=False):
                     phupopulations.attrs["standard_name"] = "population"
                     phupopulations.attrs["long_name"] = "population"
                 else:
-                    print("no population found for Ontario : ",phu)
+                    print("no population found for Ontario : ",ckey)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
