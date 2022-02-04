@@ -7126,7 +7126,7 @@ def hdf5_ON(throttle=False):
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=r.astype('float32'))
                 latest = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
-                if ckey in phupops["Ontario"]:
+                if ckey in phupops["Ontario"] and ckey!="Toronto":
                     phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
                                                        data=phupops["Ontario"][ckey])
                     phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
