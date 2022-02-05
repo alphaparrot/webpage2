@@ -2114,9 +2114,10 @@ def report_TOH5():
     TOneighborhoods = []
     for k in dataset["Canada/Ontario/Toronto"]:
         if not isinstance(torontogroup[k], h5.Dataset):
-            TOneighborhoods.append(k)
-            fstub = k.replace("/","-")
-            makehtml.makeneighborhood(k,"%s/%s"%(fstub,fstub))
+            if "cases" in torontogroup[k]:
+                TOneighborhoods.append(k)
+                fstub = k.replace("/","-")
+                makehtml.makeneighborhood(k,"%s/%s"%(fstub,fstub))
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -2754,7 +2755,16 @@ def report_ONH5():
 
     for k in ontariogroup:
         if not isinstance(ontariogroup[k],h5.Dataset):
-            ontario_phus.append(k)
+            if "cases" in ontariogroup[k]:
+                ontario_phus.append(k)
+                
+    cankeys = []
+    for province in dataset["Canada"]:
+        if not isinstance(dataset["Canada"][province],h5.Dataset):
+            if "cases" in dataset["Canada"][province]:
+                cankeys.append(str(province))
+            
+    dataset.close()
     
     ontariokeys = sorted(ontario_phus)
     for k in sorted(ontario_phus):
@@ -2792,11 +2802,6 @@ def report_ONH5():
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
     _log(logfile,"Ontario PHU plots completed. \t%s"%systime.asctime(systime.localtime()))
-    
-    cankeys = []
-    for province in dataset["Canada"]:
-        if not isinstance(dataset["Canada"][province],h5.Dataset):
-            cankeys.append(str(province))
             
     for province in cankeys:
         p = Pool(1)
@@ -3097,7 +3102,8 @@ def report_USH5():
     uskeys = []
     for state in dataset["United States"]:
         if not isinstance(dataset["United States"][state],h5.Dataset) and dataset["United States/%s/population"%state][()]>0:
-            uskeys.append(state)
+            if "cases" in usa[state]:
+                uskeys.append(state)
              
     ckeys = sorted(uskeys)
     if "Guam" in ckeys:
@@ -3372,7 +3378,8 @@ def report_worldH5():
     countries = []
     for country in dataset:
         if not isinstance(dataset[country],h5.Dataset):
-            countries.append(country)
+            if "cases" in dataset[country]:
+                countries.append(country)
     
     latestglobal = "\nAs of "+dataset["Canada/latestdate"][()]
          
@@ -5725,7 +5732,8 @@ def processcountiesH5(state):
     counties = []
     for cty in dataset["United States/%s"%state]:
         if not isinstance(dataset["United States/%s/%s"%(state,cty)],h5.Dataset):
-            counties.append(cty)
+            if "cases" in dataset["United States/%s/%s"%(state,cty)]:
+                counties.append(cty)
             
     ncounties = len(counties)
     if state=="Texas":
@@ -7347,7 +7355,7 @@ def hdf5_ON(throttle=False):
                                                   data=r.astype('float32'))
                     latest = hdfs.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
                                                 data=latestdate)
-                    if region in phupops[province]:
+                    if region in phupops[province] and region!="Toronto" and region!="City of Toronto":
                         phupopulation = hdf.create_dataset("/Canada/%s/"%province+ckey+"/population",
                                                            data=phupops[province][region])
                         phupopulations = hdfs.create_dataset("/Canada/%s/"%province+ckey+"/population",
