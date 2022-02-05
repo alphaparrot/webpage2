@@ -7042,6 +7042,8 @@ def hdf5_ON(throttle=False):
         with open("index.html","w") as indexf:
             indexf.write("\n".join(html))
         
+        phumap = {}
+        
         print("Doing PHUs")
         for phu in sorted(ontario):
             if len(ontario[phu][:])>10:
@@ -7054,77 +7056,77 @@ def hdf5_ON(throttle=False):
                 dtotal = np.diff(np.append([0,],ontario_d[phu])).astype(int)
                 atotal = ontario_a[phu].astype(int)
                 rtotal = np.diff(np.append([0,],ontario_r[phu])).astype(int)
-                r,lp,ll = Rt(day5avg(ctotal.astype(float)))
-                p = np.exp(lp)
-                l = np.exp(ll)
-                del lp
-                del ll
-                phucases = hdf.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=ctotal.astype(np.short))
-                phudeaths = hdf.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=dtotal.astype(np.short))
+                #r,lp,ll = Rt(day5avg(ctotal.astype(float)))
+                #p = np.exp(lp)
+                #l = np.exp(ll)
+                #del lp
+                #del ll
+                #phucases = hdf.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=ctotal.astype(np.short))
+                #phudeaths = hdf.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=dtotal.astype(np.short))
                 phuactive = hdf.create_dataset("/Canada/Ontario/"+ckey+"/active",compression='gzip',
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=atotal.astype(np.short))
                 phurecovered = hdf.create_dataset("/Canada/Ontario/"+ckey+"/recovered",compression='gzip',
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=rtotal.astype(np.short))
-                phuRt = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=r.astype('float32'))
-                phuRpost = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rpost",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=p)
-                phuRlike = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rlike",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=l)
+                #phuRt = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=r.astype('float32'))
+                #phuRpost = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rpost",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=p)
+                #phuRlike = hdf.create_dataset("/Canada/Ontario/"+ckey+"/Rlike",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=l)
                 latest = hdf.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
-                phucases.attrs["units"] = "cases day-1"
-                phudeaths.attrs["units"] = "deaths day-1"
+                #phucases.attrs["units"] = "cases day-1"
+                #phudeaths.attrs["units"] = "deaths day-1"
                 phuactive.attrs["units"] = "cases"
                 phurecovered.attrs["units"] = "recoveries day-1"
                 #phupopulation.units = "people"
-                phucases.attrs["standard_name"] = "daily_cases"
-                phudeaths.attrs["standard_name"] = "daily_deaths"
+                #phucases.attrs["standard_name"] = "daily_cases"
+                #phudeaths.attrs["standard_name"] = "daily_deaths"
                 phuactive.attrs["standard_name"] = "active_cases"
                 phurecovered.attrs["standard_name"] = "daily_recoveries"
                 #phupopulation.standard_name = "population"
-                phucases.attrs["long_name"] = "new cases per day"
-                phudeaths.attrs["long_name"] = "new deaths per day"
+                #phucases.attrs["long_name"] = "new cases per day"
+                #phudeaths.attrs["long_name"] = "new deaths per day"
                 phuactive.attrs["long_name"] = "active cases"
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
                 #phupopulation.long_name = "population"
                 
-                phuRt.attrs["units"] = "infections per sick person"
-                phuRt.attrs["standard_name"] = "effective_reproductive_number"
-                phuRt.attrs["long_name"] = "Effective Reproductive Number"
-                phuRpost.attrs["units"] = "n/a"
-                phuRlike.attrs["units"] = "n/a"
-                phuRpost.attrs["standard_name"] = "R_t_posterior"
-                phuRlike.attrs["standard_name"] = "R_t_likelihood"
-                phuRpost.attrs["long_name"] = "Rt Posterior Probability"
-                phuRpost.attrs["long_name"] = "Rt Likelihood Function"
+                #phuRt.attrs["units"] = "infections per sick person"
+                #phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                #phuRt.attrs["long_name"] = "Effective Reproductive Number"
+                #phuRpost.attrs["units"] = "n/a"
+                #phuRlike.attrs["units"] = "n/a"
+                #phuRpost.attrs["standard_name"] = "R_t_posterior"
+                #phuRlike.attrs["standard_name"] = "R_t_likelihood"
+                #phuRpost.attrs["long_name"] = "Rt Posterior Probability"
+                #phuRpost.attrs["long_name"] = "Rt Likelihood Function"
                 
                 
-                phucases = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=ctotal.astype(np.short))
-                phudeaths = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=dtotal.astype(np.short))
+                #phucases = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/cases",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=ctotal.astype(np.short))
+                #phudeaths = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/deaths",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=dtotal.astype(np.short))
                 phuactive = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/active",compression='gzip',
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=atotal.astype(np.short))
                 phurecovered = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/recovered",compression='gzip',
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=rtotal.astype(np.short))
-                phuRt = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
-                                                    compression_opts=9,shuffle=True,fletcher32=True,
-                                                    data=r.astype('float32'))
+                #phuRt = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/Rt",compression='gzip',
+                                                    #compression_opts=9,shuffle=True,fletcher32=True,
+                                                    #data=r.astype('float32'))
                 latest = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
                 if ckey!="Toronto":
                     found = False
@@ -7143,6 +7145,7 @@ def hdf5_ON(throttle=False):
                             phupopulations.attrs["units"] = "people"
                             phupopulations.attrs["standard_name"] = "population"
                             phupopulations.attrs["long_name"] = "population"
+                            phumap[region] = ckey
                             break
                     if not found:
                         if ckey=="Hastings & Prince Edward Counties":
@@ -7161,6 +7164,7 @@ def hdf5_ON(throttle=False):
                             region = "Wellington Duffering Guelph"
                             found=True
                         if found:
+                            phumap[region] = ckey
                             phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
                                                        data=phupops["Ontario"][region])
                             phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
@@ -7176,22 +7180,22 @@ def hdf5_ON(throttle=False):
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
-                phucases.attrs["units"] = "cases day-1"
-                phudeaths.attrs["units"] = "deaths day-1"
+                #phucases.attrs["units"] = "cases day-1"
+                #phudeaths.attrs["units"] = "deaths day-1"
                 phuactive.attrs["units"] = "cases"
                 phurecovered.attrs["units"] = "recoveries day-1"
-                phucases.attrs["standard_name"] = "daily_cases"
-                phudeaths.attrs["standard_name"] = "daily_deaths"
+                #phucases.attrs["standard_name"] = "daily_cases"
+                #phudeaths.attrs["standard_name"] = "daily_deaths"
                 phuactive.attrs["standard_name"] = "active_cases"
                 phurecovered.attrs["standard_name"] = "daily_recoveries"
-                phucases.attrs["long_name"] = "new cases per day"
-                phudeaths.attrs["long_name"] = "new deaths per day"
+                #phucases.attrs["long_name"] = "new cases per day"
+                #phudeaths.attrs["long_name"] = "new deaths per day"
                 phuactive.attrs["long_name"] = "active cases"
                 phurecovered.attrs["long_name"] = "newly-recovered cases per day"
                 
-                phuRt.attrs["units"] = "infections per sick person"
-                phuRt.attrs["standard_name"] = "effective_reproductive_number"
-                phuRt.attrs["long_name"] = "Effective Reproductive Number"
+                #phuRt.attrs["units"] = "infections per sick person"
+                #phuRt.attrs["standard_name"] = "effective_reproductive_number"
+                #phuRt.attrs["long_name"] = "Effective Reproductive Number"
                 
                 hdf.close()
                 hdfs.close()
@@ -7267,7 +7271,7 @@ def hdf5_ON(throttle=False):
     
     
     for province in data:
-        if province!="Ontario": #We already do Ontario, separately
+        if True: #We already do Ontario, separately
             _log(logfile,"Writing %s\t.....%s"%(province,systime.asctime(systime.localtime())))
             for region in data[province]:
                 if throttle:
@@ -7276,6 +7280,8 @@ def hdf5_ON(throttle=False):
                     hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
                     hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","a")
                     ckey = strtitle(region)
+                    if region in phumap:
+                        ckey=phumap[region]
                     ctotal = np.array(data[province][region]["Cases"]).astype(int)
                     dtotal = np.array(ddata[province][region]["Deaths"]).astype(int)
                     latestdate = data[province][region]["Time"][-1]
