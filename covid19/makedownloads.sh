@@ -28,5 +28,6 @@ ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/on
 cd $cdir
 
 cd /home/adivp416/public_html/covid19/
+ionice -c 3 rm tmp*.hdf5
 ionice -c 3 python /home/adivp416/public_html/covid19/covid19report.py dataset_ON
 cat /home/adivp416/public_html/covid19/reportlog.txt

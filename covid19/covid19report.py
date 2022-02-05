@@ -7319,8 +7319,12 @@ def hdf5_ON(throttle=False):
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=l)
-                    latest = hdf.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
-                                                data=latestdate)
+                    if "latestdate" not in hdf["Canada/%s/%s"%(province,ckey)]:
+                        latest = hdf.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
+                                                    data=latestdate)
+                    elif np.datetime64(datetime.datetime.strptime(latestdate,"%a %b %d %Y"))>\
+                         np.datetime64(datetime.datetime.strptime(hdf["Canada/%s/%s/latestdate"%(province,ckey)].asstr()[()],"%a %b %d %Y")):
+                             hdf["Canada/%s/%s/latestdate"%(province,ckey)][()] = latestdate
                     
                     phucases.attrs["units"] = "cases day-1"
                     phudeaths.attrs["units"] = "deaths day-1"
@@ -7353,8 +7357,12 @@ def hdf5_ON(throttle=False):
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=r.astype('float32'))
-                    latest = hdfs.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
-                                                data=latestdate)
+                    if "latestdate" not in hdfs["Canada/%s/%s"%(province,ckey)]:
+                        latest = hdfs.create_dataset("/Canada/%s/%s/latestdate"%(province,ckey),
+                                                    data=latestdate)
+                    elif np.datetime64(datetime.datetime.strptime(latestdate,"%a %b %d %Y"))>\
+                         np.datetime64(datetime.datetime.strptime(hdfs["Canada/%s/%s/latestdate"%(province,ckey)].asstr()[()],"%a %b %d %Y")):
+                             hdfs["Canada/%s/%s/latestdate"%(province,ckey)][()] = latestdate
                     if region in phupops[province] and region!="Toronto" and region!="City of Toronto":
                         phupopulation = hdf.create_dataset("/Canada/%s/"%province+ckey+"/population",
                                                            data=phupops[province][region])
@@ -7387,6 +7395,7 @@ def hdf5_ON(throttle=False):
                     
                 except BaseException as err:
                     traceback.print_exc()
+                    print("We stumbled on %s, %s"%(region,province))
                     try:
                         hdf.close()
                         hdfs.close()
