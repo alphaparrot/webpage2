@@ -7364,16 +7364,17 @@ def hdf5_ON(throttle=False):
                          np.datetime64(datetime.datetime.strptime(hdfs["Canada/%s/%s/latestdate"%(province,ckey)].asstr()[()],"%a %b %d %Y")):
                              hdfs["Canada/%s/%s/latestdate"%(province,ckey)][()] = latestdate
                     if region in phupops[province] and region!="Toronto" and region!="City of Toronto":
-                        phupopulation = hdf.create_dataset("/Canada/%s/"%province+ckey+"/population",
-                                                           data=phupops[province][region])
-                        phupopulations = hdfs.create_dataset("/Canada/%s/"%province+ckey+"/population",
-                                                             data=phupops[province][region])
-                        phupopulation.attrs["units"] = "people"
-                        phupopulation.attrs["standard_name"] = "population"
-                        phupopulation.attrs["long_name"] = "population"
-                        phupopulations.attrs["units"] = "people"
-                        phupopulations.attrs["standard_name"] = "population"
-                        phupopulations.attrs["long_name"] = "population"
+                        if "population" not in hdf["/Canada/%s/"%province+ckey]:
+                            phupopulation = hdf.create_dataset("/Canada/%s/"%province+ckey+"/population",
+                                                            data=phupops[province][region])
+                            phupopulations = hdfs.create_dataset("/Canada/%s/"%province+ckey+"/population",
+                                                                data=phupops[province][region])
+                            phupopulation.attrs["units"] = "people"
+                            phupopulation.attrs["standard_name"] = "population"
+                            phupopulation.attrs["long_name"] = "population"
+                            phupopulations.attrs["units"] = "people"
+                            phupopulations.attrs["standard_name"] = "population"
+                            phupopulations.attrs["long_name"] = "population"
                     else:
                         print("no population found for %s : "%province,region)
                     
@@ -10157,7 +10158,9 @@ if __name__=="__main__":
         #netcdf_slim()
         #netcdf()
         hdf5_ON(throttle=True)
-        hdf5_USA(throttle=True)
+        hdf5_USA1(throttle=True)
+        hdf5_USA2(throttle=True)
+        hdf5_USA3(throttle=True)
         hdf5_world(throttle=True)
         #hdf5_slim()
         
