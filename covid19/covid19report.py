@@ -7126,19 +7126,53 @@ def hdf5_ON(throttle=False):
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=r.astype('float32'))
                 latest = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/latestdate",data=latestON)
-                if ckey in phupops["Ontario"] and ckey!="Toronto":
-                    phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
-                                                       data=phupops["Ontario"][ckey])
-                    phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
-                                                         data=phupops["Ontario"][ckey])
-                    phupopulation.attrs["units"] = "people"
-                    phupopulation.attrs["standard_name"] = "population"
-                    phupopulation.attrs["long_name"] = "population"
-                    phupopulations.attrs["units"] = "people"
-                    phupopulations.attrs["standard_name"] = "population"
-                    phupopulations.attrs["long_name"] = "population"
-                else:
-                    print("no population found for Ontario : ",ckey)
+                if ckey!="Toronto":
+                    found = False
+                    for region in phupops["Ontario"]:
+                        place = region.replace(",","").replace("&","").replace("-"," ")
+                        search = ckey.replace(",","").replace("&","").replace("-"," ")
+                        if place in search or search in place:
+                            found=True
+                            phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                       data=phupops["Ontario"][region])
+                            phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                         data=phupops["Ontario"][region])
+                            phupopulation.attrs["units"] = "people"
+                            phupopulation.attrs["standard_name"] = "population"
+                            phupopulation.attrs["long_name"] = "population"
+                            phupopulations.attrs["units"] = "people"
+                            phupopulations.attrs["standard_name"] = "population"
+                            phupopulations.attrs["long_name"] = "population"
+                            break
+                    if not found:
+                        if ckey=="Hastings & Prince Edward Counties":
+                            region = "Hastings Prince Edward"
+                            found=True
+                        elif ckey=="Haliburton, Kawartha, Pine Ridge":
+                            region = "Haliburton Kawartha Pineridge"
+                            found=True
+                        elif ckey=="Leeds, Grenville And Lanark District":
+                            region = "Leeds Grenville and Lanark"
+                            found=True
+                        elif ckey=="Oxford Elgin-St.Thomas":
+                            region = "Southwestern"
+                            found=True
+                        elif ckey=="Wellington-Dufferin-Guelph":
+                            region = "Wellington Duffering Guelph"
+                            found=True
+                        if found:
+                            phupopulation = hdf.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                       data=phupops["Ontario"][region])
+                            phupopulations = hdfs.create_dataset("/Canada/Ontario/"+ckey+"/population",
+                                                         data=phupops["Ontario"][region])
+                            phupopulation.attrs["units"] = "people"
+                            phupopulation.attrs["standard_name"] = "population"
+                            phupopulation.attrs["long_name"] = "population"
+                            phupopulations.attrs["units"] = "people"
+                            phupopulations.attrs["standard_name"] = "population"
+                            phupopulations.attrs["long_name"] = "population"
+                        else:
+                            print("no population found for Ontario : ",ckey)
                 #phupopulation = ncd["Canada/Ontario"][ckey].createVariable("population","f4",("scalar",),zlib=True)
                 #ncd["Canada/Ontario"][ckey]["population"][:] = float(phupops[phu])
                 #phupopulation.set_auto_mask(False)
@@ -7319,7 +7353,7 @@ def hdf5_ON(throttle=False):
                         phupopulations.attrs["standard_name"] = "population"
                         phupopulations.attrs["long_name"] = "population"
                     else:
-                        print("no population found for Ontario : ",phu)
+                        print("no population found for %s : "%province,region)
                     
                     phucases.attrs["units"] = "cases day-1"
                     phudeaths.attrs["units"] = "deaths day-1"
