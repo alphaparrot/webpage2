@@ -1269,7 +1269,7 @@ def plotStateOrProvinceH5(args):
         ddeaths = dataset[country][name]["deaths"][1:]
         
         fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
-        curve = ddeaths
+        curve = ddeaths[2:]
         plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
         plt.annotate("%d Deaths per Day"%curve[-1],(-len(curve)*0.2,0.7*curve.max()))
         plt.xlabel("Days before Present")
@@ -1281,7 +1281,7 @@ def plotStateOrProvinceH5(args):
         
         
         fig,ax = plt.subplots(num=13,clear=True,figsize=(14,9))
-        curve = day5avg(ddeaths)/float(population)*1e6
+        curve = day5avg(ddeaths[2:])/float(population)*1e6
         ntldeaths = day5avg(national_ddeaths)*1e6
         plt.plot(np.arange(len(curve))-len(curve),curve,label=name)
         if np.sum(curve)>=1:
