@@ -7057,7 +7057,7 @@ def hdf5_ON(throttle=False):
         
         print("Doing PHUs")
         for phu in sorted(ontario):
-            if len(ontario[phu][:])>10:
+            if len(ontario[phu][:])>10 and strtitle(phu)!="Not Reported":
                 if throttle:
                     systime.sleep(0.5)
                 hdf = h5.File("tmp_adivparadise_covid19data.hdf5","a")
@@ -7237,7 +7237,7 @@ def hdf5_ON(throttle=False):
             if not line:
                 break
             line = line.replace('"','').split(',')
-            if line[0]!="Repatriated":
+            if line[0]!="Repatriated" and strtitle(line[1])!="Not Reported":
               province.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
               region.append(line[1])
               time = np.array(line[2].split("-")).astype(int)
@@ -7264,7 +7264,7 @@ def hdf5_ON(throttle=False):
             if not line:
                 break
             line = line.replace('"','').split(',')
-            if line[0]!="Repatriated":
+            if line[0]!="Repatriated" and strtitle(line[1])!="Not Reported":
               dprovince.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
               dregion.append(line[1])
               dtime = np.array(line[2].split("-")).astype(int)
