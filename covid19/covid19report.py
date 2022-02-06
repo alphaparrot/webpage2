@@ -1550,7 +1550,7 @@ def plotOntarioH5(phu):
         
         fig,ax = plt.subplots(num=13,clear=True)
         
-        plt.plot(np.arange(len(cases))-len(cases),active)
+        plt.plot(np.arange(len(active))-len(active),active)
         plt.xlabel("Days before Present")
         plt.ylabel("Active Cases")
         plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
@@ -1560,7 +1560,7 @@ def plotOntarioH5(phu):
         
         fig,ax = plt.subplots(num=13,clear=True)
         
-        plt.plot(np.arange(len(cases))-len(cases),active)
+        plt.plot(np.arange(len(active))-len(active),active)
         plt.xlabel("Days before Present")
         plt.ylabel("Active Cases")
         plt.title("%s, ON Daily Active Cases"%phuname+timestamp)
@@ -1600,8 +1600,9 @@ def plotOntarioH5(phu):
         except:
             pass
         print(err)
-        raise err
+        return -1
     dataset.close()
+    return 1
     
 #@profile    
 def plotCounty(county,state,countydataset,statedataset,statepopulation,timestamp):
@@ -2770,8 +2771,10 @@ def report_ONH5():
     for k in sorted(ontario_phus):
         try:
             p = Pool(1)
-            p.map(plotOntarioH5,[[k,]])
+            err=p.map(plotOntarioH5,[[k,]])
             p.close()
+            if err==-1:
+                systime.sleep(2.0)
         except:
             traceback.print_exc()
             os.system("rm -rf ontario_%s*"%(strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")))
