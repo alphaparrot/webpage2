@@ -65,6 +65,8 @@ def unify_files(h5file,shapefile):
             row["Population"] = np.nan
         cases = hdf[place]["cases"][:]
         deaths = hdf[place]["deaths"][:]
+        cumcases = np.cumsum(np.append([0,],cases))
+        cumdeaths = np.cumsum(np.append([0,],deaths))
         rt = hdf[place]["Rt"][:]
         rt2wk = np.convolve(rt,np.ones(14),'valid')/14.0
         drt = np.diff(np.append([0,],rt2wk))
@@ -79,6 +81,8 @@ def unify_files(h5file,shapefile):
         dadeaths = len(avgdeaths)-nrows
         drcases = len(recentcases)-nrows
         drdeaths = len(recentdeaths)-nrows
+        dccases = len(cumcases)-nrows
+        dcdeaths = len(cumdeaths)-nrows
         time = np.array((np.datetime64(datetime.datetime.strptime(hdf[place]["latestdate"].asstr()[()],"%a %b %d %Y"))\
                         -np.arange(nrows)[::-1].astype('timedelta64[D]')).tolist())
         for n in range(nrows):
@@ -86,8 +90,10 @@ def unify_files(h5file,shapefile):
             drow["Time"] = time[n]
             drow["cases"] = cases[dcases+n]
             drow["cases_avg"] = avgcases[dacases+n]
+            drow["cum_cases"] = cumcases[dccases+n]
             drow["deaths"] = deaths[ddeaths+n]
             drow["deaths_avg"] = avgdeaths[dadeaths+n]
+            drow["cum_deaths"] = cumdeaths[dcdeaths+n]
             drow["21d_cases"] = recentcases[drcases+n]
             drow["21d_deaths"] = recentdeaths[drdeaths+n]
             drow["Rt"] = rt2wk[n]

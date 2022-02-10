@@ -8516,6 +8516,38 @@ CNpops = {"Anhui"         :  61027171 ,
           "Yunnan"        :  47209277 ,
           "Zhejiang"      :  64567588}
 
+FRpops = {"French Guiana":              294436,
+          "Guadeloupe"   :              400201,
+          "French Polynesia":           275918,
+          "Martinique":                 375053,
+          "Mayotte":                    299348,
+          "New Caledonia":              271407,
+          "Reunion":                    868846,
+          "Saint Barthelemy":             9961,
+          "Saint Pierre and Miquelon":    5997,
+          "St Martin":                   34065,
+          "Wallis and Futuna":           11558}
+
+DENpops = {"Faroe Islands" : 53358,
+           "Greenland"     : 56365}
+
+NETHpops = {"Aruba"                            : 106766,
+            "Bonaire, Sint Eustatius and Saba" :  25987,
+            "Curacao"                          : 155014,
+            "Sint Maarten"                     :  40812}
+
+NZpops = {"Cook Islands" : 17459}
+
+UKpops = {"Anguilla"                                    :  15094,
+          "Bermuda"                                     :  63903,
+          "Cayman Islands"                              :  65720,
+          "Channel Islands"                             : 176432,
+          "Falkland Islands (Malvinas)"                 :   2840,
+          "Gibraltar"                                   :  33691,
+          "Isle of Man"                                 :  85032,
+          "Montserrat"                                  :   4992,
+          "Saint Helena, Ascension and Tristan Da Cunha":   5661, 
+          "Turks and Caicos Islands"                    :  38718}
 
 def hdf5_world(throttle=False):
     import h5py as h5
@@ -8726,7 +8758,67 @@ def hdf5_world(throttle=False):
                                provincepopulations.attrs["standard_name"] = "population"
                                provincepopulations.attrs["long_name"] = "Population"
                                china.append(localname)
+                               
+                           elif country=="France" and localname in FRpops:
+                               provincepopulation = hdf.create_dataset("/France/%s/population"%localname,
+                                                                       data=float(FRpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/France/%s/population"%localname,
+                                                                           data=float(FRpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               
+                           elif country=="Denmark" and localname in DENpops:
+                               provincepopulation = hdf.create_dataset("/Denmark/%s/population"%localname,
+                                                                       data=float(DENpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/Denmark/%s/population"%localname,
+                                                                           data=float(DENpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
                                 
+                           elif country=="Netherlands" and localname in NETHpops:
+                               provincepopulation = hdf.create_dataset("/Netherlands/%s/population"%localname,
+                                                                       data=float(NETHpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/Netherlands/%s/population"%localname,
+                                                                           data=float(NETHpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               
+                           elif country=="New Zealand" and localname in NZpops:
+                               provincepopulation = hdf.create_dataset("/New Zealand/%s/population"%localname,
+                                                                       data=float(NZpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/New Zealand/%s/population"%localname,
+                                                                           data=float(NZpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               
+                           elif country=="United Kingdom" and localname in UKpops:
+                               provincepopulation = hdf.create_dataset("/United Kingdom/%s/population"%localname,
+                                                                       data=float(UKpops[localname]))
+                               provincepopulations = hdfs.create_dataset("/United Kingdom/%s/population"%localname,
+                                                                           data=float(UKpops[localname]))
+                               provincepopulation.attrs["units"] = "people"
+                               provincepopulation.attrs["standard_name"] = "population"
+                               provincepopulation.attrs["long_name"] = "Population"
+                               provincepopulations.attrs["units"] = "people"
+                               provincepopulations.attrs["standard_name"] = "population"
+                               provincepopulations.attrs["long_name"] = "Population"
+                               
                                
                            latest = hdf.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
                            latest = hdfs.create_dataset("%s/%s/latestdate"%(country,localname),data=latestglobal)
