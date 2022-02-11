@@ -1,0 +1,719 @@
+<!DOCTYPE HTML>
+<!--
+	Synchronous by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)-->
+<html>
+	<head>
+<!-- TITLE -->
+		<title>Adiv Paradise | COVID-19 Maps and Videos</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="icon" type='image/x-icon' href="imgs/planeticon.ico">
+        <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-panels.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+
+       <style>
+      /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+      /*body { background: #000; font-family: 'Open Sans', sans-serif; -webkit-font-smoothing: antialiased; font-smoothing: antialiased; background-image: url('https://i.imgur.com/n4O2kR2.jpg'); }*/
+
+/* -- Table of Contents -- */
+
+#tableOfContents {
+    width: 300px;
+    color: #fff !important;
+    background: #222;
+    float: left;
+    position: fixed;
+    bottom: 0;
+    right: 1%;
+    z-index: 11;
+    font-size: 18px;
+    font-weight: normal;
+    opacity:0.95;
+}
+
+#tableOfContents h2 {
+    padding: 0;
+    font-size: 20px;
+    font-weight: 700;
+    width: 100%;
+    margin: 0 !important;
+    line-height: 26px;
+    z-index: 10;
+    background: #5c0929;
+    position: relative;
+}
+
+#tableofContents:hover {
+  background: #a32f59;
+}
+
+#tableOfContents h2 a {
+    
+    background: url("imgs/tocarrow.png") no-repeat top left;
+    padding: 10px 0 10px 50px;
+    width: 250px;
+    display: block;
+}
+
+#tableOfContents h2 a:hover {
+    background: #a32f59; 
+}
+
+#tableOfContents a {
+    color: #fff;
+    text-decoration: none;
+    width: 260px;
+    padding: 6px 10px;
+    margin: 0;
+    display: block;
+}
+
+#tableOfContents a:hover {
+    background: #8194d1;
+    color:#000000;
+}
+
+.sectionsWrapper {
+    padding-left: 40px;
+    background: transparent;
+    position: absolute;
+    width: 260px;
+    bottom: -200px;
+    visibility: hidden;
+}
+
+#tableOfContents dl {
+    margin: 0;
+    overflow: hidden;
+    background: #002a5c;
+    padding: 0 0 20px 0;
+    width: 260px;
+    z-index: 10;
+}
+
+#tableOfContents dt {
+    padding: 0;
+    font-weight: 550;
+}
+
+.subsectionContent {
+    display: none;
+}
+
+.subsectionContent dd a {
+    /*color: #eee !important;*/
+    color: #000000;
+    padding-left: 25px !important;
+    font-weight: 500;
+    background: #002a5c;
+}
+
+
+.flex-container {
+  display: flex;
+}
+
+.column {
+  flex: 48%;
+  padding: 5px;
+}
+
+
+    </style>
+
+    <script src="js/prefixfree.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+  <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/lib/codemirror.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/addon/runmode/runmode-standalone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/python/python.min.js"></script>
+ 
+
+	</head>
+	<body>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code1");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code2");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code3");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code4");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code5");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code6");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code7");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code8");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code9");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>
+    <script type="text/javascript">
+        window.onload = function(){
+            var codeElement = document.getElementById("python_code10");
+            // Add code mirror class for coloring (default is the theme)
+            codeElement.classList.add( 'cm-s-default' );
+            var code = codeElement.innerText;
+
+            codeElement.innerHTML = "";
+
+            CodeMirror.runMode(
+              code,
+              'python',
+              codeElement
+            );
+        };
+    </script>-->
+    
+<!--    <div class="globalWrapper">
+        <div id="tableOfContents">
+        <h2><a id="toc" href="#">Table of Contents</a></h2>
+        <div class="sectionsWrapper closed">
+        <dl class="sections">-->
+<!-- TOC -->
+<!--          <dt><a class="subsection" href="#ChemTag">1. PhD Research</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#habz" data=""-offset="70">1.1. Tidally-locked Planets</a></dd>
+              <dd><a href="#stability" data=""-offset="70">1.2. Climate stability</a></dd>
+              <dd><a href="#observ" data=""-offset="70">1.2. Observability</a></dd>
+            </div>
+          <dt><a class="subsection" href="#Other">2. Past Research</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#blocking" data=""-offset="80">2.1. Atmospheric Blocking</a></dd>
+              <dd><a href="#chime" data=""-offset="80">2.2. CHIME FRB</a></dd>
+              <dd><a href="#implicit" data=""-offset="80">2.3. Implicit Fluid Transport</a></dd>
+              <dd><a href="#poisson" data=""-offset="80">2.4. Poisson Solver</a></dd>
+              <dd><a href="#solarwind" data=""-offset="80">2.5. Solar Wind</a></dd>
+            </div>
+           <dt><a class="subsection" href="#Pub">3. Publications</a></dt>
+            <div class="subsectionContent">
+              <dd><a href="#first" data=""-offset="80">3.1. First Author</a></dd>
+              <dd><a href="#author" data=""-offset="80">3.2. Author</a></dd>
+              <dd><a href="#draft" data=""-offset="80">3.3. Drafts</a></dd>
+            </div>-->
+        <!--</dl>--><!-- / sections -->
+        <!--</div>--><!-- / sectionsWrapper -->
+      <!--</div>--><!-- / tableOfContents -->
+      <!--</div>-->
+</head>
+<body>
+
+	  <div class="globalWrapper">
+        <div id="tableOfContents">
+        <h2><a id="toc" href="#">Table of Contents</a></h2>
+        <div class="sectionsWrapper closed">
+        <dl class="sections">
+          <dt><a class="subsection" href="#"> COVID-19 Dashboard</a></dt>
+          	<div class="subsectionContent">
+              <dd><a href="index.html#Toronto" data=""-offset="70">Toronto</a></dd>
+              <dd><a href="index.html#Ontario" data=""-offset="70">Ontario</a></dd>
+              <dd><a href="index.html#Canada" data=""-offset="70">Canada</a></dd>
+              <dd><a href="index.html#USA" data=""-offset="70">USA</a></dd>
+              <dd><a href="index.html#Global" data=""-offset="70">Global</a></dd>
+            </div>
+          <dt><a class="subsection" href="#"> Data and Scripts</a></dt>
+              <div class="subsectionContent">
+                <dd><a href="data.html" data =""-offset="70">How to Use</a></dd>
+              </div>
+          <dt><a class="subsection" href="#"> COVID-19 Maps and Videos</a></dt>
+          	<div class="subsectionContent">
+              <dd><a href="maps.html#Toronto" data=""-offset="70">Greater Toronto Area</a></dd>
+              <dd><a href="maps.html#SOntario" data=""-offset="70">Southern Ontario</a></dd>
+              <dd><a href="maps.html#GreatLakes" data=""-offset="70">Great Lakes</a></dd>
+              <dd><a href="maps.html#NA" data=""-offset="70">North America</a></dd>
+              <dd><a href="maps.html#Global" data=""-offset="70">Global</a></dd>
+            </div>
+          <dt><a class="subsection" href="#"> Main Page</a></dt>
+          	<div class="subsectionContent">
+              <dd><a href="https://adivparadise.ca/index.html" data=""-offset="70">Homepage</a></dd>
+              <dd><a href="https://adivparadise.ca/research.html" data=""-offset="70">Research</a></dd>
+              <dd><a href="https://adivparadise.ca/extracurriculars.html" data=""-offset="70">Extracurriculars</a></dd>
+              <dd><a href="https://adivparadise.ca/outreach.html" data=""-offset="70">Outreach</a></dd>
+              <dd><a href="https://adivparadise.ca/cv_dossier.html" data=""-offset="70">CV/Resume</a></dd>
+            </div>
+        </dl><!-- / sections -->
+        </div><!-- / sectionsWrapper -->
+      </div><!-- / tableOfContents -->
+      </div>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+        <script src="js/index.js"></script>
+
+		<div id="wrapper">
+			
+			<!-- Header -->
+			<div id="header">
+				<div class="container"> 
+					
+					<!-- Logo -->
+					<div id="logo">
+						<h1><a href="https://adivparadise.ca/index.html">Adiv Paradise</a></h1>
+						<span>Astrophysicist | Climate Scientist | Programmer | Storyteller</span>
+					</div>
+					
+					<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="https://adivparadise.ca/index.html">Homepage</a></li>
+<!-- NAVBAR -->
+<!-- <li class="active"><a href="currentpage.html">currentpage</a></li> -->
+							<li><a href="https://covid19.adivparadise.ca/index.html">COVID-19 Dashboard</a></li>
+							
+                                        <li><a class="active" href="maps.html">COVID-19 Maps and Videos</a></li>
+						</ul>
+					</nav>
+					<br/>
+					<nav id="nav">
+                                        <ul>
+                                        <li><a href="maps.html#Toronto">Toronto</a></li>
+                                        <li><a href="maps.html#SOntario">Southern Ontario</a></li>
+                                        <li><a href="maps.html#GreatLakes">Great Lakes</a></li>
+                                        <li><a href="maps.html#NA">North America</a></li>
+                                        <li><a href="maps.html#Global">Global</a></li>
+                                        <li><a href="data.html">Data</a></li>
+                                        </ul>
+                                        </nav>
+				</div>
+			</div>
+			<!-- /Header -->
+
+            <script>
+            $(function () {
+    setIFrameSize();
+    $(window).resize(function () {
+        setIFrameSize();
+    });
+});
+
+function setIFrameSize() {
+    var ogWidth = 960;
+    var ogHeight = 596;
+    var ogRatio = ogWidth / ogHeight;
+
+    var parentDivWidth = $(".iframe-class").parent().width();
+    var newHeight = (parentDivWidth / ogRatio);
+    $(".iframe-class").addClass("iframe-class-resize");
+    $(".iframe-class-resize").css("width", parentDivWidth);
+    $(".iframe-class-resize").css("height", newHeight);
+}
+</script>
+			
+<div id="page">
+        <div class="container">
+                <div class="row">
+                        <div class="9u skel-cell-important">
+                                <section id="content" >
+                             
+                                <header>
+<!-- HEADER -->
+<!--                                         <h2><a name="current">PhD Research</a></h2> -->
+                                <h2><a name="current">COVID-19 Maps and Videos</a></h2>
+                                </header>
+                                <p style="font-size:25px">Important Disclaimers</p>
+                                <ul style="font-weight:bold;list-style-type:disc;">
+                                <li>I am not an epidemiologist. I may get things wrong, and you should not use my analyses as predictive tools or for policy decisions.<br/><br/></li>
+                                <li>I am providing access to data along with some basic mathematical and statistical manipulations of said data, packaged into visualizations I think are useful. I am not making predictions about where the pandemic is headed next.<br/><br/></li>
+                                <li>Data on small populations are inherently more uncertain. Take any data product for local scales such as counties, neighborhoods, small states, etc with some hefty grains of salt.<br/><br/></li>
+                                <li>These analyses are always retrospective. There is a known lag between when someone gets sick and when the databases find out about it, often several days to a week. When things are getting worse, assume they're worse than the data reveal. When they're getting better, however, assume you don't know what's actually going on, because there could be a growth in cases happening that hasn't shown up in the data yet. Additionally, many of my measures make use of rolling averages or running sums, which will also tend to increase the degree to which the analysis lags the real world. Where possible I use the center of the rolling window for the associated timestamp, which reduces the lag effect for historical data, but for recent data it absolutely still applies.<br/><br/></li>
+                                <li>The data are always incomplete. Not everyone who gets covid gets recorded in the databases, because some people are asymptomatic and have no idea they're infected, some tested positive on an at-home rapid test and just immediately isolated and never went and got a PCR test, or they got sick and just never got tested at all.<br/><br/></li>
+                                <li>Vaccination reduces the severity of infection. My analyses focus on case numbers, but there will come a point where that stops being a useful measure of the severity of an outbreak, because people won't get hospitalized or die from covid anymore.<br/><br/></li>
+                                </ul>
+                                <br/><br/><br/>
+                                <p style="font-size:25px">My Data and Methodology Sources</p>
+                                <p>For Toronto and Ontario data, I source my data directly from the respective public health authorities. Canadian public health region data is sourced from the COVID-19 Canada Open Data Working Group. For US and global data, I use the John's Hopkins COVID-19 Dashboard github repository.</p>
+                                <ul style="list-style-type:disc">
+                                <li><a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University</a><br/><br/></li>
+                                <li><a target="_blank" href="https://data.ontario.ca/dataset/1115d5fe-dd84-4c69-b5ed-05bf0c0a0ff9/resource/d1bfe1ad-6575-4352-8302-09ca81f7ddfc">Status of COVID-19 cases in Ontario by Public Health Unit (PHU) - Ontario Data Catalogue</a><br/><br/></li>
+                                <li><a target="_blank" href="https://github.com/ccodwg/Covid19Canada">Epidemiological Data from the COVID-19 Outbreak in Canada, COVID-19 Canada Open Data Working Group</a><br/><br/></li>
+                                <li><a target="_blank" href="https://ckan0.cf.opendata.inter.prod-toronto.ca/dataset/covid-19-cases-in-toronto">Toronto Public Health COVID-19 Cases</a><br/><br/></li>
+                                <li>R<sub>t</sub> is computed using the Bayesian method described in <a target="_blank" href="https://doi.org/10.1101/2020.06.02.20120188">Yap & Yong (2020)</a><br/><br/></li>
+                                </ul>
+                                <p>I have repackaged the data from the various datasets into a hierarchical data format (HDF-5) that is available to download using the links on the right-hand side of the page. These datasets contain data all formatted the same way, with similar reference patterns, from national to local scales. The datasets also include my R<sub>t</sub> values, along with the posterior probability distributions and likelihood functions (this accounts for the bulk of the dataset's size). A slim version that omits the posteriors and likelihoods is also available.</p>
+                                <p>A shapefile is also now available, which has identical naming conventions as the locations in the HDF5 file. No COVID-19 data is stored in the shapefile, only location names, shape data, and coordinates, but the HDF5 and shapefiles can be used together to map the data. A Python script is also provided which contains a routine for performing the merge using a GeoPandas GeoDataFrame. The script requires Pandas, GeoPandas, numpy, and h5py.</p>
+<!-- BODY -->
+                            <br>
+                            <header>
+                                <h2><a name="Global">Global Maps<a></h2>
+                            </header>
+                                <br>
+                                
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="global_all.mp4" type="video/mp4">
+                                        <img src="global_all_0713.png" alt="Population-normalized average daily COVID-19 cases, 21-day aggregate cases, daily change in transmission, and effective reproductive number for various locations around the world.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily COVID-19 cases per 100k people, the 21-day rolling sum of new cases per 1000 people, the 2-week mean daily change in transmission as measured by the change in the effective reproductive number, and the effective reproductive number, as a function of time for the smallest juridisctions included in the dataset.</p>
+                                    </div></a>
+                                </div>
+                                
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="global_deaths_cum.mp4" type="video/mp4">
+                                        <img src="global_deaths_cum_0713.png" alt="Global 7-day average deaths per 1 million people and the cumulative official total death toll per 1000 people.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily deaths per million from COVID-19, and the cumulative total death toll per 1000 people, for locations across the globe. These numbers reflect official tallies, and therefore are subject to underreporting.</p>
+                                    </div></a>
+                                </div>
+                                
+                                <header>
+                                <h2><a name="NA">North America</a></h2>
+                                </header>
+                                <br>
+                                
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="northamerica_all.mp4" type="video/mp4">
+                                        <img src="northamerica_all_0713.png" alt="Population-normalized average daily COVID-19 cases, 21-day aggregate cases, daily change in transmission, and effective reproductive number for various locations in North America.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily COVID-19 cases per 100k people, the 21-day rolling sum of new cases per 1000 people, the 2-week mean daily change in transmission as measured by the change in the effective reproductive number, and the effective reproductive number, as a function of time for the smallest juridisctions included in the dataset in North America.</p>
+                                    </div></a>
+                                </div>
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="northamerica_deaths_cum.mp4" type="video/mp4">
+                                        <img src="northamerica_deaths_cum_0713.png" alt="North America 7-day average deaths per 1 million people and the cumulative official total death toll per 1000 people.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily deaths per million from COVID-19, and the cumulative total death toll per 1000 people, for locations across North America. These numbers reflect official tallies, and therefore are subject to underreporting.</p>
+                                    </div></a>
+                                </div>
+                                
+                                <header>
+                                <h2><a name="GreatLakes">Great Lakes Region</a></h2>
+                                </header>
+                                
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="greatlakes_all.mp4" type="video/mp4">
+                                        <img src="greatlakes_all_0713.png" alt="Population-normalized average daily COVID-19 cases, 21-day aggregate cases, daily change in transmission, and effective reproductive number for various locations in the Great Lakes region">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily COVID-19 cases per 100k people, the 21-day rolling sum of new cases per 1000 people, the 2-week mean daily change in transmission as measured by the change in the effective reproductive number, and the effective reproductive number, as a function of time for the smallest juridisctions included in the dataset in the Great Lakes region.</p>
+                                    </div></a>
+                                </div>
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="greatlakes_deaths_cum.mp4" type="video/mp4">
+                                        <img src="greatlakes_deaths_cum_0713.png" alt="Great Lakes Region 7-day average deaths per 1 million people and the cumulative official total death toll per 1000 people.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily deaths per million from COVID-19, and the cumulative total death toll per 1000 people, for locations around the Great Lakes region. These numbers reflect official tallies, and therefore are subject to underreporting.</p>
+                                    </div></a>
+                                </div>
+                                
+                                <header>
+                                <h2><a name="SOntario">Golden Horseshoe / Southern Ontario</a></h2>
+                                </header>
+                                
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="horseshoe_all.mp4" type="video/mp4">
+                                        <img src="horseshoe_all_0713.png" alt="Population-normalized average daily COVID-19 cases, 21-day aggregate cases, daily change in transmission, and effective reproductive number for the Golden Horseshoe and Southern Ontario.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily COVID-19 cases per 100k people, the 21-day rolling sum of new cases per 1000 people, the 2-week mean daily change in transmission as measured by the change in the effective reproductive number, and the effective reproductive number, as a function of time for the smallest juridisctions included in the dataset in Southern Ontario and the Golden Horseshoe.</p>
+                                    </div></a>
+                                </div>
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="horseshoe_deaths_cum.mp4" type="video/mp4">
+                                        <img src="horseshoe_deaths_cum_0713.png" alt="Golden Horseshoe Region 7-day average deaths per 1 million people and the cumulative official total death toll per 1000 people.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily deaths per million from COVID-19, and the cumulative total death toll per 1000 people, for locations around the Golden Horseshoe region and Southern Ontario. These numbers reflect official tallies, and therefore are subject to underreporting.</p>
+                                    </div></a>
+                                </div>
+                                
+                                <header>
+                                <h2><a name="Toronto">Greater Toronto Area</a></h2>
+                                </header>
+                                
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="GTA_all.mp4" type="video/mp4">
+                                        <img src="GTA_all_0713.png" alt="Population-normalized average daily COVID-19 cases, 21-day aggregate cases, daily change in transmission, and effective reproductive number for the Greater Toronto Area.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily COVID-19 cases per 100k people, the 21-day rolling sum of new cases per 1000 people, the 2-week mean daily change in transmission as measured by the change in the effective reproductive number, and the effective reproductive number, as a function of time for the smallest juridisctions included in the dataset in the Greater Toronto Area.</p>
+                                    </div></a>
+                                </div>
+                               
+                               <div class="image full" style="text-align: center">
+                                    <video width="100%" height="100%" controls loop autoplay>
+                                        <source src="GTA_deaths_cum.mp4" type="video/mp4">
+                                        <img src="GTA_deaths_cum_0713.png" alt="GTA 7-day average deaths per 1 million people and the cumulative official total death toll per 1000 people.">
+                                    </video>
+                                    <div class="description">
+                                    <p class="description content"> Average daily deaths per million from COVID-19, and the cumulative total death toll per 1000 people, for locations within the Greater Toronto Area. These numbers reflect official tallies, and therefore are subject to underreporting.</p>
+                                    </div></a>
+                                </div>
+                                
+                                </section>
+                        </div>
+                        
+-						<div class="3u"> 
+							<section id="sidebard2">
+								<header>
+									<h2>Download Data</h2>
+								</header>
+								<ul class="style1">
+								<li><a href="adivparadise_covid19data_slim.hdf5" download>HDF5 (Slim)</a></li>
+								<li><a href="adivparadise_covid19data.hdf5" download>HDF5</a></li>
+								<li><a href="unified.zip" download>Shapefile</a></li>
+								<li><a href="covid_utilities.py" download>GeoPandas Integration Script</a></li>
+								<li>How to Use</li>
+								</ul>
+                                                        </section>
+                                                </div>
+<!--                        <div class="3u"> 
+                                <section id="sidebard2">
+                                        <header>
+                                                <h2>Links</h2>
+                                        </header>
+                                    <ul class="style1">
+                                    <li><a target="_blank" href="https://www.linkedin.com/in/adivparadise/">LinkedIn</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/">GitHub</a></li>
+                                    <li><script language="JavaScript">
+                                        var username = "paradise.astro";
+                                        var hostname = "gmail.com";
+                                        var linktext = username + "@" + hostname ;
+                                        document.write("<a href='" + "mailto:" + username + "@" + hostname + "'>Email</a>");
+                                    </script></li>
+
+                                </ul>
+                                    <br>
+                                    <br>
+                                    <header>
+                                        <h2>Selected Projects</h2>
+                                    </header>
+                                    <ul class="style1">
+                                    <li><a target="_blank" href="https://exoplasim.readthedocs.io/en/latest/">ExoPlaSim</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/crawler2">Crawler<sub>2</sub></a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/GCMscope">GCMscope</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/gcmtools">gcmtools</a></li>
+                                    <li><a target="_blank" href="https://github.com/alphaparrot/NagMe">NagMe</a></li>
+                                    </ul>
+                                </section>
+                        </div>-->
+                </div>
+
+        </div>	
+    </div>
+
+<!-- Footer -->
+            <div id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="3u">
+                            <section id="box1">
+                                <header>
+                                    <h2>Recent travel</h2>
+                                </header>
+                                <ul class="style3">
+                                    <li class="first">
+                                        <p class="date"> Aug 19-23 2019</p>
+                                        <p><a href="https://sites.northwestern.edu/iceland2019/">Extreme Solar Systems IV</a> - Reykjavik, Iceland </p>
+                                    </li>
+                                    <li>
+                                        <p class="date">Jun 17-19 2019</p>
+                                        <p><a href="https://eres.astro.cornell.edu/">Emerging Researchers in Exoplanet Science V</a> - Cornell University, Ithaca</p>
+                                    </li>
+                                </ul>
+                            </section>
+                        </div>
+                        <div class="6u">
+                            <section id="box2">
+                                <header>
+                                    <h2>Department of Astronomy</h2>
+                                </header>
+                                <div> <a href="https://www.astro.utoronto.ca/" class="image full"><img src="imgs/gasa_nov2017.jpg" style="width:90%" alt=""></a> </div>
+                                <p>I did my PhD at the <a target="_blank" href="https://www.astro.utoronto.ca/">Department of Astronomy & Astrophysics </a> at the University of Toronto.</p>
+                            </section>
+                        </div>
+                        <div class="3u">
+                            <section id="box3">
+                                <header>
+                                    <h2>External Links</h2>
+                                </header>
+                                <ul class="style1">
+                                    <li class="first"><a href="https://universe.utoronto.ca/talks-lectures/ask-an-astronomer/" target=_"blank">Ask an Astronomer</a>
+                                    <a href="https://www.astro.utoronto.ca/astrotours/" target="_blank">AstroTours</a>
+                                    <a href="https://astro.utoronto.ca/~gasa/" target="_blank">GASA</a>
+                                    <a target="_blank" href="https://www.linkedin.com/in/adivparadise/">My LinkedIn</a>
+                                    <a href="https://github.com/alphaparrot/">My GitHub</a>
+                                    <script language="JavaScript">
+                                        var username = "paradise";
+                                        var hostname = "astro.utoronto.ca";
+                                        var linktext = username + "@" + hostname ;
+                                        document.write("<a href='" + "mailto:" + username + "@" + hostname + "'>My Email</a>");
+                                    </script></li>
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Copyright -->
+            <div id="copyright">
+                <div class="container">
+                    Copyright Adiv Paradise 2018; Design: <a href="https://templated.co">TEMPLATED</a> ; Banner image: <a href="https://eol.jsc.nasa.gov/">Earth Science and Remote Sensing Unit, NASA Johnson Space Center</a>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>
+
