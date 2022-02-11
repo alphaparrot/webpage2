@@ -355,6 +355,7 @@
           <dt><a class="subsection" href="#"> Data and Scripts</a></dt>
               <div class="subsectionContent">
                 <dd><a href="data.html" data =""-offset="70">How to Use</a></dd>
+                <dd><a href="data.html#maps" data =""-offset="70">How to Map</a></dd>
               </div>
           <dt><a class="subsection" href="#"> COVID-19 Maps and Videos</a></dt>
           	<div class="subsectionContent">
@@ -548,9 +549,9 @@ plt.show()
                                 <br>
                                 
                                 
-                            <br>
-                                <h2>Mapping the data</h2>
-                                <br>
+                            <header>
+                                <h2><a name="maps">Mapping the data</a></h2>
+                                </header>
                                 
 <p>Along with the HDF5 datasets, I have also made available a <a href="unified.zip" download>shapefile</a> that combines geometries for all the different locales included in the HDF5 file, labeled in the same form as their HDF5 counterparts. A Python script, <a href="covid_utlities.py" download>covid_utilities.py</a>, is also available, which contains a routine to merge the HDF5 datasets and the shapefile into a <a href="https://geopandas.org/en/stable/index.html" target="_blank">GeoPandas</a> <a href="https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.html" target="_blank">GeoDataFrame</a>. This can then be used to produce maps of the data, such as those found on the <a href="maps.html">Maps and Videos</a> page. The script also computes some derivative quantities that may be useful, such as the 7-day average cases and 7-day average deaths, the 21-day rolling sum of both cases and deaths (to match the 'recent cases' metric used by Toronto Public Health), and the cumulative case and death counts. Note that the R<sub>t</sub> posterior and likelihood distributions are <em>not</em> merged into the GeoDataFrame, as this would consume enormous amounts of RAM, and so only the 'slim' dataset is needed. Two basic mapping examples are shown below.</p>
 

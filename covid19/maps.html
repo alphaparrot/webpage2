@@ -355,6 +355,7 @@
           <dt><a class="subsection" href="#"> Data and Scripts</a></dt>
               <div class="subsectionContent">
                 <dd><a href="data.html" data =""-offset="70">How to Use</a></dd>
+                <dd><a href="data.html#maps" data =""-offset="70">How to Map</a></dd>
               </div>
           <dt><a class="subsection" href="#"> COVID-19 Maps and Videos</a></dt>
           	<div class="subsectionContent">
@@ -472,6 +473,7 @@ function setIFrameSize() {
                                 </ul>
                                 <p>I have repackaged the data from the various datasets into a hierarchical data format (HDF-5) that is available to download using the links on the right-hand side of the page. These datasets contain data all formatted the same way, with similar reference patterns, from national to local scales. The datasets also include my R<sub>t</sub> values, along with the posterior probability distributions and likelihood functions (this accounts for the bulk of the dataset's size). A slim version that omits the posteriors and likelihoods is also available.</p>
                                 <p>A shapefile is also now available, which has identical naming conventions as the locations in the HDF5 file. No COVID-19 data is stored in the shapefile, only location names, shape data, and coordinates, but the HDF5 and shapefiles can be used together to map the data. A Python script is also provided which contains a routine for performing the merge using a GeoPandas GeoDataFrame. The script requires Pandas, GeoPandas, numpy, and h5py.</p>
+                                <p>Tutorials on how to use the HDF5 dataset and shapefile are available on the <a href="data.html">Data</a> page.</p>
 <!-- BODY -->
                             <br>
                             <header>
