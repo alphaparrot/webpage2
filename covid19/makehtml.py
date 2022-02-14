@@ -31,7 +31,7 @@ par = "<p>%s</p>"
 section = '<p style="font-size:25px"><a name="%s">%s</a></p>'
 #section%(name,sectiontitle)
 
-def makeneighborhood(neighborhood,pathdir):
+def makeneighborhood(neighborhood,pathdir,deathratio):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename = neighborhood.replace("/","_").replace(" ","_").replace("-","_")+".html"
@@ -39,7 +39,13 @@ def makeneighborhood(neighborhood,pathdir):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, Toronto</a></li>'%(filename,neighborhood)
     header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%neighborhood
     
+    if deathratio>0:
+        deathplate = "<br> \n<p>1 in %d people have died in %s, Toronto.</p>\n<br>\n"%(deathratio,neighborhood)
+    else:
+        deathplate = "<br> \n<p>No people have died in %s, Toronto.</p>\n<br>\n"%neighborhood
+    
     body = ("<header><h2>%s Plots</h2></header>    \n"%neighborhood+
+            deathplate+
             imgplate("%s_rawcases.png"%pathdir,"%s cases per day"%neighborhood,
                       "New COVID-19 cases per day in %s, Toronto. These data "%neighborhood+
                       "have not had a rolling average applied.","%s_rawcases.png"%pathdir,
@@ -93,7 +99,7 @@ def makeneighborhood(neighborhood,pathdir):
     with open("%s"%filename,"w") as htmlf:
         htmlf.write('\n'.join(html))
         
-def makephu(phu,pathdir):
+def makephu(phu,pathdir,deathratio):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename = "ontario_%s"%phu.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
@@ -101,6 +107,11 @@ def makephu(phu,pathdir):
     title = "\t\t<title>%s, ON | COVID-19 Dashboard</title>"%phu
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s, ON</a></li>'%(filename,phu)
     header = '\t\t\t\t\t<h2><a name="current">%s, ON COVID-19 Data</a></h2>'%phu
+    
+    if deathratio>0:
+        deathplate = "<br> \n<p>1 in %d people have died in %s, Ontario.</p>\n<br>\n"%(deathratio,phu)
+    else:
+        deathplate = "<br> \n<p>No people have died in %s, Ontario.</p>\n<br>\n"%phu
     
     body = ("<header><h2>%s Plots</h2></header>    \n"%phu+
             img2plate("%s_rawdaily.png"%pathdir,
@@ -139,7 +150,7 @@ def makephu(phu,pathdir):
                       "7-day average of COVID-19 deaths per day in %s, ON."%phu+
                       "These data have had a rolling average applied.",
                       "%s_deaths.png"%pathdir,"%s_deaths.pdf"%pathdir)+"\n"+
-            "<br >\n"+
+            deathplate+
             "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
     
     html = []
@@ -158,7 +169,7 @@ def makephu(phu,pathdir):
         htmlf.write('\n'.join(html))
     
 
-def makeStateorProvince(name,pathdir):
+def makeStateorProvince(name,pathdir,deathratio):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename = name.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")+".html"
@@ -166,6 +177,11 @@ def makeStateorProvince(name,pathdir):
     title = "\t\t<title>%s | COVID-19 Dashboard</title>"%name
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s</a></li>'%(filename,name)
     header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%name
+    
+    if deathratio>0:
+        deathplate = "<br> \n<p>1 in %d people have died in %s.</p>\n<br>\n"%(deathratio,name)
+    else:
+        deathplate = "<br> \n<p>No people have died in %s.</p>\n<br>\n"%(name)
     
     body = ("<header><h2>%s Plots</h2></header>    \n"%name+
             img2plate("%s_rawdaily.png"%pathdir,
@@ -216,7 +232,7 @@ def makeStateorProvince(name,pathdir):
             imgplate("%s_Rt.png"%pathdir,"Historical %s effective reproductive number"%name,
                       "Raw and 2-week average of the effective reproductive number in %s. This is the average number of people a sick person will infect. If this is increasing, then transmission is increasing, even if cases are still declining. If this is above 1, then cases are increasing. If it is decreasing, then transmission is declining, even if cases are still rising. Note that due to the existence of super-spreaders, this metric is not the same as the number of people the average sick person will infect (i.e. a person selected at random from the cohort of infected people will typically infect fewer people than would be implied by R<sub>t</sub>, but a small fraction will infect many more."%name,
                       "%s_Rt.png"%pathdir,"%s_Rt.pdf"%pathdir)+"\n"+
-            "<br> \n"+
+            deathplate+
             img2plate("%s_rawdeaths.png"%pathdir,
                       "%s raw deaths per day"%name,
                       "%s_relavgdeaths.png"%pathdir,
@@ -243,7 +259,7 @@ def makeStateorProvince(name,pathdir):
         htmlf.write('\n'.join(html))
         
         
-def makeCounty(county,state,pathdir):
+def makeCounty(county,state,pathdir,deathratio):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename1 = "%s_%s"%(state,
@@ -256,7 +272,13 @@ def makeCounty(county,state,pathdir):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s County, %s</a></li>'%(filename,county,state)
     header = '\t\t\t\t\t<h2><a name="current">%s County, %s COVID-19 Data</a></h2>'%(county,state)
     
+    if deathratio>0:
+        deathplate = "<br> \n<p>1 in %d people have died in %s County, %s.</p>\n<br>\n"%(deathratio,county,state)
+    else:
+        deathplate = "<br> \n<p>No people have died in %s County, %s.</p>\n<br>\n"%(county,state)
+    
     body = ("<header><h2>%s Plots</h2></header>    \n"%county+
+            deathplate+
             img2plate("%s_rawdaily.png"%pathdir,
                       "%s County raw cases per day"%county,
                       "%s_avgdaily.png"%pathdir,
@@ -324,7 +346,7 @@ def makeCounty(county,state,pathdir):
         htmlf.write('\n'.join(html))
         
         
-def makeCountry(country):
+def makeCountry(country,deathratio):
     with open("template.html","r") as templatef:
         template = templatef.read().split('\n')
     filename = "%s_country"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))+".html"
@@ -333,11 +355,16 @@ def makeCountry(country):
     navlink = '\t\t\t\t\t\t\t<li class="active"><a href="%s">%s</a></li>'%(filename,country)
     header = '\t\t\t\t\t<h2><a name="current">%s COVID-19 Data</a></h2>'%country
     
+    if deathratio>0:
+        deathplate = "<br> \n<p>1 in %d people have died in %s.</p>\n<br>\n"%(deathratio,country)
+    else:
+        deathplate = "<br> \n<p>No people have died in %s.</p>\n<br>\n"%country
+    
     body = (imgplate("%s_summary.png"%country,
                      "COVID-19 summary for %s"%country,
                      "7-day average of daily cases, 2-week average of the effective reproductive number, 7-day average of daily deaths per million, and total cumulative cases as a percent of the population for %s."%country,
                       "%s_summary.png"%country,"%s_summary.pdf"%country)+"\n"+
-            "<br >\n"+
+            deathplate+
             "<p>Last updated %s</p>"%(time.asctime(time.localtime())))
     
     html = []

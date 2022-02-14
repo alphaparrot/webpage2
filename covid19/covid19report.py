@@ -1528,7 +1528,7 @@ def plotOntarioH5(phu):
         plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
         if population is not None:
             plt.annotate("%1.2f%% of the population of %s, ON has been infected."%(np.sum(cases)/population*100,phuname),
-                        (-len(cases)+10,0.9*cases.max()))
+                        (-len(curve)+10,0.9*curve.max()))
         plt.savefig("ontario_%s/%s_avgdaily.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
         plt.savefig("ontario_%s/%s_avgdaily.pdf"%(fstub,fstub),bbox_inches='tight')
         plt.clf(); plt.close('all'); gc.collect()
@@ -1541,7 +1541,7 @@ def plotOntarioH5(phu):
         plt.title("%s, ON Average Cases per Day"%phuname+timestamp)
         if population is not None:
             plt.annotate("%1.2f%% of the population of %s has been infected."%(np.sum(cases)/population*100,phu),
-                        (-len(cases)+10,0.9*cases.max()))
+                        (-len(curve)+10,0.9*curve.max()))
         plt.yscale('symlog',linthreshy=1.0)
         plt.ylim(0,curve.max())
         plt.savefig("ontario_%s/%s_avgdaily_log.png"%(fstub,fstub),bbox_inches='tight',facecolor='white')
@@ -1572,7 +1572,7 @@ def plotOntarioH5(phu):
         
         fig,ax = plt.subplots(num=13,clear=True)
         
-        curve=day5avg(np.diff(deaths))
+        curve=day5avg(deaths)
         plt.plot(np.arange(len(curve))-len(curve),curve)
         plt.xlabel("Days before Present")
         plt.ylabel("7-day Average Deaths per Day")
@@ -1799,10 +1799,22 @@ def plotCountyH5(args):#countydataset,statedataset,statepopulation,timestamp):
       
     try:
       
+        pathdir = "%s/%s"%(fstub1,fstub2)
+        population = float(dataset["United States"][state][county]["population"][()])
+        totaldeaths = np.sum(dataset["United States"][state][county]["deaths"][:])/population*1e2
+        os.system("echo %f>%s_totaldeaths.txt"%(totaldeaths,pathdir))
+        if os.path.exists("usa_maxdeaths.txt"):
+            with open("usa_maxdeaths.txt","r+") as maxdf:
+                maxd = float(maxdf.read().split()[0])
+                if totaldeaths>maxd:
+                    maxdf.seek(0)
+                    maxdf.write("%f %s,%s"%(totaldeaths,county,state))
+        else:
+            with open("usa_maxdeaths.txt","w") as maxdf:
+                maxdf.write("%f %s,%s"%(totaldeaths,county,state))
+      
         #These are all cumulative
         cases = np.append([0,],np.cumsum(dataset["United States"][state][county]["cases"][:]))
-        population = float(dataset["United States"][state][county]["population"][()])
-        pathdir = "%s/%s"%(fstub1,fstub2)
         statecases = np.append([0,],np.cumsum(dataset["United States"][state]["cases"][:]))
         statepopulation = float(dataset["United States"][state]["population"][()])
         timestamp = "\nAs of "+dataset["United States"][state][county]["latestdate"][()]
@@ -2118,7 +2130,12 @@ def report_TOH5():
             if "cases" in torontogroup[k]:
                 TOneighborhoods.append(k)
                 fstub = k.replace("/","-")
-                makehtml.makeneighborhood(k,"%s/%s"%(fstub,fstub))
+                deaths = np.sum(torontogroup[k]["deaths"][:])
+                if deaths>0 and "population" in torontogroup[k]:
+                    deathratio = int(round(torontogroup[k]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                makehtml.makeneighborhood(k,"%s/%s"%(fstub,fstub),deathratio)
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -2134,6 +2151,13 @@ def report_TOH5():
                                                                           neighborhood))
             elif "<!-- PLACEHOLDER -->" in line:
                 skipnext=True
+            elif "<!-- DEATHTOTAL -->" in line and os.path.exists("usa_maxdeaths.txt"):
+                with open("usa_maxdeaths.txt","r") as maxdf:
+                    parts = maxdf.read().split()
+                    deaths = float(parts[0])
+                    county,state = parts[1].split(',')
+                    deathratio = int(round(100./deaths))
+                html.append("<!-- DEATHTOTAL -->   <br><p>The worst-hit county in the US is %s County, %s, with 1 in %d dead, or %1.2f%% of the population.</p><br>"%(county,state,deathratio,deaths))
             elif "<option" in line and "<!--TO-->" in line:
                 pass #skip thi line too 
             else:
@@ -2151,7 +2175,12 @@ def report_TOH5():
             ontario_phus.append(k)
             fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             if os.path.isdir("ontario_%s"%fstub):
-                makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub))
+                deaths = np.sum(ontariogroup[k]["deaths"][:])
+                if deaths>0  and "population" in ontariogroup[k]:
+                    deathratio = int(round(ontariogroup[k]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub),deathratio)
 
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -2183,7 +2212,12 @@ def report_TOH5():
         if not isinstance(dataset["Canada"][province],h5.Dataset):
             cankeys.append(str(province))
             fstub = province.replace(" ","_").replace("&","and")
-            makehtml.makeStateorProvince(province,"%s/%s"%(fstub,fstub))
+            deaths = np.sum(dataset["Canada"][province]["deaths"][:])
+            if deaths>0 and "population" in dataset["Canada"][province]:
+                deathratio = int(round(dataset["Canada"][province]["population"][()]/deaths))
+            else:
+                deathratio = -1
+            makehtml.makeStateorProvince(province,"%s/%s"%(fstub,fstub),deathratio)
    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -2214,7 +2248,12 @@ def report_TOH5():
         if not isinstance(dataset["United States"][state],h5.Dataset) and dataset["United States/%s/population"%state][()]>0:
             uskeys.append(state)
             fstub = state.replace(" ","_").replace("&","and")
-            makehtml.makeStateorProvince(state,"%s/%s"%(fstub,fstub))
+            deaths = np.sum(dataset["United States"][state]["deaths"][:])
+            if deaths>0 and "population" in dataset["United States"][state]:
+                deathratio = int(round(dataset["United States"][state]["population"][()]/deaths))
+            else:
+                deathratio = -1
+            makehtml.makeStateorProvince(state,"%s/%s"%(fstub,fstub),deathratio)
    
     #for state in uskeys:
         #counties = get_counties(usacsv,state=state)
@@ -2288,7 +2327,12 @@ def report_TOH5():
         if not isinstance(dataset[country],h5.Dataset):
             countries.append(country)
             if os.path.exists("%s_summary.png"%country):
-                makehtml.makeCountry(country)
+                deaths = np.sum(dataset[country]["deaths"][:])
+                if deaths>0 and "population" in dataset[country]:
+                    deathratio = int(round(dataset[country]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                makehtml.makeCountry(country,deathratio)
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -3616,7 +3660,7 @@ def report_worldH5():
             p.map(country_summaryH5,[[country,]])
             p.close()
             _log(logfile,"%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
-            makehtml.makeCountry(country)
+            #makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
@@ -3956,7 +4000,7 @@ def report():
     import makehtml
     for neighborhood in TOneighborhoods["units"]:
         fstub = neighborhood.replace("/","-")
-        makehtml.makeneighborhood(neighborhood,"%s/%s"%(fstub,fstub))
+        #makehtml.makeneighborhood(neighborhood,"%s/%s"%(fstub,fstub))
 
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -3984,8 +4028,8 @@ def report():
 
     for k in sorted(ontario_a.keys()):
         fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
-        if os.path.isdir("ontario_%s"%fstub):
-            makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub))
+        #if os.path.isdir("ontario_%s"%fstub):
+            #makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub))
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -4019,7 +4063,7 @@ def report():
    
     for k in sorted(cankeys):
         fstub = k.replace(" ","_").replace("&","and")
-        makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
+        #makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
    
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -4055,7 +4099,7 @@ def report():
    
     for k in sorted(uskeys):
         fstub = k.replace(" ","_").replace("&","and")
-        makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
+        #makehtml.makeStateorProvince(k,"%s/%s"%(fstub,fstub))
    
     #for state in uskeys:
         #counties = get_counties(usacsv,state=state)
@@ -4120,9 +4164,9 @@ def report():
     with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
     
-    for country in sorted(countries):
-        if os.path.exists("%s_summary.png"%country):
-            makehtml.makeCountry(country)
+    #for country in sorted(countries):
+        #if os.path.exists("%s_summary.png"%country):
+            #makehtml.makeCountry(country)
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -5157,7 +5201,7 @@ def report():
             ptotals[k] = statepops[k]/us_deaths[k][-1]
     
     worst = int(round(ptotals[sorted(ptotals,key=ptotals.get,reverse=True)[-1]]))
-    plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd*1.1))
+    plt.annotate("Worst hit: 1 in %d dead in %s"%(worst,labels[0]),(1,maxd))
     plt.savefig("usa_deathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("usa_deathtoll.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
@@ -5412,12 +5456,14 @@ def report():
     plt.clf(); plt.close('all'); gc.collect()
 
     ptotals = {}
+    mind = 1e3
     for country in countries:
         try:
             cdata = extract_country(ddataset,country)
             if cdata["Total"][-1]>=25:
                 y = cdata["Total"]
                 ptotals[country] = y[-1]/float(countrypops[country])*1.0e3
+                mind = min(mind,ptotals[country])
         except Exception as e:
             traceback.print_exc()
     cdata = extract_country(ddataset,"US")
@@ -5451,7 +5497,7 @@ def report():
                  "In Canada, 1 in %d people have died."%(int(round(1.0/(ptotals["Canada"]*1.0e-3))))+"\n"+
                  "In Australia, 1 in %d people have died."%(int(round(1.0/(ptotals["Australia"]*1.0e-3))))+"\n"+
                  "In New Zealand, 1 in %d people have died."%(int(round(1.0/(ptotals["New Zealand"]*1.0e-3)))),
-                 (30,int(round(1.0/(ptotals[labels[0]]*1.0e-3*0.1)))),clip_on=True)
+                 (30,int(round(1.0/mind))*0.1),clip_on=True)
     plt.savefig("globaldeathtoll.png",bbox_inches='tight',facecolor='white')
     plt.savefig("globaldeathtoll.pdf",bbox_inches='tight')
     plt.clf(); plt.close('all'); gc.collect()
@@ -5686,16 +5732,16 @@ def report():
             if cdata["Total"][-1]>=25 and "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
                 country_summary(country,dataset,ddataset,countrypops,latestglobal)
                 _log(logfile,"%s data plotted. \t%s"%(country,systime.asctime(systime.localtime())))
-                makehtml.makeCountry(country)
+                #makehtml.makeCountry(country)
             
         except Exception as e:
             traceback.print_exc()
             _log(logfile,"No data or broken data for %s \t%s"%(country,systime.asctime(systime.localtime())))
     
     
-    for country in sorted(countries):
-        if os.path.exists("%s_summary.png"%country):
-            makehtml.makeCountry(country)
+    #for country in sorted(countries):
+        #if os.path.exists("%s_summary.png"%country):
+            #makehtml.makeCountry(country)
     
     with open("index.html","r") as indexf:
         index = indexf.read().split('\n')
@@ -5733,21 +5779,30 @@ def processcountiesH5(state):
     dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
 
     counties = []
+    deathratios = []
     for cty in dataset["United States/%s"%state]:
         if not isinstance(dataset["United States/%s/%s"%(state,cty)],h5.Dataset):
             if "cases" in dataset["United States/%s/%s"%(state,cty)]:
                 counties.append(cty)
+                deaths = np.sum(dataset["United States"][state][cty]["deaths"][:])
+                if deaths>0 and "population" in dataset["United States"][state][cty]:
+                    deathratio = int(round(dataset["United States"][state][cty]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                deathratios.append(deathratio)
             
     ncounties = len(counties)
     if state=="Texas":
         if "1" in sys.argv[:]:
             counties = counties[:int(ncounties/2)]
+            deathratios = deathratios[:int(ncounties/2)]
         else:
             counties = counties[int(ncounties/2):]
+            deathratios = deathratios[int(ncounts/2):]
             
     dataset.close()
             
-    for county in counties:
+    for ix,county in enumerate(counties):
         try:
             p = Pool(1)
             p.map(plotCountyH5,[[county,state]])
@@ -5757,7 +5812,7 @@ def processcountiesH5(state):
             fstub1 = state.replace(" ","_").replace("&","and")
             fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
-            makehtml.makeCounty(county,state,pathdir)
+            makehtml.makeCounty(county,state,pathdir,deathratios[ix])
         except:
             _log(logfile,"Error encountered with %s County, %s:"%(county,state))
             print("Error encountered with %s County, %s:"%(county,state))
@@ -5821,7 +5876,7 @@ def processcounties(state):
             fstub1 = state.replace(" ","_").replace("&","and")
             fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             pathdir = "%s/%s"%(fstub1,fstub2)
-            makehtml.makeCounty(county,state,pathdir)
+            #makehtml.makeCounty(county,state,pathdir)
         except:
             _log(logfile,"Error encountered with %s County, %s:"%(county,state))
             print("Error encountered with %s County, %s:"%(county,state))
