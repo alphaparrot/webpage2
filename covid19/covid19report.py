@@ -1802,12 +1802,13 @@ def plotCountyH5(args):#countydataset,statedataset,statepopulation,timestamp):
         pathdir = "%s/%s"%(fstub1,fstub2)
         population = float(dataset["United States"][state][county]["population"][()])
         totaldeaths = np.sum(dataset["United States"][state][county]["deaths"][:])/population*1e2
-        os.system("echo %f>%s_totaldeaths.txt"%(totaldeaths,pathdir))
+        #with open("%s_totaldeaths.txt"%pathdir,"w") as deathf:
+            #deathf.write("%f"%totaldeaths)
         if os.path.exists("usa_maxdeaths.txt"):
-            with open("usa_maxdeaths.txt","r+") as maxdf:
+            with open("usa_maxdeaths.txt","r") as maxdf:
                 maxd = float(maxdf.read().split()[0])
-                if totaldeaths>maxd:
-                    maxdf.seek(0)
+            if totaldeaths>maxd:
+                with open("usa_maxdeaths.txt","w") as maxdf:
                     maxdf.write("%f %s,%s"%(totaldeaths,county,state))
         else:
             with open("usa_maxdeaths.txt","w") as maxdf:
@@ -2154,8 +2155,11 @@ def report_TOH5():
             elif "<!-- DEATHTOTAL -->" in line and os.path.exists("usa_maxdeaths.txt"):
                 with open("usa_maxdeaths.txt","r") as maxdf:
                     parts = maxdf.read().split()
+                    print(parts)
                     deaths = float(parts[0])
-                    county,state = parts[1].split(',')
+                    location = parts[1].split(',')
+                    county = location[0]
+                    state = location[1]
                     deathratio = int(round(100./deaths))
                 html.append("<!-- DEATHTOTAL -->   <br><p>The worst-hit county in the US is %s County, %s, with 1 in %d dead, or %1.2f%% of the population.</p><br>"%(county,state,deathratio,deaths))
             elif "<option" in line and "<!--TO-->" in line:
@@ -5798,7 +5802,7 @@ def processcountiesH5(state):
             deathratios = deathratios[:int(ncounties/2)]
         else:
             counties = counties[int(ncounties/2):]
-            deathratios = deathratios[int(ncounts/2):]
+            deathratios = deathratios[int(ncounties/2):]
             
     dataset.close()
             
