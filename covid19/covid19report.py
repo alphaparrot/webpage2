@@ -1831,7 +1831,7 @@ def plotCountyH5(args):#countydataset,statedataset,statepopulation,timestamp):
         plt.annotate("%1.1f%% of the population in %s County has tested positive."%(cases[-1]/float(population)*1e2,county),(-len(curve),0.9*curve.max()))
         plt.xlabel("Days before Present")
         plt.ylabel("New Cases per Day")
-        plt.title("%s Daily New Cases"+timestamp)
+        plt.title("%s County Daily New Cases"%county+timestamp)
         plt.savefig("%s_rawdaily.png"%pathdir,bbox_inches='tight',facecolor='white')
         plt.savefig("%s_rawdaily.pdf"%pathdir,bbox_inches='tight')
         plt.clf(); plt.close('all'); gc.collect()
