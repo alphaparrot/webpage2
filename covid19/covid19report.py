@@ -6659,28 +6659,29 @@ def hdf5_ON(throttle=False):
         torontoraw = np.zeros(len(torontocsv))
         for line in range(len(torontoraw)):
             timestamp = torontocsv[line].split(',')[9].split('-')
-            timestamps.append(datetime.date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
-            entry = torontocsv[line].split(',')
-            if entry[11]=="ACTIVE":
-                pass
-            elif entry[11]=="FATAL":
-                ftimes.append(timestamps[-1])
-            else:
-                rtimes.append(timestamps[-1])
-            if entry[15]=="Yes":
-                htimes.append(timestamps[-1])
-                
-            if entry[4] not in TOneighborhoods["units"]:
-                TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
-            TOneighborhoods["units"][entry[4]]["CASES"].append(timestamps[-1])
-            if entry[11]=="ACTIVE":
-                pass
-            elif entry[11]=="FATAL":
-                TOneighborhoods["units"][entry[4]]["FATAL"].append(timestamps[-1])
-            else:
-                TOneighborhoods["units"][entry[4]]["RECOVERED"].append(timestamps[-1])
-            if entry[15]=="Yes":
-                TOneighborhoods["units"][entry[4]]["HOSPITALIZED"].append(timestamps[-1])
+            if "" not in timestamp:
+                timestamps.append(datetime.date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
+                entry = torontocsv[line].split(',')
+                if entry[11]=="ACTIVE":
+                    pass
+                elif entry[11]=="FATAL":
+                    ftimes.append(timestamps[-1])
+                else:
+                    rtimes.append(timestamps[-1])
+                if entry[15]=="Yes":
+                    htimes.append(timestamps[-1])
+                    
+                if entry[4] not in TOneighborhoods["units"]:
+                    TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
+                TOneighborhoods["units"][entry[4]]["CASES"].append(timestamps[-1])
+                if entry[11]=="ACTIVE":
+                    pass
+                elif entry[11]=="FATAL":
+                    TOneighborhoods["units"][entry[4]]["FATAL"].append(timestamps[-1])
+                else:
+                    TOneighborhoods["units"][entry[4]]["RECOVERED"].append(timestamps[-1])
+                if entry[15]=="Yes":
+                    TOneighborhoods["units"][entry[4]]["HOSPITALIZED"].append(timestamps[-1])
             
     #for neighborhood in TOneighborhoods["units"]:
     #    TOneighborhoods["units"][neighborhood]["CASES"] = np.array(TOneighborhoods["units"][neighborhood]["CASES"])
