@@ -6659,6 +6659,7 @@ def hdf5_ON(throttle=False):
         torontoraw = np.zeros(len(torontocsv))
         for line in range(len(torontoraw)):
             timestamp = torontocsv[line].split(',')[9].split('-')
+            timestamp[2] = timestamp[2].split("T")[0] #strip off the time
             if "" not in timestamp:
                 timestamps.append(datetime.date(int(timestamp[0]),int(timestamp[1]),int(timestamp[2])))
                 entry = torontocsv[line].split(',')
