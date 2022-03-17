@@ -6777,7 +6777,8 @@ def hdf5_ON(throttle=False):
         if keys1[n]!=keys2[n]:
             neighborhoodpops[keys2[n]] = neighborhoodpops[keys1[n]]
             neighborhoodpops.pop(keys1[n])
-    neighborhoodpops["Unknown"] = 3.0e6 #Just use the whole Toronto population
+    if "Unknown" in TOneighborhoods["units"]:
+        neighborhoodpops["Unknown"] = 3.0e6 #Just use the whole Toronto population
             
     for neighborhood in neighborhoodpops:
         TOneighborhoods["units"][neighborhood]["POP"] = neighborhoodpops[neighborhood]
