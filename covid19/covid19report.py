@@ -6671,7 +6671,8 @@ def hdf5_ON(throttle=False):
                     rtimes.append(timestamps[-1])
                 if entry[15]=="Yes":
                     htimes.append(timestamps[-1])
-                    
+                if entry[4]=="":
+                    entry[4] = "Unknown"
                 if entry[4] not in TOneighborhoods["units"]:
                     TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
                 TOneighborhoods["units"][entry[4]]["CASES"].append(timestamps[-1])
@@ -6776,6 +6777,7 @@ def hdf5_ON(throttle=False):
         if keys1[n]!=keys2[n]:
             neighborhoodpops[keys2[n]] = neighborhoodpops[keys1[n]]
             neighborhoodpops.pop(keys1[n])
+    neighborhoodpops["Unknown"] = 3.0e6 #Just use the whole Toronto population
             
     for neighborhood in neighborhoodpops:
         TOneighborhoods["units"][neighborhood]["POP"] = neighborhoodpops[neighborhood]
