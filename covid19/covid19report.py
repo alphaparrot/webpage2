@@ -6957,8 +6957,15 @@ def hdf5_ON(throttle=False):
             areaRlike = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Rlike",compression='gzip',
                                                     compression_opts=9,shuffle=True,fletcher32=True,
                                                     data=l)
-            areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
-                                                data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+            if "POP" in TOneighborhoods["units"][neighborhood]:
+                areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
+                                                    data=float(TOneighborhoods["units"][neighborhood]["POP"]))
+            else:
+                print("Missing population for %s, Toronto. Setting to 3 million"%neighborhood)
+                TOneighborhoods["units"][neighborhood]["POP"] = 3.0e6
+                areapopulation = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/population",
+                                                    data=3.0e6)
+                
             latest = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/latestdate",data=latestTO)
 
             areacases.attrs["units"] = "cases day-1"
