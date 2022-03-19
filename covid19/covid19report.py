@@ -6671,7 +6671,7 @@ def hdf5_ON(throttle=False):
                     rtimes.append(timestamps[-1])
                 if entry[15]=="Yes":
                     htimes.append(timestamps[-1])
-                if entry[4]=="":
+                if entry[4]=="" or entry[4]=='""':
                     entry[4] = "Unknown"
                 if entry[4] not in TOneighborhoods["units"]:
                     TOneighborhoods["units"][entry[4]] = {"CASES":[],"FATAL":[],"HOSPITALIZED":[],"RECOVERED":[]}
@@ -7043,7 +7043,7 @@ def hdf5_ON(throttle=False):
                 ontariocsv = ontariocsv[:-1]
         for line in ontariocsv:
             entry = line.split(',')
-            if entry[1]=="":
+            if entry[1]=="" or entry[1]=='""':
                 entry[1]="UNKNOWN"
             if entry[1][0]=='"':
                 entry[1] = entry[1][1:]
