@@ -2179,9 +2179,12 @@ def report_TOH5():
             ontario_phus.append(k)
             fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
             if os.path.isdir("ontario_%s"%fstub):
-                deaths = np.sum(ontariogroup[k]["deaths"][:])
-                if deaths>0  and "population" in ontariogroup[k]:
-                    deathratio = int(round(ontariogroup[k]["population"][()]/deaths))
+                if "deaths" in ontariogroup[k]:
+                    deaths = np.sum(ontariogroup[k]["deaths"][:])
+                    if deaths>0  and "population" in ontariogroup[k]:
+                        deathratio = int(round(ontariogroup[k]["population"][()]/deaths))
+                    else:
+                        deathratio = -1
                 else:
                     deathratio = -1
                 makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub),deathratio)
