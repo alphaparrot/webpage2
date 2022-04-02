@@ -2144,15 +2144,15 @@ def report_TOH5():
     skipnext=False
     for line in index:
         if not skipnext:
-            if "<!-- TORONTOFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for neighborhood in sorted(TOneighborhoods):
-                    html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
-                                                                          neighborhood))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<!-- DEATHTOTAL -->" in line and os.path.exists("usa_maxdeaths.txt"):
+            #if "<!-- TORONTOFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                ##for neighborhood in sorted(TOneighborhoods):
+                    ##html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
+                                                                          ##neighborhood))
+            #elif "<!-- PLACEHOLDER -->" in line:
+                #skipnext=True
+            if "<!-- DEATHTOTAL -->" in line and os.path.exists("usa_maxdeaths.txt"):
                 with open("usa_maxdeaths.txt","r") as maxdf:
                     parts = maxdf.read().split()
                     print(parts)
@@ -2162,8 +2162,8 @@ def report_TOH5():
                     state = location[1]
                     deathratio = int(round(100./deaths))
                 html.append("<!-- DEATHTOTAL -->   <br><p>The worst-hit county in the US is %s County, %s, with 1 in %d dead, or %1.2f%% of the population.</p><br>"%(county,state,deathratio,deaths))
-            elif "<option" in line and "<!--TO-->" in line:
-                pass #skip thi line too 
+            #elif "<option" in line and "<!--TO-->" in line:
+                #pass #skip thi line too 
             else:
                 html.append(line)
         else:
@@ -2189,29 +2189,29 @@ def report_TOH5():
                     deathratio = -1
                 makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub),deathratio)
 
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- ONTARIOFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for k in sorted(ontario_phus):
-                    phu = "%s"%strtitle(str(k))
-                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and "<!--ON-->" in line:
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            if "<!-- TRIPWIRE -->" in line:
-                html.append(line)
-            skipnext=False
-    with open("index.html","w") as indexf:
+    #with open("index.html","r") as indexf:
+        #index = indexf.read().split('\n')
+    #html = []
+    #skipnext=False
+    #for line in index:
+        #if not skipnext:
+            #if "<!-- ONTARIOFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                ##for k in sorted(ontario_phus):
+                    ##phu = "%s"%strtitle(str(k))
+                    ##html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+            #elif "<!-- PLACEHOLDER -->" in line:
+                #skipnext=True
+            ##elif "<option" in line and "<!--ON-->" in line:
+                ##pass #skip thi line too 
+            #else:
+                #html.append(line)
+        #else:
+            #if "<!-- TRIPWIRE -->" in line:
+                #html.append(line)
+            #skipnext=False
+    #with open("index.html","w") as indexf:
         indexf.write("\n".join(html))
    
     cankeys = []
@@ -2226,29 +2226,29 @@ def report_TOH5():
                 deathratio = -1
             makehtml.makeStateorProvince(province,"%s/%s"%(fstub,fstub),deathratio)
    
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- CANADAFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for k in sorted(cankeys):
-                    html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and "<!--CA-->" in line:
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            if "<!-- TRIPWIRE -->" in line:
-                html.append(line)
-            skipnext=False
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
+    #with open("index.html","r") as indexf:
+        #index = indexf.read().split('\n')
+    #html = []
+    #skipnext=False
+    #for line in index:
+        #if not skipnext:
+            #if "<!-- CANADAFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                #for k in sorted(cankeys):
+                    #html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            #elif "<!-- PLACEHOLDER -->" in line:
+                #skipnext=True
+            ##elif "<option" in line and "<!--CA-->" in line:
+                ##pass #skip thi line too 
+            #else:
+                #html.append(line)
+        #else:
+            #if "<!-- TRIPWIRE -->" in line:
+                #html.append(line)
+            #skipnext=False
+    #with open("index.html","w") as indexf:
+        #indexf.write("\n".join(html))
         
     uskeys = []
     for state in dataset["United States"]:
@@ -2274,60 +2274,60 @@ def report_TOH5():
     if "Guam" in ckeys:
         ckeys.remove('Guam') #No counties in Guam
     
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- USAFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for k in sorted(uskeys):
-                    html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
-            elif "<!-- COUNTYFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                n=0
-                for k in sorted(ckeys):
-                    html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
-                    n+=1
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            if "<!-- TRIPWIRE -->" in line:
-                html.append(line)
-            skipnext=False
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
+    #with open("index.html","r") as indexf:
+        #index = indexf.read().split('\n')
+    #html = []
+    #skipnext=False
+    #for line in index:
+        #if not skipnext:
+            #if "<!-- USAFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                ##for k in sorted(uskeys):
+                    ##html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            #elif "<!-- COUNTYFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                ##n=0
+                ##for k in sorted(ckeys):
+                    ##html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
+                    ##n+=1
+            #elif "<!-- PLACEHOLDER -->" in line:
+                #skipnext=True
+            ##elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
+                ##pass #skip thi line too 
+            #else:
+                #html.append(line)
+        #else:
+            #if "<!-- TRIPWIRE -->" in line:
+                #html.append(line)
+            #skipnext=False
+    #with open("index.html","w") as indexf:
+        #indexf.write("\n".join(html))
         
     #Create linked state/county menus for the USA section
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    for line in index:
-        if "//COUNTY" in line:
-            html.append(line)
-            for state in ckeys:
-                counties = []
-                for cty in dataset["United States"][state]:
-                    if not isinstance(dataset["United States"][state][cty],h5.Dataset):
-                        counties.append(cty)
-                options = '"'
-                for county in sorted(counties):
-                    options+="<option value='%s|%s'>%s</option>"%(county,state,county)
-                options += '",'
-                html.append("\t"+options+" //CY")
-        elif "//CY" in line:
-            pass
-        else:
-            html.append(line)
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
+    #with open("index.html","r") as indexf:
+        #index = indexf.read().split('\n')
+    #html = []
+    #for line in index:
+        #if "//COUNTY" in line:
+            #html.append(line)
+            ##for state in ckeys:
+                ##counties = []
+                ##for cty in dataset["United States"][state]:
+                    ##if not isinstance(dataset["United States"][state][cty],h5.Dataset):
+                        ##counties.append(cty)
+                ##options = '"'
+                ##for county in sorted(counties):
+                    ##options+="<option value='%s|%s'>%s</option>"%(county,state,county)
+                ##options += '",'
+                ##html.append("\t"+options+" //CY")
+        ##elif "//CY" in line:
+            ##pass
+        #else:
+            #html.append(line)
+    #with open("index.html","w") as indexf:
+        #indexf.write("\n".join(html))
     
     countries = []
     for country in dataset:
@@ -2341,30 +2341,30 @@ def report_TOH5():
                     deathratio = -1
                 makehtml.makeCountry(country,deathratio)
     
-    with open("index.html","r") as indexf:
-        index = indexf.read().split('\n')
-    html = []
-    skipnext=False
-    for line in index:
-        if not skipnext:
-            if "<!-- GLOBALFORM -->" in line:
-                html.append(line)
-                skipnext=True
-                for country in sorted(countries):
-                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))):
-                        html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
-            elif "<!-- PLACEHOLDER -->" in line:
-                skipnext=True
-            elif "<option" in line and "<!--GL-->" in line:
-                pass #skip thi line too 
-            else:
-                html.append(line)
-        else:
-            if "<!-- TRIPWIRE -->" in line:
-                html.append(line)
-            skipnext=False
-    with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
+    #with open("index.html","r") as indexf:
+        #index = indexf.read().split('\n')
+    #html = []
+    #skipnext=False
+    #for line in index:
+        #if not skipnext:
+            #if "<!-- GLOBALFORM -->" in line:
+                #html.append(line)
+                #skipnext=True
+                ##for country in sorted(countries):
+                    ##if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))):
+                        ##html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
+            #elif "<!-- PLACEHOLDER -->" in line:
+                #skipnext=True
+            ##elif "<option" in line and "<!--GL-->" in line:
+                ##pass #skip thi line too 
+            #else:
+                #html.append(line)
+        #else:
+            #if "<!-- TRIPWIRE -->" in line:
+                #html.append(line)
+            #skipnext=False
+    #with open("index.html","w") as indexf:
+        #indexf.write("\n".join(html))
         
         
     _log(logfile,"Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
@@ -6643,7 +6643,259 @@ def hdf5_ON(throttle=False):
     #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
  
     os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">%s'%logfile)
+        
+    dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
+     
+    #Build aliases and generate HTML pages
+    
+    torontogroup = dataset["Canada/Ontario/Toronto"]
+    TOneighborhoods = []
+    for k in dataset["Canada/Ontario/Toronto"]:
+        if not isinstance(torontogroup[k], h5.Dataset):
+            if "cases" in torontogroup[k]:
+                TOneighborhoods.append(k)
+                fstub = k.replace("/","-")
+                deaths = np.sum(torontogroup[k]["deaths"][:])
+                if deaths>0 and "population" in torontogroup[k]:
+                    deathratio = int(round(torontogroup[k]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                makehtml.makeneighborhood(k,"%s/%s"%(fstub,fstub),deathratio)
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- TORONTOFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for neighborhood in sorted(TOneighborhoods):
+                    html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
+                                                                          neighborhood))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<!-- DEATHTOTAL -->" in line and os.path.exists("usa_maxdeaths.txt"):
+                with open("usa_maxdeaths.txt","r") as maxdf:
+                    parts = maxdf.read().split()
+                    print(parts)
+                    deaths = float(parts[0])
+                    location = parts[1].split(',')
+                    county = location[0]
+                    state = location[1]
+                    deathratio = int(round(100./deaths))
+                html.append("<!-- DEATHTOTAL -->   <br><p>The worst-hit county in the US is %s County, %s, with 1 in %d dead, or %1.2f%% of the population.</p><br>"%(county,state,deathratio,deaths))
+            elif "<option" in line and "<!--TO-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+
+    ontario_phus = []
+    ontariogroup = dataset["Canada/Ontario"]
+
+    for k in ontariogroup:
+        if not isinstance(ontariogroup[k],h5.Dataset):
+            ontario_phus.append(k)
+            fstub = strtitle(str(k)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            if os.path.isdir("ontario_%s"%fstub):
+                if "deaths" in ontariogroup[k]:
+                    deaths = np.sum(ontariogroup[k]["deaths"][:])
+                    if deaths>0  and "population" in ontariogroup[k]:
+                        deathratio = int(round(ontariogroup[k]["population"][()]/deaths))
+                    else:
+                        deathratio = -1
+                else:
+                    deathratio = -1
+                makehtml.makephu(strtitle(str(k)),"ontario_%s/%s"%(fstub,fstub),deathratio)
+
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- ONTARIOFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(ontario_phus):
+                    phu = "%s"%strtitle(str(k))
+                    html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--ON-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+   
+    cankeys = []
+    for province in dataset["Canada"]:
+        if not isinstance(dataset["Canada"][province],h5.Dataset):
+            cankeys.append(str(province))
+            fstub = province.replace(" ","_").replace("&","and")
+            deaths = np.sum(dataset["Canada"][province]["deaths"][:])
+            if deaths>0 and "population" in dataset["Canada"][province]:
+                deathratio = int(round(dataset["Canada"][province]["population"][()]/deaths))
+            else:
+                deathratio = -1
+            makehtml.makeStateorProvince(province,"%s/%s"%(fstub,fstub),deathratio)
+   
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- CANADAFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(cankeys):
+                    html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--CA-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
+    uskeys = []
+    for state in dataset["United States"]:
+        if not isinstance(dataset["United States"][state],h5.Dataset) and dataset["United States/%s/population"%state][()]>0:
+            uskeys.append(state)
+            fstub = state.replace(" ","_").replace("&","and")
+            deaths = np.sum(dataset["United States"][state]["deaths"][:])
+            if deaths>0 and "population" in dataset["United States"][state]:
+                deathratio = int(round(dataset["United States"][state]["population"][()]/deaths))
+            else:
+                deathratio = -1
+            makehtml.makeStateorProvince(state,"%s/%s"%(fstub,fstub),deathratio)
+   
+    #for state in uskeys:
+        #counties = get_counties(usacsv,state=state)
+        #for county in counties:
+            #fstub1 = state.replace(" ","_").replace("&","and")
+            #fstub2 = strtitle(str(county)).replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_")
+            #pathdir = "%s/%s"%(fstub1,fstub2)
+            #makehtml.makeCounty(county,state,pathdir)
             
+    ckeys = sorted(uskeys)
+    if "Guam" in ckeys:
+        ckeys.remove('Guam') #No counties in Guam
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- USAFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for k in sorted(uskeys):
+                    html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
+            elif "<!-- COUNTYFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                n=0
+                for k in sorted(ckeys):
+                    html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
+                    n+=1
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
+    #Create linked state/county menus for the USA section
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    for line in index:
+        if "//COUNTY" in line:
+            html.append(line)
+            for state in ckeys:
+                counties = []
+                for cty in dataset["United States"][state]:
+                    if not isinstance(dataset["United States"][state][cty],h5.Dataset):
+                        counties.append(cty)
+                options = '"'
+                for county in sorted(counties):
+                    options+="<option value='%s|%s'>%s</option>"%(county,state,county)
+                options += '",'
+                html.append("\t"+options+" //CY")
+        elif "//CY" in line:
+            pass
+        else:
+            html.append(line)
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+    
+    countries = []
+    for country in dataset:
+        if not isinstance(dataset[country],h5.Dataset):
+            countries.append(country)
+            if os.path.exists("%s_summary.png"%country):
+                deaths = np.sum(dataset[country]["deaths"][:])
+                if deaths>0 and "population" in dataset[country]:
+                    deathratio = int(round(dataset[country]["population"][()]/deaths))
+                else:
+                    deathratio = -1
+                makehtml.makeCountry(country,deathratio)
+    
+    with open("index.html","r") as indexf:
+        index = indexf.read().split('\n')
+    html = []
+    skipnext=False
+    for line in index:
+        if not skipnext:
+            if "<!-- GLOBALFORM -->" in line:
+                html.append(line)
+                skipnext=True
+                for country in sorted(countries):
+                    if os.path.exists("%s_country.html"%(country.replace('"','').replace('&','and').replace(",","").replace("/","_").replace(" ","_").replace("-","_"))):
+                        html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
+            elif "<!-- PLACEHOLDER -->" in line:
+                skipnext=True
+            elif "<option" in line and "<!--GL-->" in line:
+                pass #skip thi line too 
+            else:
+                html.append(line)
+        else:
+            if "<!-- TRIPWIRE -->" in line:
+                html.append(line)
+            skipnext=False
+    with open("index.html","w") as indexf:
+        indexf.write("\n".join(html))
+        
+        
+    _log(logfile,"Links and pages generated. \t%s"%systime.asctime(systime.localtime()))
+    
+    dataset.close()
+        
+        
     _log(logfile,"Starting HDF5_ON at %s"%systime.asctime(systime.localtime()))
     #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
@@ -6898,29 +7150,6 @@ def hdf5_ON(throttle=False):
     try:
         print("doing neighborhoods")
         
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        skipnext=False
-        for line in index:
-            if not skipnext:
-                if "<!-- TORONTOFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    for neighborhood in sorted(TOneighborhoods["units"]):
-                        html.append('<!--TO-->\t\t\t<option value="%s">%s</option>'%(neighborhood,
-                                                                              neighborhood))
-                elif "<!-- PLACEHOLDER -->" in line:
-                    skipnext=True
-                elif "<option" in line and "<!--TO-->" in line:
-                    pass #skip thi line too 
-                else:
-                    html.append(line)
-            else:
-                skipnext=False
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
-        
         for neighborhood in sorted(TOneighborhoods["units"]):
             if throttle:
                 systime.sleep(0.5)
@@ -7101,31 +7330,6 @@ def hdf5_ON(throttle=False):
         latestON = otimes["TORONTO"].max() #datetime.date
         latestON = ' '.join([x for i,x in enumerate(latestON.ctime().split()) if i!=3])
         
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        skipnext=False
-        for line in index:
-            if not skipnext:
-                if "<!-- ONTARIOFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    for k in sorted(ontario):
-                        if len(ontario[k][:])>10:
-                           phu = "%s"%strtitle(str(k))
-                           html.append('<!--ON-->\t\t\t<option value="%s">%s</option>'%(phu,phu))
-                elif "<!-- PLACEHOLDER -->" in line:
-                    skipnext=True
-                elif "<option" in line and "<!--ON-->" in line:
-                    pass #skip thi line too 
-                else:
-                    html.append(line)
-            else:
-                if "<!-- TRIPWIRE -->" in line:
-                    html.append(line)
-                skipnext=False
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
         
         phumap = {}
         
@@ -8484,58 +8688,6 @@ def hdf5_USA3(throttle=False):
         ckeys = uskeys[:]
         ckeys.remove('Guam') #No counties in Guam
         
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        skipnext=False
-        for line in index:
-            if not skipnext:
-                if "<!-- USAFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    for k in uskeys:
-                        html.append('<!--US-->\t\t\t<option value="%s">%s</option>'%(k,k))
-                elif "<!-- COUNTYFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    n=0
-                    for k in ckeys:
-                        html.append('<!--CY-->\t\t\t<option value="%d">%s</option>'%(n,k))
-                        n+=1
-                elif "<!-- PLACEHOLDER -->" in line:
-                    skipnext=True
-                elif "<option" in line and ("<!--US-->" in line or "<!--CY-->" in line):
-                    pass #skip thi line too 
-                else:
-                    html.append(line)
-            else:
-                if "<!-- TRIPWIRE -->" in line:
-                    html.append(line)
-                skipnext=False
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
-            
-        hdfs = h5.File("tmp_adivparadise_covid19data_slim.hdf5","r")
-        #Create linked state/county menus for the USA section
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        for line in index:
-            if "//COUNTY" in line:
-                html.append(line)
-                for state in ckeys:
-                    options = '"'
-                    for county in hdfs["United States"][state]:
-                        options+="<option value='%s|%s'>%s</option>"%(county,state,county)
-                    options += '",'
-                    html.append("\t"+options+" //CY")
-            elif "//CY" in line:
-                pass
-            else:
-                html.append(line)
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
-        hdfs.close()
     except BaseException as err:
         print(err)
         try:
@@ -8923,58 +9075,7 @@ def hdf5_world(throttle=False):
               
         countries = sorted(countries)
         canada = sorted(canada)
-                
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        skipnext=False
-        for line in index:
-            if not skipnext:
-                if "<!-- GLOBALFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    for country in countries:
-                        if "Princess" not in country and "Olympics" not in country and "Zaandam" not in country:
-                            html.append('<!--GL-->\t\t\t<option value="%s">%s</option>'%(country,country))
-                elif "<!-- PLACEHOLDER -->" in line:
-                    skipnext=True
-                elif "<option" in line and "<!--GL-->" in line:
-                    pass #skip thi line too 
-                else:
-                    html.append(line)
-            else:
-                if "<!-- TRIPWIRE -->" in line:
-                    html.append(line)
-                skipnext=False
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
-        
-        #print("Doing provinces")   
-        
-        with open("index.html","r") as indexf:
-            index = indexf.read().split('\n')
-        html = []
-        skipnext=False
-        for line in index:
-            if not skipnext:
-                if "<!-- CANADAFORM -->" in line:
-                    html.append(line)
-                    skipnext=True
-                    for k in canada:
-                        if "Princess" not in k and k!="Recovered" and k!="Repatriated Travellers" and k!="Total":
-                            html.append('<!--CA-->\t\t\t<option value="%s">%s</option>'%(k,k))
-                elif "<!-- PLACEHOLDER -->" in line:
-                    skipnext=True
-                elif "<option" in line and "<!--CA-->" in line:
-                    pass #skip thi line too 
-                else:
-                    html.append(line)
-            else:
-                if "<!-- TRIPWIRE -->" in line:
-                    html.append(line)
-                skipnext=False
-        with open("index.html","w") as indexf:
-            indexf.write("\n".join(html))
+           
             
         for country in countries:
             if throttle:
