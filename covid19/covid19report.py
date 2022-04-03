@@ -6645,7 +6645,7 @@ def hdf5_ON(throttle=False):
  
     os.system('echo "Imports completed. \t%s'%systime.asctime(systime.localtime())+'">%s'%logfile)
     
-        try:
+    try:
         dataset = h5.File("adivparadise_covid19data_slim.hdf5","r")
         
         #Build aliases and generate HTML pages
