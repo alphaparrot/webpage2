@@ -6898,7 +6898,10 @@ def hdf5_ON(throttle=False):
         dataset.close()
     except:
         _log(logfile,"Skipping dropdown link population due to errors; likely missing or incomplete HDF5 file.")
-        
+        try:
+            dataset.close()
+        except:
+            pass
     _log(logfile,"Starting HDF5_ON at %s"%systime.asctime(systime.localtime()))
     #_log(logfile,"Dynamic CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
     
