@@ -6639,6 +6639,7 @@ def netcdf():
 def hdf5_ON(throttle=False):
     import h5py as h5
     import datetime
+    import makehtml
         
     #_log(logfile,"Static CSVs loaded. \t%s"%systime.asctime(systime.localtime()))
  
