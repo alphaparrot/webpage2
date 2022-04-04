@@ -2212,7 +2212,7 @@ def report_TOH5():
                 #html.append(line)
             #skipnext=False
     #with open("index.html","w") as indexf:
-        indexf.write("\n".join(html))
+        #indexf.write("\n".join(html))
    
     cankeys = []
     for province in dataset["Canada"]:
