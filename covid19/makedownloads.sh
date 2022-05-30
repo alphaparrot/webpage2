@@ -19,6 +19,8 @@ ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/gi
 
 ionice -c 2 -n 7 sed -i 's/"Korea, South"/South Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv
 ionice -c 2 -n 7 sed -i 's/"Korea, South"/South Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv
+ionice -c 2 -n 7 sed -i 's/"Korea, North"/North Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv
+ionice -c 2 -n 7 sed -i 's/"Korea, North"/North Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv
 ionice -c 2 -n 7 sed -i 's/Taiwan\*/Taiwan/g' /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv
 ionice -c 2 -n 7 sed -i 's/Taiwan\*/Taiwan/g' /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv
 cd /home/adivp416/public_html/covid19/
