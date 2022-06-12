@@ -7514,6 +7514,31 @@ def hdf5_ON(throttle=False):
     region = []
     tdate = []
     cases = []
+    
+    provinceabbrvs = {"AB":"Alberta",
+                      "BC":"British Columbia",
+                      "MB":"Manitoba",
+                      "NB":"New Brunswick",
+                      "NL":"Newfoundland and Labrador",
+                      "NS":"Novia Scotia",
+                      "NT":"Northwest Territories",
+                      "NU":"Nunavut",
+                      "ON":"Ontario",
+                      "PE":"Prince Edward Island",
+                      "QC":"Quebec",
+                      "SK":"Saskatchewan",
+                      "YT":"Yukon"}
+    
+    phumapping = {}
+    with open("health_regions_rf.csv","r") as geof:
+        header = geof.readline()
+        while True:
+            line = geof.readline()
+            if not line:
+                break
+            line = line.replace('"','').split(">")
+            phumapping[line[1]] = line[5]
+    
     with open("github/canada_hr_cases.csv","r") as casef:
         header = casef.readline()
         while True:
@@ -7521,12 +7546,12 @@ def hdf5_ON(throttle=False):
             if not line:
                 break
             line = line.replace('"','').split(',')
-            if line[0]!="Repatriated" and strtitle(line[1])!="Not Reported":
-              province.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
-              region.append(line[1])
-              time = np.array(line[2].split("-")).astype(int)
-              tdate.append(datetime.date(time[2],time[1],time[0]))
-              cases.append(int(line[3]))
+            if line[1]!="Repatriated" and strtitle(line[1])!="Not Reported":
+              province.append(provinceabbrvs[line[1]])
+              region.append(phumapping[line[2]])
+              time = np.array(line[3].split("-")).astype(int)
+              tdate.append(datetime.date(time[0],time[1],time[2]))
+              cases.append(int(line[5]))
     
     data = {}
     for n,count in enumerate(cases):
@@ -7549,11 +7574,11 @@ def hdf5_ON(throttle=False):
                 break
             line = line.replace('"','').split(',')
             if line[0]!="Repatriated" and strtitle(line[1])!="Not Reported":
-              dprovince.append(line[0].replace("BC","British Columbia").replace("PEI","Prince Edward Island").replace("NL","Newfoundland and Labrador").replace("NWT","Northwest Territories"))
-              dregion.append(line[1])
-              dtime = np.array(line[2].split("-")).astype(int)
-              ddate.append(datetime.date(dtime[2],dtime[1],dtime[0]))
-              deaths.append(int(line[3]))
+              dprovince.append(provinceabbrvs[line[1]])
+              dregion.append(phumapping[line[2]])
+              dtime = np.array(line[3].split("-")).astype(int)
+              ddate.append(datetime.date(dtime[0],dtime[1],dtime[2]))
+              deaths.append(int(line[5]))
     
     ddata = {}
     for n,count in enumerate(deaths):

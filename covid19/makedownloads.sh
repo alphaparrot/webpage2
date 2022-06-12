@@ -14,8 +14,10 @@ ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/gi
 ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv
 ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/time_series_covid19_recovered_global.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv
 ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_US.csv https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv
-ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_cases.csv https://raw.githubusercontent.com/ccodwg/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv
-ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_deaths.csv https://raw.githubusercontent.com/ccodwg/Covid19Canada/master/timeseries_hr/mortality_timeseries_hr.csv
+#ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_cases.csv https://raw.githubusercontent.com/ccodwg/Covid19Canada/master/timeseries_hr/cases_timeseries_hr.csv
+ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_cases.csv https://raw.githubusercontent.com/ccodwg/CovidTimelineCanada/main/data/hr/cases_hr.csv
+#ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_deaths.csv https://raw.githubusercontent.com/ccodwg/Covid19Canada/master/timeseries_hr/mortality_timeseries_hr.csv
+ionice -c 2 -n 7 wget --limit-rate=800k -O /home/adivp416/public_html/covid19/github/canada_hr_deaths.csv https://raw.githubusercontent.com/ccodwg/CovidTimelineCanada/main/data/hr/deaths_hr.csv
 
 ionice -c 2 -n 7 sed -i 's/"Korea, South"/South Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_confirmed_global.csv
 ionice -c 2 -n 7 sed -i 's/"Korea, South"/South Korea/g' /home/adivp416/public_html/covid19/github/time_series_covid19_deaths_global.csv
