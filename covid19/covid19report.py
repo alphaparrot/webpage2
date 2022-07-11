@@ -2219,6 +2219,7 @@ def report_TOH5():
         if not isinstance(dataset["Canada"][province],h5.Dataset):
             cankeys.append(str(province))
             fstub = province.replace(" ","_").replace("&","and")
+            print(province)
             deaths = np.sum(dataset["Canada"][province]["deaths"][:])
             if deaths>0 and "population" in dataset["Canada"][province]:
                 deathratio = int(round(dataset["Canada"][province]["population"][()]/deaths))
@@ -7029,6 +7030,8 @@ def hdf5_ON(throttle=False):
 
     if "" in TOneighborhoods["units"]:
         TOneighborhoods["units"].pop("")
+    if "Unknown" in TOneighborhoods["units"]:
+        TOneighborhoods["units"].pop("Unknown")
         
     keys1 = sorted(neighborhoodpops.keys())
     keys2 = sorted(TOneighborhoods["units"].keys())
@@ -7135,19 +7138,34 @@ def hdf5_ON(throttle=False):
     hdf.close()
     hdfs.close()
     
+    provinceabbrvs = {"AB":"Alberta",
+                      "BC":"British Columbia",
+                      "MB":"Manitoba",
+                      "NB":"New Brunswick",
+                      "NL":"Newfoundland and Labrador",
+                      "NS":"Nova Scotia",
+                      "NT":"Northwest Territories",
+                      "NU":"Nunavut",
+                      "ON":"Ontario",
+                      "PE":"Prince Edward Island",
+                      "QC":"Quebec",
+                      "SK":"Saskatchewan",
+                      "YT":"Yukon"}
+    
     phupops = {}
     poplines = []
-    with open("hr_map.csv") as popfile:
-        reader = csv.reader(popfile,delimiter=',',quotechar='"')
+    with open("health_regions_rf.csv") as popfile:
+        reader = csv.reader(popfile,delimiter='>',quotechar='"')
         header = next(reader)
         for row in reader:
             poplines.append(row)
+            #print(row)
     for line in poplines:
         parts = line
-        if parts[6]!='':
-            province = parts[2]
-            phu = parts[4]
-            pop = int(parts[6])
+        if parts[0]!='NA' and parts[0]!='':
+            province = provinceabbrvs[parts[0]]
+            phu = parts[5]
+            pop = int(parts[9])
             if province not in phupops:
                 phupops[province] = {phu:pop}
             else:
@@ -7515,19 +7533,6 @@ def hdf5_ON(throttle=False):
     tdate = []
     cases = []
     
-    provinceabbrvs = {"AB":"Alberta",
-                      "BC":"British Columbia",
-                      "MB":"Manitoba",
-                      "NB":"New Brunswick",
-                      "NL":"Newfoundland and Labrador",
-                      "NS":"Novia Scotia",
-                      "NT":"Northwest Territories",
-                      "NU":"Nunavut",
-                      "ON":"Ontario",
-                      "PE":"Prince Edward Island",
-                      "QC":"Quebec",
-                      "SK":"Saskatchewan",
-                      "YT":"Yukon"}
     
     phumapping = {}
     with open("health_regions_rf.csv","r") as geof:
