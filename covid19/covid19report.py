@@ -7282,6 +7282,13 @@ def hdf5_ON(throttle=False):
             arearecovered.attrs["long_name"] = "day's cases which have recovered"
             areapopulation.attrs["long_name"] = "population"
             
+            deepest = hdf.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Deepest",compression="gzip",
+                                         compression_opts=9,shuffle=True,fletcher32=True,
+                                         data=np.ones(len(ctotal)))
+            deepest = hdfs.create_dataset("/Canada/Ontario/Toronto/"+ckey+"/Deepest",compression="gzip",
+                                         compression_opts=9,shuffle=True,fletcher32=True,
+                                         data=np.ones(len(ctotal)))
+            
             hdf.close()
             hdfs.close()
         
@@ -7708,6 +7715,21 @@ def hdf5_ON(throttle=False):
                         phuRt.attrs["units"] = "infections per sick person"
                         phuRt.attrs["standard_name"] = "effective_reproductive_number"
                         phuRt.attrs["long_name"] = "Effective Reproductive Number"
+                        
+                        if ckey=="Toronto":
+                            deepmask = np.zeros(len(ctotal))
+                            delay=(np.datetime64(latestdate)-np.datetime64(hdfs["Canada/Ontario/Toronto/Alderwood/latestdate"][()])).astype('timedelta64[D]').astype(int)
+                            if delay>0:
+                                deepmask[-delay:] = 1
+                        else:
+                            deepmask = np.ones(len(ctotal))
+                            
+                        deepest = hdf.create_dataset("/Canada/%s/%s/Deepest"%(province,ckey),compression="gzip",
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=deepmask)
+                        deepest = hdfs.create_dataset("/Canada/%s/%s/Deepest"%(province,ckey),compression="gzip",
+                                                      compression_opts=9,shuffle=True,fletcher32=True,
+                                                      data=deepmask)
                     except KeyError:
                         print("Error; %s not found"%ckey)
                     
@@ -7791,6 +7813,8 @@ def hdf5_USA1(throttle=False):
                                 old = np.append(np.zeros(len(cases)-nold),old)
                             hdf["United States/%s/%s/cases"%(state,county)][:] = old+cases
                             hdfs["United States/%s/%s/cases"%(state,county)][:] = old+cases
+                            hdf["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
+                            hdfs["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
                         
                             avgcases = (cases+old).astype(float)
                             avgcases = day5avg(avgcases)
@@ -7863,6 +7887,13 @@ def hdf5_USA1(throttle=False):
                             countyRlike = hdf.create_dataset("/United States/%s/%s/Rlike"%(state,county),
                                                             compression='gzip',compression_opts=9,shuffle=True,
                                                             fletcher32=True,data=l)
+                            
+                            deepest = hdf.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
+                            deepest = hdfs.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
                         
                             countyRt.attrs["units"] = "secondary infections case-1"
                             countyRt.attrs["standard_name"] = "R_t"
@@ -7911,6 +7942,14 @@ def hdf5_USA1(throttle=False):
                             statepopulation.attrs["standard_name"] = "population"
                             statecases.attrs["long_name"] = "New Cases per Day"
                             statepopulation.attrs["long_name"] = "Population"
+                            
+                            deepest = hdf.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
+                            deepest = hdfs.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
+                            
                         else:
                             hdf["United States/%s/cases"%state][:] += cases
                             hdfs["United States/%s/cases"%state][:] += cases
@@ -8126,6 +8165,8 @@ def hdf5_USA2(throttle=False):
                             old = np.append(np.zeros(len(cases)-nold),old)
                         hdf["United States/%s/%s/cases"%(state,county)][:] = old+cases
                         hdfs["United States/%s/%s/cases"%(state,county)][:] = old+cases
+                        hdf["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
+                        hdfs["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
                     
                         avgcases = (cases+old).astype(float)
                         avgcases = day5avg(avgcases)
@@ -8199,6 +8240,12 @@ def hdf5_USA2(throttle=False):
                                                         compression='gzip',compression_opts=9,shuffle=True,
                                                         fletcher32=True,data=l)
                     
+                        deepest = hdf.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
+                        deepest = hdfs.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
                         countyRt.attrs["units"] = "secondary infections case-1"
                         countyRt.attrs["standard_name"] = "R_t"
                         countyRt.attrs["long_name"] = "Effective Reproductive Number"
@@ -8246,6 +8293,13 @@ def hdf5_USA2(throttle=False):
                         statepopulation.attrs["standard_name"] = "population"
                         statecases.attrs["long_name"] = "New Cases per Day"
                         statepopulation.attrs["long_name"] = "Population"
+                        
+                        deepest = hdf.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
+                        deepest = hdfs.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
                     else:
                         hdf["United States/%s/cases"%state][:] += cases
                         hdfs["United States/%s/cases"%state][:] += cases
@@ -8463,6 +8517,8 @@ def hdf5_USA3(throttle=False):
                             old = np.append(np.zeros(len(cases)-nold),old)
                         hdf["United States/%s/%s/cases"%(state,county)][:] = old+cases
                         hdfs["United States/%s/%s/cases"%(state,county)][:] = old+cases
+                        hdf["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
+                        hdfs["United States/%s/%s/Deepest"%(state,county)][:] = np.ones(len(old+cases))
                     
                         avgcases = (cases+old).astype(float)
                         avgcases = day5avg(avgcases)
@@ -8536,6 +8592,12 @@ def hdf5_USA3(throttle=False):
                                                         compression='gzip',compression_opts=9,shuffle=True,
                                                         fletcher32=True,data=l)
                     
+                        deepest = hdf.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
+                        deepest = hdfs.create_dataset("/United States/%s/%s/Deepest"%(state,county),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.ones(len(cases)))
                         countyRt.attrs["units"] = "secondary infections case-1"
                         countyRt.attrs["standard_name"] = "R_t"
                         countyRt.attrs["long_name"] = "Effective Reproductive Number"
@@ -8583,6 +8645,12 @@ def hdf5_USA3(throttle=False):
                         statepopulation.attrs["standard_name"] = "population"
                         statecases.attrs["long_name"] = "New Cases per Day"
                         statepopulation.attrs["long_name"] = "Population"
+                        deepest = hdf.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
+                        deepest = hdfs.create_dataset("/United States/%s/Deepest"%(state),compression="gzip",
+                                                          compression_opts=9,shuffle=True,fletcher32=True,
+                                                          data=np.zeros(len(cases)))
                     else:
                         hdf["United States/%s/cases"%state][:] += cases
                         hdfs["United States/%s/cases"%state][:] += cases
@@ -8896,6 +8964,19 @@ def hdf5_world(throttle=False):
                                                                   data=float(countrypops[country]))
                            countrypopulations = hdfs.create_dataset("%s/population"%country,
                                                                   data=float(countrypops[country]))
+                           
+                           deepmask = np.zeros(len(timeseries))
+                           delay = (np.datetime64(latestglobal)-np.datetime64(hdfs["United States/Minnesota/latestdate"][()])).astype('timedelta64[D]').astype(int)
+                           if delay>0:
+                               deepmask[-delay:] = 1
+                           
+                           deepest = hdf.create_dataset("/United States/Deepest",compression="gzip",
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=deepmask)
+                           deepest = hdfs.create_dataset("/United States/Deepest"%(province,ckey),compression="gzip",
+                                                      compression_opts=9,shuffle=True,fletcher32=True,
+                                                      data=deepmask)
+                           
                            countrycases.attrs["units"] = "cases day-1"
                            countrycases.attrs["standard_name"] = "daily_cases"
                            countrycases.attrs["long_name"] = "New Cases per Day"
@@ -8919,35 +9000,6 @@ def hdf5_world(throttle=False):
                        gc.collect()
                    
                    else:
-                       if "%s/cases"%country not in hdfs:
-                           print(country,"cases")
-                           countrycases = hdf.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
-                                                             shuffle=True,fletcher32=True,data=timeseries)
-                           countrycasess = hdfs.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
-                                                            shuffle=True,fletcher32=True,data=timeseries)
-                           countrypopulation = hdf.create_dataset("%s/population"%country,
-                                                                  data=float(countrypops[country]))
-                           countrypopulations = hdfs.create_dataset("%s/population"%country,
-                                                                  data=float(countrypops[country]))
-                           countrycases.attrs["units"] = "cases day-1"
-                           countrycases.attrs["standard_name"] = "daily_cases"
-                           countrycases.attrs["long_name"] = "New Cases per Day"
-                           countrypopulation.attrs["units"] = "people"
-                           countrypopulation.attrs["standard_name"] = "population"
-                           countrypopulation.attrs["long_name"] = "Population"
-                           countrycasess.attrs["units"] = "cases day-1"
-                           countrycasess.attrs["standard_name"] = "daily_cases"
-                           countrycasess.attrs["long_name"] = "New Cases per Day"
-                           countrypopulations.attrs["units"] = "people"
-                           countrypopulations.attrs["standard_name"] = "population"
-                           countrypopulations.attrs["long_name"] = "Population"
-                               
-                           latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
-                           latest = hdfs.create_dataset("%s/latestdate"%country,data=latestglobal)
-                       else:
-                           hdf["%s/cases"%country][:] += timeseries
-                           hdfs["%s/cases"%country][:] += timeseries
-                           
                        if "%s/%s/cases"%(country,localname) not in hdfs: 
                            print(localname,country,"cases")
                            
@@ -8984,6 +9036,15 @@ def hdf5_world(throttle=False):
                                                            data=r)
                            del r
                            gc.collect()
+                           
+                           if "%s/%s/Deepest"%(country,localname) not in hdfs and country!="Canada":
+                           
+                               deepest = hdf.create_dataset("/%s/Deepest",compression="gzip",
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=np.ones(len(timeseries))
+                               deepest = hdfs.create_dataset("/%s/Deepest"%(province,ckey),compression="gzip",
+                                                      compression_opts=9,shuffle=True,fletcher32=True,
+                                                      data=np.ones(len(timeseries))
                            
                            if country=="Canada":
                                provincepopulation = hdf.create_dataset("/Canada/%s/population"%localname,
@@ -9106,6 +9167,53 @@ def hdf5_world(throttle=False):
                            localRlike.attrs["standard_name"] = "R_t_likelihood"
                            localRpost.attrs["long_name"] = "Rt Posterior Probability"
                            localRpost.attrs["long_name"] = "Rt Likelihood Function"
+                           
+                       if "%s/cases"%country not in hdfs:
+                           print(country,"cases")
+                           countrycases = hdf.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
+                                                             shuffle=True,fletcher32=True,data=timeseries)
+                           countrycasess = hdfs.create_dataset("/%s/cases"%country,compression='gzip',compression_opts=9,
+                                                            shuffle=True,fletcher32=True,data=timeseries)
+                           countrypopulation = hdf.create_dataset("%s/population"%country,
+                                                                  data=float(countrypops[country]))
+                           countrypopulations = hdfs.create_dataset("%s/population"%country,
+                                                                  data=float(countrypops[country]))
+                           
+                           
+                           if "latestdate" in hdfs["%s/%s"%(country,localname)] and localname!="":
+                               deepmask = np.zeros(len(timeseries))
+                               delay = (np.datetime64(latestglobal)-np.datetime64(hdfs["%s/%s/latestdate"%(country,localname)][()])).astype('timedelta64[D]').astype(int)
+                               if delay>0:
+                                   deepmask[-delay:] = 1
+                           else:
+                               deepmask = np.ones(len(timeseries))
+                           
+                           deepest = hdf.create_dataset("/%s/Deepest"%country,compression="gzip",
+                                                     compression_opts=9,shuffle=True,fletcher32=True,
+                                                     data=deepmask)
+                           deepest = hdfs.create_dataset("/%s/Deepest"%country,compression="gzip",
+                                                      compression_opts=9,shuffle=True,fletcher32=True,
+                                                      data=deepmask)
+                           
+                           countrycases.attrs["units"] = "cases day-1"
+                           countrycases.attrs["standard_name"] = "daily_cases"
+                           countrycases.attrs["long_name"] = "New Cases per Day"
+                           countrypopulation.attrs["units"] = "people"
+                           countrypopulation.attrs["standard_name"] = "population"
+                           countrypopulation.attrs["long_name"] = "Population"
+                           countrycasess.attrs["units"] = "cases day-1"
+                           countrycasess.attrs["standard_name"] = "daily_cases"
+                           countrycasess.attrs["long_name"] = "New Cases per Day"
+                           countrypopulations.attrs["units"] = "people"
+                           countrypopulations.attrs["standard_name"] = "population"
+                           countrypopulations.attrs["long_name"] = "Population"
+                               
+                           latest = hdf.create_dataset("%s/latestdate"%country,data=latestglobal)
+                           latest = hdfs.create_dataset("%s/latestdate"%country,data=latestglobal)
+                       else:
+                           hdf["%s/cases"%country][:] += timeseries
+                           hdfs["%s/cases"%country][:] += timeseries
+                           
                         
                     
                    hdf.close()

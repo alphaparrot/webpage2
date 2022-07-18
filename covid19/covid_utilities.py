@@ -32,6 +32,43 @@ def get_tree(group,prefix,searchkey="cases"):
             paths += get_tree(group[k],newfix) #recurse
     return paths
 
+def get_tree_reversed(group,prefix,searchkey="cases"):
+    '''For an HDF5 group, find all subgroups which contain Datasets called searchkey, sorted by deepest first.
+    
+    The output will be a list of strings which use the given prefix as part of the path. They will be sorted
+    such that child Datasets come before parents.
+    
+    Parameters
+    ----------
+    group : h5py.Group
+        An h5py Group or open File object
+    prefix : str
+        String that should be prepended to the output paths
+    searchkey : str, optional
+        The variable (Dataset name) to look for in subgroups.
+        
+    Returns
+    -------
+    list
+        List of paths to subgroups within the given group or file, which contain Datasets named searchkey.
+    '''
+    paths = []
+    for k in group:
+        if not isinstance(group[k],h5.Dataset):
+            newfix = "%s/%s"%(prefix,k)
+            paths += get_tree_reversed(group[k],newfix) #recurse
+            if "cases" in group[k]:
+                paths.append(newfix)
+    return paths
+    
+def striplevel(path):
+    parts = path.split("/")
+    if len(parts)>1:
+        parts = parts[:-1]
+    else:
+        parts = ["",""]
+    return "/".join(parts)
+
 def unify_files(h5file,shapefile):
     '''Merge an HDF5 covid-19 dataset and a shapefile.
     
@@ -49,7 +86,7 @@ def unify_files(h5file,shapefile):
     '''
     
     hdf = h5.File(h5file,"r")
-    tree = get_tree(hdf,"")
+    tree = get_tree_reversed(hdf,"")
     rows = []
     for place in tree:
         if place[0]=="/":
@@ -107,6 +144,25 @@ def unify_files(h5file,shapefile):
     pandemic = pd.merge(world,covid)
     pandemic.set_index(["Country","State","Region","Area","Time"],inplace=True)
     
+    #alltimes = sorted(pandemic.index.unique(4))
+    #tmp = pandemic.reset_index().set_index("Time")
+    #for n in range(len(alltimes)):
+        #for place in tree:
+            #try:
+                #report = tmp.loc[tmp["Path"]==place].loc[alltimes[n]].copy()
+                #if np.isnan(report["Cases"]) and report["Deepest"] == 1:
+                    #report.loc["Deepest"] = 0
+                    #report2 = tmp.loc[tmp["Path"]==striplevel(place)].loc[alltimes[n]].copy()
+                    #report2.loc["Deepest"] = 1 #Pass it up a level
+                    #tmp.loc[alltimes[n],tmp["Path"]==striplevel(place)] = report2.copy()
+            #except KeyError:
+                #try:
+                    #report2 = tmp.loc[tmp["Path"]==striplevel(place)].loc[alltimes[n]].copy()
+                    #report2.loc["Deepest"] = 1 #Pass it up a level
+                    #tmp.loc[alltimes[n],tmp["Path"]==striplevel(place)] = report2.copy() #Pass it up a level
+                #except:
+                    #pass # We let the entry fade away into nothingness
+    #pandemic = tmp.reset_index().set_index(["Country","State","Region","Area","Time"])
     return pandemic
     
     
