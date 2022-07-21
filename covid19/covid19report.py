@@ -9041,10 +9041,10 @@ def hdf5_world(throttle=False):
                            
                                deepest = hdf.create_dataset("/%s/Deepest"%country,compression="gzip",
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=np.ones(len(timeseries))
+                                                     data=np.ones(len(timeseries)))
                                deepest = hdfs.create_dataset("/%s/Deepest"%country,compression="gzip",
                                                       compression_opts=9,shuffle=True,fletcher32=True,
-                                                      data=np.ones(len(timeseries))
+                                                      data=np.ones(len(timeseries)))
                            
                            if country=="Canada":
                                provincepopulation = hdf.create_dataset("/Canada/%s/population"%localname,
