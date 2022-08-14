@@ -9083,12 +9083,12 @@ def hdf5_world(throttle=False):
                            
                            if "%s/%s/Deepest"%(country,localname) not in hdfs and country!="Canada":
                            
-                               deepest = hdf.create_dataset("/%s/Deepest",compression="gzip",
+                               deepest = hdf.create_dataset("/%s/Deepest"%country,compression="gzip",
                                                      compression_opts=9,shuffle=True,fletcher32=True,
-                                                     data=np.ones(len(timeseries))
-                               deepest = hdfs.create_dataset("/%s/Deepest"%(province,ckey),compression="gzip",
+                                                     data=np.ones(len(timeseries)))
+                               deepest = hdfs.create_dataset("/%s/Deepest"%country,compression="gzip",
                                                       compression_opts=9,shuffle=True,fletcher32=True,
-                                                      data=np.ones(len(timeseries))
+                                                      data=np.ones(len(timeseries)))
                            
                            if country=="Canada":
                                provincepopulation = hdf.create_dataset("/Canada/%s/population"%localname,
