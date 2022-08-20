@@ -7587,7 +7587,7 @@ def hdf5_ON(throttle=False):
     for n,count in enumerate(cases):
         if province[n] not in data:
             data[province[n]] = {}
-        if region[n] not in data[province[n]] and region_alt[n] not in data[province[n]]:
+        if region[n] not in data[province[n]]:
             data[province[n]][region[n]] = {"Time":[],"Cases":[]}
         data[province[n]][region[n]]["Time"].append(tdate[n])
         data[province[n]][region[n]]["Cases"].append(count)
@@ -9054,7 +9054,6 @@ def hdf5_world(throttle=False):
                                                            compression_opts=9,shuffle=True,fletcher32=True,
                                                            data=timeseries)
                            r,lp,ll = Rt(day5avg(timeseries))
-                           del timeseries
                            gc.collect()
                            
                            p = np.exp(lp)
@@ -9258,7 +9257,8 @@ def hdf5_world(throttle=False):
                            hdf["%s/cases"%country][:] += timeseries
                            hdfs["%s/cases"%country][:] += timeseries
                            
-                        
+                       
+                       del timeseries 
                     
                    hdf.close()
                    hdfs.close()
