@@ -7643,14 +7643,14 @@ def hdf5_ON(throttle=False):
                         l = np.exp(ll)
                         del lp
                         del ll
-                        if "cases" not in hdf["/Canada/%s/%s"%(province,ckey)]:
+                        if "%s/%s/cases"%(province,ckey) not in hdf["/Canada"]:
                             phucases = hdf.create_dataset("/Canada/%s/%s/cases"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
                                                   data=ctotal.astype(np.short))
                         else:
                             hdf["/Canada/%s/%s/cases"][:] = ctotal.astype(np.short)
-                        if "deaths" not in hdf["/Canada/%s/%s"%(province,ckey)]:
+                        if "%s/%s/deaths"%(province,ckey) not in hdf["/Canada"]:
                             phudeaths = hdf.create_dataset("/Canada/%s/%s/deaths"%(province,ckey),
                                                   compression='gzip',compression_opts=9,
                                                   shuffle=True,fletcher32=True,
