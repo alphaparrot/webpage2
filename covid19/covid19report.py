@@ -1,6 +1,7 @@
 import gc
 from multiprocessing import Pool
 import time as systime
+from dateutil import parser as timeparser
 #from memory_profiler import profile
 
 logfile = "/home/adivp416/public_html/covid19/reportlog.txt"
@@ -7774,8 +7775,15 @@ def hdf5_ON(throttle=False):
                         deepest = hdfs.create_dataset("/Canada/%s/%s/Deepest"%(province,ckey),compression="gzip",
                                                       compression_opts=9,shuffle=True,fletcher32=True,
                                                       data=deepmask)
-                    except KeyError:
+                    except KeyError as err:
                         print("Error; %s not found"%ckey)
+                        traceback.print_exc()
+                        print(err)
+                        print(province,region)
+                        print(data.keys())
+                        if province in data:
+                            print(data[province].keys())
+                        
                     
                     hdf.close()
                     hdfs.close()
@@ -9225,7 +9233,7 @@ def hdf5_world(throttle=False):
                            
                            if "latestdate" in hdfs["%s/%s"%(country,localname)] and localname!="":
                                deepmask = np.zeros(len(timeseries))
-                               delay = (np.datetime64(latestglobal)-np.datetime64(hdfs["%s/%s/latestdate"%(country,localname)][()])).astype('timedelta64[D]').astype(int)
+                               delay = (np.datetime64(latestglobal)-np.datetime64(timeparser.parse(hdfs["%s/%s/latestdate"%(country,localname)][()]))).astype('timedelta64[D]').astype(int)
                                if delay>0:
                                    deepmask[-delay:] = 1
                            else:
